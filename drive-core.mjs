@@ -15,9 +15,17 @@ export class DriveStore{
  async listFiles(kind,project,context=this.context()){
   const safe=x=>String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
   const q=["trashed=false","'me' in owners",`appProperties has { key='app' and value='${APP}' }`,kind?`appProperties has { key='kind' and value='${safe(kind)}' }`:null,project?`appProperties has { key='project' and value='${safe(project)}' }`:null].filter(Boolean).join(' and ');
-  let all=[],token;do{const p=new URLSearchParams({q,spaces:'drive',pageSize:'100',fields:'nextPageToken,files(id,name,size,appProperties,ownedByMe)'});if(token)p.set('pageToken',token);const data=await(await this.request(ROOT+'/files?'+p,{},context)).json();all.push(...data.files.filter(f=>f.ownedByMe!==false));token=data.nextPageToken;if(all.length>10000)throw fail('檔案數超過此試版檢查上限，未繼續寫入。',413)}while(token);return all;
+  let all=[],token;const pages=new Set();do{const p=new URLSearchParams({q,corpora:'user',spaces:'drive',pageSize:'100',fields:'incompleteSearch,nextPageToken,files(id,name,size,appProperties,ownedByMe)'});if(token)p.set('pageToken',token);const data=await(await this.request(ROOT+'/files?'+p,{},context)).json();if(data.incompleteSearch||!Array.isArray(data.files))throw fail('Drive清單尚不完整，未繼續寫入；請重試。',503);all.push(...data.files.filter(f=>f.ownedByMe!==false));token=data.nextPageToken;if(token){if(pages.has(token)||pages.size>=1000)throw fail('Drive分頁異常，未繼續寫入。',503);pages.add(token)}if(all.length>10000)throw fail('檔案數超過此試版檢查上限，未繼續寫入。',413)}while(token);return all;
  }
- async readFile(id,context=this.context()){return(await this.request(ROOT+'/files/'+encodeURIComponent(id)+'?alt=media',{},context)).blob()}
+ async readFile(id,context=this.context(),limit=LIMITS.assetBytes){
+  const response=await this.request(ROOT+'/files/'+encodeURIComponent(id)+'?alt=media',{},context);
+  if(Number(response.headers.get('content-length'))>limit){await response.body?.cancel();throw fail('雲端檔案超過讀取上限，本機內容保留。',413)}
+  if(!response.body)return new Blob([],{type:response.headers.get('content-type')||''});
+  const reader=response.body.getReader(),parts=[];let size=0;
+  try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit){await reader.cancel();throw fail('雲端檔案超過讀取上限，本機內容保留。',413)}parts.push(value)}}finally{reader.releaseLock()}
+  if(this.credential()!==context)throw fail('帳號已切換，舊帳號下載未套用。',401);
+  return new Blob(parts,{type:response.headers.get('content-type')||'application/octet-stream'});
+ }
  async create(key,blob,properties,context=this.context()){
   const storageKey=context.owner+':'+key;let id=await this.ids.get(storageKey);
   if(!id){const data=await(await this.request(ROOT+'/files/generateIds?count=1&space=drive&type=files',{},context)).json();id=data.ids[0];await this.ids.put(storageKey,id)}
@@ -40,7 +48,7 @@ export class DriveStore{
  }
  async revisions(project,context=this.context()){
   const files=await this.listFiles('revision',project,context),rows=[];if(files.reduce((n,f)=>n+Number(f.size||0),0)>LIMITS.historyBytes)throw fail('版本資訊超過試版讀取上限，請先保留備份。',413);
-  for(const f of files){const b=await this.readFile(f.id,context);if(b.size>LIMITS.manifestBytes)throw fail('專案版本過大。',413);const r=JSON.parse(await b.text());if(r.schema!==1||r.owner!==context.owner||r.projectId!==f.appProperties.project||r.id!==f.appProperties.operation||!Array.isArray(r.parents)||r.parents.some(x=>typeof x!=='string'))throw fail('雲端版本格式不符。',422);rows.push(r)}
+  for(const f of files){const b=await this.readFile(f.id,context,LIMITS.manifestBytes);if(b.size>LIMITS.manifestBytes)throw fail('專案版本過大。',413);const r=JSON.parse(await b.text());if(r.schema!==1||r.owner!==context.owner||r.projectId!==f.appProperties.project||r.id!==f.appProperties.operation||!Array.isArray(r.parents)||r.parents.some(x=>typeof x!=='string'))throw fail('雲端版本格式不符。',422);rows.push(r)}
   const unique=new Map();for(const r of rows){if(unique.has(r.id)&&JSON.stringify(unique.get(r.id))!==JSON.stringify(r))throw fail('重複版本內容不一致。',409);unique.set(r.id,r)}return[...unique.values()];
  }
  heads(rows){const parents=new Set(rows.flatMap(r=>r.parents));return rows.filter(r=>!parents.has(r.id))}
@@ -60,6 +68,6 @@ export class DriveStore{
   await this.create('revision-'+body.operationId,blob,{kind:'revision',project,operation:body.operationId,parent:body.baseRevision||'',title},context);
   const observed=await this.revisions(project,context);if(!observed.some(r=>r.id===revision.id))observed.push(revision);return this.commitResult(observed,body.operationId);
  }
- commitResult(rows,id){if(this.heads(rows).length>1)throw fail('兩端同時修改；所有版本均已保存，請選版本或另存副本。',409);return{revision:id}}
+ commitResult(rows,id){const heads=this.heads(rows);if(heads.length===1&&heads[0].id!==id)throw fail('雲端已有後續版本；本次舊重試不會標成最新同步，請先開啟雲端版本。',409);if(heads.length>1)throw fail('兩端同時修改；所有版本均已保存，請選版本或另存副本。',409);return{revision:id}}
  async api(path,options={}){const url=new URL(path,'https://local.invalid'),context=this.context();if(url.pathname==='/session')return{owner:context.owner,mode:'google-drive',limits:LIMITS};if(url.pathname==='/projects')return this.projects();const m=url.pathname.match(/^\/projects\/(.+)$/);if(m)return options.method==='POST'?this.commit(decodeURIComponent(m[1]),JSON.parse(options.body)):this.get(decodeURIComponent(m[1]),url.searchParams.get('revision'));const a=url.pathname.match(/^\/assets\/([a-f0-9]{64})$/);if(a&&options.method==='PUT')return this.putAsset(a[1],options.body);throw fail('不支援的同步操作。',400)}
 }

@@ -2,6 +2,7 @@
 (()=>{
  const home=document.querySelector('#worktable'),scene=home.querySelector('.scene-characters');
  home.querySelector('.scene-heading')?.remove();
+ const stage=document.createElement('div');stage.className='studio-wood-stage';stage.setAttribute('aria-hidden','true');scene.prepend(stage);
  const backdrop=document.createElement('div');backdrop.className='studio-scene-backdrop';backdrop.setAttribute('aria-hidden','true');home.prepend(backdrop);
  const board=home.querySelector('.project-paper');board.classList.add('studio-nameboard');const title=board.querySelector('input');const titleHint=()=>{title.title=title.value||'編輯專案名稱'};title.addEventListener('input',titleHint);title.addEventListener('focus',titleHint);titleHint();
  const library=home.querySelector('.cabinet-entry');library.querySelector('svg')?.remove();const cabinetArt=document.createElement('img');cabinetArt.src='assets/audio-library-cabinet.png';cabinetArt.width=1374;cabinetArt.height=1145;cabinetArt.alt='';cabinetArt.setAttribute('aria-hidden','true');library.prepend(cabinetArt);scene.append(library);

@@ -98,3 +98,16 @@
 #driveSettingsDialog a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;line-height:1.6}
 #silenceThreshold{min-height:44px}
 @media(max-width:600px){.room-return .sync-entry,.top-actions .sync-entry{font-size:12px!important}}
+
+/* Editing can scroll above a keyboard without rebuilding the recording card. */
+dialog.editing-viewport[open]{max-height:calc(var(--edit-viewport-height,100dvh) - 24px);overflow-y:auto;scroll-padding:12px}
+dialog.editing-viewport[open]{top:var(--edit-viewport-top,0px);bottom:auto;margin-top:12px}
+body.text-editing :is(input,textarea){scroll-margin-block:16px}
+@media(max-width:600px){
+ body.phone-room-record.text-editing{height:auto;overflow-y:auto}
+ body.phone-room-record.text-editing main,body.phone-room-record.text-editing #workroom{height:auto;min-height:var(--edit-viewport-height,100dvh);overflow:visible}
+ body.phone-room-record.text-editing #recordPage,body.phone-room-record.text-editing .workspace,body.phone-room-record.text-editing .record-content{height:auto;overflow:visible;flex:none}
+ body.phone-room-record.text-editing #mobileRecordDeck{min-height:340px;flex:none}
+ #structureDialogBody label{flex-wrap:wrap;gap:6px}
+ #structureDialogBody label input{min-width:0;max-width:100%;font-size:16px}
+}

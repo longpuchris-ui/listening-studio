@@ -122,3 +122,54 @@
 .character-entrance .entry-label small{overflow:hidden;text-overflow:ellipsis}
 /* Props retain click ownership even beside an enlarged mascot; dim via existing filter. */
 .worktable.spotlight-ready .scene-sound-prop,.worktable.spotlight-ready .cabinet-entry,.worktable.spotlight-ready.has-spotlight .cabinet-entry{z-index:12}
+
+/* Small scene props respond independently; stationary buttons keep their hit areas. */
+.worktable .cabinet-entry img,.worktable .guide-sheet-art,.worktable .sound-prop-art{transition:transform 180ms ease,filter 180ms ease;transform-origin:50% 80%}
+@keyframes prop-sheet-greet{0%{transform:rotate(0)}35%{transform:rotate(-3deg)}70%{transform:rotate(2deg)}100%{transform:rotate(-1deg)}}
+@keyframes prop-speaker-greet{0%{transform:translateY(0)}45%{transform:translateY(-4px) scale(1.025)}75%{transform:translateY(0)}100%{transform:translateY(-1px)}}
+@media(hover:hover) and (pointer:fine){
+ .worktable .cabinet-entry:hover img{transform:translateY(-4px);filter:drop-shadow(0 3px 4px #b8a36766)}
+ .worktable .studio-guide-prop:hover .guide-sheet-art{animation:prop-sheet-greet 380ms ease both;filter:drop-shadow(0 2px 4px #c4b0d677)}
+ .worktable .scene-sound-prop button:not(:disabled):hover .sound-prop-art{animation:prop-speaker-greet 320ms ease both;filter:drop-shadow(0 2px 4px #b2caaa77)}
+}
+.worktable .cabinet-entry:focus-visible img{transform:translateY(-4px);filter:drop-shadow(0 3px 4px #b8a36766)}
+.worktable .studio-guide-prop:focus-visible .guide-sheet-art{animation:prop-sheet-greet 380ms ease both;filter:drop-shadow(0 2px 4px #c4b0d677)}
+.worktable .scene-sound-prop button:not(:disabled):focus-visible .sound-prop-art{animation:prop-speaker-greet 320ms ease both;filter:drop-shadow(0 2px 4px #b2caaa77)}
+@media(hover:none){
+ .worktable .cabinet-entry:active img,.worktable .studio-guide-prop:active .guide-sheet-art,.worktable .scene-sound-prop button:not(:disabled):active .sound-prop-art{transform:translateY(-2px) scale(.98);filter:drop-shadow(0 2px 4px #c4b0d677);transition-duration:60ms}
+}
+@media(prefers-reduced-motion:reduce){
+ .worktable .cabinet-entry img,.worktable .studio-guide-prop .guide-sheet-art,.worktable .scene-sound-prop .sound-prop-art{animation:none!important;transform:none!important;transition:none!important}
+}
+/* Leave a clear gap above Paizai's card on the narrowest phones. */
+@media(max-width:340px){.worktable .cabinet-entry{margin-top:-10px}}
+/* Return to the illustrated room: a restrained wooden base behind the original scene. */
+.studio-wood-stage{position:absolute;left:-9%;right:-9%;bottom:-10px;height:19%;pointer-events:none;z-index:-1;border-radius:50% / 25%;background:linear-gradient(178deg,#edce9f 0%,#e1b982 71%,#bd8c59 74%,#c89a66 91%,#b58252 100%);box-shadow:0 7px 10px #79604420,inset 0 2px 0 #fff3da8c;opacity:.82}
+.worktable .character-entrance .entry-label{margin-bottom:-16px}
+@media(max-width:600px){
+ .worktable{padding-top:116px}
+ .worktable .character-entrance .entry-label{margin-bottom:-12px}
+ .studio-wood-stage{left:-1%;right:-1%;bottom:-8px;height:18%;border-radius:48% / 24%}
+ .worktable .finish-ticket,.worktable .finish-ticket.ready{margin-top:68px}
+}
+@media(max-width:360px){
+ .worktable .cabinet-entry{left:-2px;width:48px;min-width:48px}
+ .worktable .cabinet-entry img{width:64px;height:54px;margin-left:-8px}
+}
+/* Mirror only the cabinet artwork; individual scale composes with its hover lift. */
+.worktable .cabinet-entry img{scale:-1 1}
+@media(max-width:600px){
+ .worktable{--scene-lower:clamp(0px,calc(50svh - 290px - env(safe-area-inset-bottom,0px)),180px);padding-top:calc(116px + var(--scene-lower));padding-bottom:env(safe-area-inset-bottom,0px)}
+ .worktable .studio-guide-prop{top:calc(88px + var(--scene-lower))}
+}
+/* Mobile-only spacing polish: bring the scene and nameplate a little closer. */
+@media(max-width:600px){
+ .worktable{--scene-lower:clamp(0px,calc(50svh - 314px - env(safe-area-inset-bottom,0px)),156px)}
+ .worktable .studio-nameboard{top:calc(-2px + clamp(0px,calc((100svh - 600px)*.066),16px))}
+}
+/* v28: at 390×844 the original stage bottom is 34.404px below the
+   speaker's visible alpha edge. Lift the whole scene by that measured gap;
+   the zero floor protects short screens and leaves brand/nameboard fixed. */
+@media(max-width:600px){
+ .worktable{--scene-lower:clamp(0px,calc(50svh - 348.404px - env(safe-area-inset-bottom,0px)),121.596px)}
+}
