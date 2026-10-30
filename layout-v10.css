@@ -1,0 +1,100 @@
+/* Content-sized fields: preserve DOM sequence and the large capture/listen controls. */
+.chapter-heading p{font-size:14px;line-height:1.7;max-width:55ch}
+.chapter-heading .eyebrow{font-size:11px}
+.page-intro p,.library-local-note,.file-share-note{font-size:14px;line-height:1.7}
+.intro-segment-tools>input{font-size:14px}
+.intro-segment-tools select{font-size:13px}
+.arrangement-controls{padding:4px 10px;margin:10px 0;max-width:800px}
+.arrangement-controls:not([open]){width:fit-content;max-width:100%}
+.arrangement-controls summary{padding:6px 8px;min-height:44px;font-size:15px}
+.arrangement-controls[open]{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.arrangement-controls[open]>summary,.arrangement-controls[open]>p{flex-basis:100%;margin:0}
+.arrangement-controls label{margin:4px 0}
+.chapter-rename{max-width:600px}
+.cloud-field input{width:100%;max-width:540px}
+.library-tools input{max-width:420px}
+.export-options{max-width:620px;flex-wrap:wrap}
+.export-options label{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px}
+.export-options select{font-size:14px;min-width:120px}
+.option-row{align-items:center}.option-row>div{min-width:0}.option-row small{font-size:14px!important}
+.role-paper input,.role-paper select{max-width:280px;width:100%}
+@media(min-width:601px){
+ .clip-card .clip-script{min-height:44px;font-size:17px;line-height:1.7}
+ .intro-segment .clip-script{font-size:17px;line-height:1.7}
+ .clip-card .clip-info{padding:16px 20px 8px}
+ .clip-bottom{justify-content:flex-start}
+}
+@media(min-width:1100px){
+ .intro-pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;align-items:start}
+ .intro-pair-grid .intro-segment{min-width:0}
+ .intro-pair-grid .clip-info{padding:16px 14px 8px}
+ .intro-pair-grid .intro-segment-tools{flex-wrap:wrap}
+ .intro-pair-grid .intro-segment-tools>input{min-width:80px;max-width:none}
+ .intro-pair-grid .intro-segment-tools>div{margin-left:auto}
+ .intro-pair-grid .clip-script{min-height:72px}
+ .intro-pair-grid .clip-audio-status{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 6px;padding-left:6px;padding-right:14px}
+ .intro-pair-grid .clip-playback{grid-column:2;grid-row:1/3;margin-left:0}
+ .intro-pair-grid .clip-time{grid-column:1}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)){grid-template-columns:minmax(240px,1fr) 104px 220px;grid-template-rows:auto auto;align-items:center}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-info{grid-column:1;grid-row:1/3;align-self:center}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-actions{grid-column:2;grid-row:1;padding:14px 8px}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-audio-status{grid-column:3;grid-row:1;padding:14px 12px 14px 4px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-playback{grid-column:2;grid-row:1/3;margin:0}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-time{grid-column:1}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-bottom{grid-column:2/4;grid-row:2;padding:0 8px 12px;border-top:0}
+}
+@media(max-width:600px){
+ .arrangement-controls{width:100%;padding:4px 8px}
+ .arrangement-controls summary{font-size:14px}
+ .mobile-card-slot .clip-script{font-size:17px!important}
+ .phone-room-export .export-options{gap:8px}
+ .phone-room-export .export-options label,.phone-room-export .export-options select{font-size:13px}
+ .room-return .sync-entry{font-size:11px!important}
+}
+
+#exportWarnings{max-height:none;overflow:visible;background:transparent;padding:0}
+.export-readiness{font-size:15px;line-height:1.7;margin:12px 0}
+.export-flow{list-style:none;display:grid;grid-template-columns:minmax(140px,1fr) minmax(240px,2fr) minmax(140px,1fr);gap:12px;margin:16px 0;padding:0;text-align:left}
+.export-flow>li{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;padding:16px;border:1px solid #ddcfaa;border-radius:18px;background:#fff8e8;color:#4e4655}
+.export-flow>li:nth-child(2){background:#f0f6ef;border-color:#b4cabb}.export-flow>li:nth-child(3){background:#f4edf8;border-color:#cebad8}
+.export-flow strong{font-size:16px}.export-flow small,.export-flow>li>span:not(.flow-icon){font-size:13px;line-height:1.6}
+.flow-icon svg{width:24px;height:24px;stroke:currentColor;fill:none}
+.flow-sections{display:flex;flex-wrap:wrap;gap:8px}.flow-sections>span{flex:1 1 140px;padding:8px 10px;border-radius:12px;background:#ffffffaa;font-size:13px}.flow-sections b{display:block;overflow-wrap:anywhere;margin-bottom:4px}
+@media(max-width:1000px){.export-flow{grid-template-columns:1fr 1fr}.export-flow>li:nth-child(2){grid-column:1/-1;grid-row:2}.export-flow>li:nth-child(3){grid-column:1/-1;grid-row:3}.export-flow>li:first-child{grid-column:1/-1}.export-flow>li{padding:12px}.flow-sections>span{flex-basis:110px}}
+@media(max-width:600px){
+ .phone-room-export .export-main{justify-content:flex-start;overflow-y:auto;overscroll-behavior:contain}
+ .phone-room-export .export-main>*{flex-shrink:0}
+ .export-flow{gap:8px;margin:10px 0}
+ .export-flow>li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px 8px;padding:10px;border-radius:14px}
+ .export-flow .flow-icon{grid-column:1;grid-row:1/3}.flow-icon svg{width:20px;height:20px}
+ .export-flow strong{font-size:14px;grid-column:2}
+ .export-flow>li>span:not(.flow-icon),.export-flow>li>small{grid-column:2;font-size:12px;line-height:1.4}
+ .export-flow>li>small{color:#615c65}.export-flow .flow-sections{grid-column:1/-1;gap:6px}
+ .flow-sections>span{padding:6px 8px;font-size:12px}
+ .phone-room-export .export-main .export-readiness{font-size:13px;line-height:1.6}
+}
+
+.record-tools{font-size:14px}.intro-routing small{font-size:12px;line-height:1.65}.book-meta{font-size:13px}.book-heading .eyebrow{font-size:11px}.intro-add-paper p{font-size:12px;line-height:1.6}@media(max-width:600px){.book-meta{font-size:12px}.record-tools{font-size:12px}}
+/* A short viewport scrolls the clip itself, never paints controls over navigation. */
+@media(max-width:600px){
+ .mobile-card-slot{overflow-y:auto;overscroll-behavior:contain}
+ .mobile-card-slot>.clip-card{flex:1 0 auto;min-height:280px!important}
+ .mobile-page-nav{position:relative;z-index:1;background:var(--paper,#fffaf0)}
+ .mobile-card-slot:has(.clip-editor)>.clip-card{min-height:0!important;flex:1}
+}
+/* Section clips keep occasional tools beside the two primary controls. */
+@media(min-width:1100px){
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)){grid-template-columns:minmax(220px,1fr) 96px 174px 76px;grid-template-rows:auto}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-info{grid-row:1}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-bottom{grid-column:4;grid-row:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:6px;padding:12px 8px 12px 0;min-width:0}
+ :is(.section-guide,.compact-stimulus):not(:has(.clip-editor)) .clip-bottom button{min-height:44px;min-width:44px;padding:7px 5px;white-space:normal}
+}
+@media(max-width:600px){
+ .mobile-card-slot .compact-stimulus .clip-bottom{justify-content:flex-end;gap:8px;border-top:0}
+}
+/* Audit: meaningful secondary actions must remain readable on phones. */
+:is([data-action=previewRoleA],[data-action=previewRoleB],[data-action=exportVoiceScript],[data-action=closeClipEditor],[data-action=playSelection],[data-action=playOriginal],[data-action=deleteAudio],[data-action=enterArrange],[data-action=connectSharedDrive],[data-action=configureSharedDrive]){font-size:13px!important}
+#driveSettingsDialog summary{font-size:13px!important}
+#driveSettingsDialog a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;line-height:1.6}
+#silenceThreshold{min-height:44px}
+@media(max-width:600px){.room-return .sync-entry,.top-actions .sync-entry{font-size:12px!important}}

@@ -1,0 +1,241 @@
+/* v5 review: keep the illustrated desk; give its working controls clear ink. */
+:root{--studio-ink:#354260;--studio-muted:#596278;--studio-teal:#126675;--studio-purple:#65427f;--studio-rust:#95472e;--studio-danger:#963b40}
+.brand small,.save-state,.scene-heading p,.project-paper small,.project-paper>span,.book-meta,.room-topline,.finish-ticket p,.finish-ticket strong{color:var(--studio-muted)}
+.scene-heading p,.project-paper small{font-size:13px;line-height:1.7}
+.scene-entrance small,.cabinet-entry small{font-size:12px}
+.entrance-record strong,.entrance-record small{color:var(--studio-rust)}
+.entrance-arrange strong,.entrance-arrange small{color:var(--studio-teal)}
+.entrance-export strong,.entrance-export small,.cabinet-entry strong{color:var(--studio-purple)}
+.clip-title,.clip-script,.chapter-button,.chapter-button .nav-count,.page-intro p,.setting-card p,.library-tools,.archive-folder p,.library-local-note,.file-share-note{color:var(--studio-ink)}
+.clip-script{font-family:'Noto Sans TC',system-ui,sans-serif;line-height:1.85;font-size:16px}
+.clip-script::placeholder,input::placeholder{color:#687083;opacity:1}
+.status-tag{color:#80451f;background:#fff0cc;font-weight:600}
+.has-audio .status-tag,.chapter-button.chapter-complete,.chapter-button.chapter-complete .nav-count{color:#245a42!important}
+.recording .status-tag{color:#8b2632;background:#ffe5e6}
+.chapter-button.active{font-weight:700;box-shadow:inset 3px 0 0 #8e5829}
+.secondary,.quiet,.intro-segment-tools input,.intro-segment-tools select,.dialogue-tools button{color:var(--studio-ink)}
+.primary,.phone-room-library .archive-actions .primary{background:#166b78;color:#fff}
+.primary:hover{background:#105462}
+.delete-text{color:var(--studio-danger)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #176d83;outline-offset:3px}
+button:disabled{cursor:not-allowed}
+.clip-bottom,.clip-bottom button,.clip-time,.wave-help,.waveform-paper p{color:var(--studio-muted)}
+.record-dock{border:2px solid #ba6041;box-shadow:0 5px 24px #35426020}
+#recordStatus{color:#7c2e25}#recordTarget{color:var(--studio-ink)}
+#toast{background:#354260;color:#fff;font-size:14px;line-height:1.6}
+.archive-folder h3,.phone-room-library .archive-folder h3{color:var(--studio-purple)}
+.archive-actions .secondary,.archive-actions .quiet,.library-tools>.secondary{color:#4e526c}
+.shared-drive-action .primary{background:#376b4e;color:#fff}
+.shared-drive-action>small,.cloud-help,.cloud-setup-note,.shared-drive-status,.cloud-field,.cloud-project-option{color:#4c5f51}
+.setting-card h3,.dial-value input,.dial-value span,.timing-page-nav button{color:#295f57}
+@media(min-width:601px){
+ .record-tools{font-size:13px;gap:10px}.record-tools button,.intro-segment-tools button,.dialogue-tools button{min-height:40px}
+ .record-tools .role-studio-entry,.record-tools .quiet{font-size:12px}
+ .clip-bottom{font-size:12px}.clip-bottom button{min-height:36px}
+ .chapter-button{font-size:13px;min-height:44px}
+ .setting-card p,.archive-folder p,.library-local-note{font-size:13px}
+}
+@media(max-width:600px){
+ .top-actions button{min-width:44px;min-height:44px}
+ .brand small{color:#596278;font-size:11px}
+ .phone-room-record .chapter-button{min-height:44px;font-size:12px;padding:6px 10px}
+ .phone-room-record .contents{height:52px;min-height:52px}
+ .phone-room-record .record-tools{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;max-height:none;min-height:0}
+ .phone-room-record .record-tools .role-studio-entry,.phone-room-record .record-tools .quiet{min-height:44px;font-size:12px;margin:0;justify-content:center}
+ .phone-room-record .record-tools .switch-label,.phone-room-record .record-tools .silence-label{font-size:12px;min-height:44px;display:flex;align-items:center;justify-content:center}
+ .phone-room-record .record-tools select{font-size:16px;min-height:40px}
+ .mobile-deck-top{font-size:12px;min-height:44px}.mobile-deck-top>button{min-height:44px;font-size:12px}
+ .mobile-card-slot .clip-script{font-size:16px!important;line-height:1.8}
+ .mobile-card-slot .clip-title{font-size:14px}.mobile-card-slot .clip-bottom{font-size:12px}
+ .mobile-card-slot .clip-bottom button{min-width:44px;min-height:44px;font-size:12px}
+ .mobile-page-nav button{min-height:44px;font-size:13px}
+ .phone-room-arrange .timing-page-nav button,.library-page-nav button{min-height:44px;min-width:72px;font-size:12px}
+ .phone-room-arrange .dial-minus,.phone-room-arrange .dial-plus{width:44px;height:44px}
+ .phone-room-arrange .setting-card p{font-size:13px;color:#425d50}
+ .phone-room-arrange .sequence-open{min-height:44px;font-size:12px;color:#6f532b}
+ .phone-room-library .archive-actions button{min-height:44px;font-size:12px}
+ .phone-room-library .archive-actions .quiet{font-size:12px;padding:9px}
+ .library-tools>input{font-size:16px}.phone-room-library .library-tools>.secondary{min-height:44px;font-size:12px}
+ .phone-room-library .library-tools>label{font-size:12px;min-height:36px}
+ .phone-room-library .library-local-note{font-size:11px;color:#535b6c}
+ .library-tools>label input{width:22px;height:22px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* One illustrated primary action per clip, with a separate explicit re-record action. */
+.record-tools .role-studio-entry{color:#65427f}
+.record-tools .quiet,.record-tools .switch-label,.record-tools .silence-label{color:#596278}
+.phone-room-arrange .rhythm-confirm .primary{background:#166b78;color:#fff}
+.entry-label small{opacity:1;color:var(--studio-muted);font-size:12px}
+@media(max-width:600px){.entry-label strong{font-size:12px}.entry-label small{font-size:10px;line-height:1.5}}
+
+.clip-illustrated-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:76px;min-height:88px;padding:7px 10px;background:#fff0cf;border:1px solid #c19b4d;border-radius:14px 11px 15px 10px;color:#694422;box-shadow:2px 3px 0 #dfbc7e40}
+.clip-illustrated-action svg{display:block;width:58px;height:50px;stroke:none}
+.clip-illustrated-action span{font:600 14px/1.4 system-ui,sans-serif;white-space:nowrap}
+.clip-illustrated-action:hover:not(:disabled){box-shadow:2px 4px 0 #8b71454d;filter:brightness(.96)}
+.clip-illustrated-action:disabled{box-shadow:none}
+.recording .clip-illustrated-action{background:#ffe5e6;color:#8b2632;border-color:#cb8790}
+.clip-actions{gap:9px}
+@media(max-width:600px){.mobile-card-slot .clip-actions{gap:8px}.clip-illustrated-action{min-width:72px;min-height:88px;padding:7px}}
+
+.clip-audio-status{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f1eee7;border-top:1px solid #d9d0c2;border-bottom:1px solid #d9d0c2;color:#535b6c;font-size:13px;flex-shrink:0}
+.clip-audio-status .clip-time{margin-left:auto;color:#535b6c;font-variant-numeric:tabular-nums}
+.clip-playback{min-width:76px;min-height:44px;display:flex;align-items:center;justify-content:center;padding:8px 12px;background:#e0f3ec;border:1px solid #548876;color:#245c48;border-radius:8px;font-size:14px;font-weight:600}
+.clip-playback:disabled{background:#e9e7e1;border-color:#b7b8b4;color:#646763;opacity:1}
+.recording .clip-audio-state{color:#8b2632;font-weight:600}
+/* Direct in-page work areas replace the round trip through the illustrated home. */
+.in-workroom>.topbar{display:none}
+.room-return{display:flex;align-items:center;gap:8px;flex-shrink:0;padding:10px 16px}
+.room-return>button{min-height:44px;font-size:12px;color:#725032;padding:8px 12px}
+.room-picker{margin-left:auto}.room-picker select{font-size:14px;min-height:44px;padding:8px 28px 8px 10px;border:1px solid #c8bfb2;border-radius:7px;background:#fffdf5;color:#354260;max-width:100%}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.project-menu{position:relative;color:#354260;flex-shrink:0}
+.project-menu summary{cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:44px;min-width:54px;border:1px solid #c8bfb2;border-radius:7px;background:#fffdf5;font-size:13px;list-style:none}
+.project-menu summary::after{content:' ▾';font-size:11px}.project-menu summary:focus-visible{outline:3px solid #176d83;outline-offset:3px}
+.project-menu>div{position:absolute;right:0;top:48px;width:200px;z-index:80;padding:8px;background:#fffdf5;border:1px solid #c8bfb2;border-radius:8px;box-shadow:0 8px 24px #35426025}
+.project-menu button{display:block;width:100%;text-align:left;padding:12px;min-height:44px;color:#354260;font-size:14px;border-radius:4px}
+.project-menu button:hover{background:#fff0cf}
+#structureDialog button{min-height:44px;font-size:14px}
+@media(max-width:600px){.room-return{padding:5px 8px;gap:6px;min-height:54px}.room-return>button{font-size:0;padding:8px;min-width:44px}.room-return>button>span{font-size:20px}.room-return>button::after{content:'工作桌';font-size:12px;margin-left:4px}.room-picker select{font-size:16px;max-width:160px}.project-menu summary{min-width:48px}.in-workroom .book-heading{padding-top:7px}}
+#roleOptions{margin:16px 0;border-top:1px dashed #c8bfb2;padding-top:10px}#roleOptions>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#65427f;font-size:15px;font-weight:600}#roleOptions>summary:before{content:'▸';margin-right:8px}#roleOptions[open]>summary:before{content:'▾'}
+#settingsDialog{max-height:90dvh;overflow-y:auto}#settingsDialog button{min-height:44px}#settingsDialog input[type=text],#settingsDialog select{font-size:16px}
+@media(max-width:600px){
+ .phone-room-record .record-tools{display:flex;flex-wrap:nowrap;gap:5px;justify-content:space-between}
+ .phone-room-record .record-tools .switch-label,.phone-room-record .record-tools .silence-label{font-size:11px;white-space:nowrap}
+ .phone-room-record .record-tools .quiet{min-width:44px;flex-shrink:0}
+ .phone-room-record .record-tools select{font-size:16px;width:62px;padding:3px}
+ .mobile-card-slot .clip-main{min-height:130px}
+ .mobile-card-slot .clip-audio-status{padding:5px 9px;gap:7px;font-size:12px}
+ .mobile-card-slot .clip-bottom{min-height:44px;padding:3px 9px}
+}
+@media(max-width:600px) and (min-height:451px) and (max-height:650px){
+ .mobile-card-slot .clip-main{min-height:108px;padding-top:9px;padding-bottom:9px}
+ .mobile-card-slot .clip-title{margin-bottom:4px}
+ .mobile-card-slot .clip-illustrated-action{min-height:80px}
+ .mobile-deck-top{padding-top:0;padding-bottom:0}
+}
+@media(min-width:601px) and (max-width:900px) and (max-height:500px){
+ .in-workroom main{padding:0 8px}.in-workroom #workroom{margin:0;box-shadow:none}
+ .in-workroom .book-heading{padding:6px 15px}.in-workroom .book-heading .eyebrow,.in-workroom .book-meta,.in-workroom .completion{display:none}
+ .in-workroom .project-title{font-size:18px;margin:0;line-height:1.5}
+ .in-workroom .room-return{padding:4px 8px}.in-workroom .book-ribbon{display:none}
+ .in-workroom .workspace{grid-template-columns:150px 1fr}.in-workroom .contents{padding:8px}
+ .in-workroom .record-content{padding:8px 12px}.in-workroom .chapter-heading,.in-workroom .spread-edge,.in-workroom .focus-recording-button,.in-workroom .intro-routing{display:none}
+ .in-workroom .record-tools{margin:0 0 8px}.in-workroom .clip-card{margin:8px 0 12px;transform:none}
+ .in-workroom .clip-main{padding:10px}.in-workroom .clip-title{margin-bottom:4px}.in-workroom .aside-heading{display:none}
+}
+.arrangement-controls{margin:12px 0;padding:12px;border:1px solid #b7a8cf;border-radius:12px;background:#f9f5ff;color:#34264a}.arrangement-controls summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.arrangement-controls label{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0}.arrangement-controls select{min-height:44px;font-size:16px;max-width:100%}.arrangement-controls p{font-size:14px}.arrangement-controls input[type=checkbox]{width:24px;height:24px}
+/* Static spotlight preserves original artwork; this is not a 3D asset redraw. */
+.sound-preference{max-width:1280px;margin:0 auto;display:flex;justify-content:flex-end;padding:4px 12px}.sound-preference button{min-height:44px;border:1px solid #b7a8cf;border-radius:12px;padding:6px 12px;color:#46335f;background:#fff9ec;font:inherit;font-size:14px}.sound-preference button:disabled{opacity:1;color:#65596a;background:#f4eee7}.sound-preference button:focus-visible{outline:3px solid #126b7a;outline-offset:2px}
+.character-entrance:before,.character-entrance.complete:before,.character-entrance.ready:before{animation:none;box-shadow:none;background:transparent;opacity:0;transition:opacity 180ms}
+.character-entrance.selected-workspace:before{opacity:1;background:radial-gradient(ellipse at 50% 18%,#fff7be66 0%,#ffe7a126 48%,transparent 72%);box-shadow:inset 0 -8px 12px -10px #47336c80}
+.character-entrance.selected-workspace .entry-number{background:#47336c;color:white;border-radius:50%;outline:2px solid white}.character-entrance.selected-workspace .entry-label{border:2px solid #47336c}.character-entrance.selected-workspace .entry-label:after{content:'目前工作區';display:block;color:#47336c;font-size:11px;font-weight:bold}.character-entrance:focus-visible{outline:3px solid #126b7a;outline-offset:3px}.character-entrance.complete .entry-done{box-shadow:none;animation:none}.club-portrait{filter:drop-shadow(0 5px 2px #51406824)}
+#recordPage:not([hidden]),#arrangePage:not([hidden]),#exportPage:not([hidden]),#libraryPage:not([hidden]){animation:workspaceEnter 180ms ease-out}@keyframes workspaceEnter{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.arrangement-controls p,.arrangement-controls label{color:#4c3c59}
+/* Keep Pai's mobile card to two lines without changing its character hit area. */
+.arrange-status-compact{display:none}
+@media(max-width:600px),(max-width:900px) and (max-height:500px){
+ .entrance-arrange .arrange-status-full{display:none}
+ .entrance-arrange .arrange-status-compact{display:inline}
+ .entrance-arrange.selected-workspace .entry-label:after{display:none;content:none}
+ .entrance-arrange .entry-label{padding:6px 5px}
+ .entrance-arrange .entry-label strong{font-size:11px;line-height:1.5;letter-spacing:0;white-space:nowrap}
+ .entrance-arrange .entry-label small{font-size:10px;line-height:1.5;white-space:nowrap}
+}
+/* Pending distinct-pose illustrations; hidden slots add no height until assets arrive. */
+.workspace-mascot[hidden]{display:none!important}
+.workspace-mascot{position:absolute;right:8px;top:8px;width:128px;height:112px;pointer-events:none;user-select:none}
+.workspace-mascot img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+.chapter-heading:has(.workspace-mascot:not([hidden])) #chapterArt{display:none}
+.chapter-heading:has(.workspace-mascot:not([hidden]))>div:first-of-type{max-width:calc(100% - 144px)}
+.page-intro:has(.workspace-mascot:not([hidden])) h2,.page-intro:has(.workspace-mascot:not([hidden])) p{max-width:calc(100% - 144px)}
+.mobile-deck-top{position:relative}
+.mobile-deck-top .workspace-mascot{left:0;right:auto;top:0;width:40px;height:40px}
+.mobile-deck-top:has(.workspace-mascot:not([hidden])){padding-left:46px;min-height:44px}
+@media(max-width:600px),(max-width:900px) and (max-height:500px){
+ .page-intro .workspace-mascot{width:44px;height:44px;top:8px;right:8px}
+ .page-intro:has(.workspace-mascot:not([hidden])) h2,.page-intro:has(.workspace-mascot:not([hidden])) p{max-width:calc(100% - 48px)}
+}
+/* Use the existing mobile gap below the illustration for all three two-line cards. */
+@media(max-width:600px){
+ .character-entrance .entry-label{bottom:-38px;padding:6px 5px}
+ .character-entrance .entry-label strong{font-size:11px;line-height:1.5;letter-spacing:0;white-space:nowrap}
+ .character-entrance .entry-label small{font-size:10px;line-height:1.5;letter-spacing:0;white-space:nowrap}
+ .character-entrance.selected-workspace .entry-label:after{display:none;content:none}
+}
+@media(max-width:600px){
+ .finish-ticket{padding:6px 14px}
+ .finish-ticket .ticket-star{font-size:18px;line-height:24px}
+}
+@media(min-width:601px) and (max-width:900px) and (max-height:500px){
+ .character-entrance .entry-label{bottom:-12px;padding:6px 5px}
+ .character-entrance .entry-label strong{font-size:11px;line-height:1.5;letter-spacing:0;white-space:nowrap}
+ .character-entrance .entry-label small{font-size:10px;line-height:1.5;letter-spacing:0;white-space:nowrap}
+ .character-entrance.selected-workspace .entry-label:after{display:none;content:none}
+}
+/* Distinct functional poses remain decoration, with room palettes unchanged. */
+.workspace-mascot{width:132px;height:116px;top:2px;filter:drop-shadow(0 3px 2px #49376118)}
+.page-intro:has(.workspace-mascot:not([hidden])) .page-decoration{display:none}
+.mobile-deck-top .workspace-mascot{width:60px;height:60px;top:-9px;left:-2px}
+.mobile-deck-top:has(.workspace-mascot:not([hidden])){padding-left:62px;min-height:44px}
+@media(max-width:600px),(max-width:900px) and (max-height:500px){
+ .page-intro .workspace-mascot{width:68px;height:68px;top:2px;right:6px}
+ .page-intro:has(.workspace-mascot:not([hidden])) h2,.page-intro:has(.workspace-mascot:not([hidden])) p{max-width:calc(100% - 68px)}
+}
+@media(min-width:901px){
+ .page-intro .workspace-mascot{width:180px;height:164px;right:20px;top:14px}
+ .page-intro:has(.workspace-mascot:not([hidden])) h2,.page-intro:has(.workspace-mascot:not([hidden])) p{max-width:calc(100% - 196px)}
+}
+.mascot-landscape{display:none}
+@media(min-width:601px) and (max-width:900px) and (max-height:500px){
+ .record-tools{position:relative;padding-right:64px}
+ .record-tools .mascot-landscape{display:block;width:60px;height:60px;right:0;top:-6px}
+}
+@media(max-width:600px),(max-width:900px) and (max-height:500px){
+ .page-intro:has(.workspace-mascot:not([hidden])){min-height:72px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center}
+}
+@media(max-width:600px){
+ .cabinet-entry{left:8px;right:auto;transform:rotate(-5deg)}
+}
+/* Ambient toggle occupies 52px above the phone workroom; include it in its height budget. */
+@media(max-width:600px) and (min-height:451px){
+ body.phone-room-record #workroom,body.phone-room-arrange #workroom,body.phone-room-export #workroom,body.phone-room-library #workroom{height:calc(100dvh - 52px)}
+}
+@media(max-width:600px) and (min-height:451px){
+ body.in-workroom main{height:calc(100dvh - 52px);min-height:0}
+}
+/* V7 observed fixes: status messages never cover stop/download/edit controls. */
+#toast,#toast.show{position:static;display:none;transform:none;left:auto;bottom:auto;max-width:none;margin:4px 10px;padding:8px 12px;box-shadow:none;border-radius:6px;flex-shrink:0;max-height:76px;overflow:auto;transition:none;font-size:13px;line-height:1.5;background:#3f4166;color:#fff}
+#toast.show{display:block;opacity:1}
+.role-nameplate{font:600 12px/1.5 sans-serif;min-width:64px;width:auto;border-radius:6px;padding:3px 7px;white-space:nowrap}
+.cloud-help summary{min-height:44px;display:flex;align-items:center}
+@media(max-width:600px){
+ body.phone-room-record .sound-preference,body.phone-room-export .sound-preference{display:none}
+ .mobile-card-slot .clip-bottom button{min-height:44px;min-width:44px}
+ .mobile-card-slot .clip-card:has(.clip-editor)>.clip-main,.mobile-card-slot .clip-card:has(.clip-editor)>.clip-audio-status,.mobile-card-slot .clip-card:has(.clip-editor)>.clip-bottom{display:none}
+ .mobile-card-slot .clip-editor{position:static;inset:auto;max-height:none;min-height:0;flex:1;overflow:auto;box-shadow:none;border-radius:8px;padding:12px}
+ #mobileRecordDeck:has(.clip-editor) .mobile-page-nav{display:none}
+ .mobile-card-slot .clip-editor button,.mobile-card-slot .clip-editor input{min-height:44px}
+ .mobile-card-slot .close-clip-editor{position:sticky;top:0;z-index:2;background:#e4d4f0;color:#45335a;margin-bottom:8px}
+ .role-cast{grid-template-columns:1fr}
+ .role-paper label{font-size:14px}
+ .role-paper input,.role-paper select{font-size:16px;min-height:44px}
+}
+@media(max-width:600px) and (min-height:451px){
+ body.phone-room-record #workroom,body.phone-room-export #workroom,body.phone-room-record main,body.phone-room-export main{height:100dvh;min-height:0}
+}
+@media(max-width:600px){
+ .mobile-card-slot .status-tag{display:none}
+ .mobile-card-slot .clip-bottom [data-action=importAudio]{display:inline-flex;align-items:center;gap:5px;color:#4b3b5e;font-size:12px}
+}
+.record-dock .dock-actions button{min-height:48px;font-size:14px;font-weight:600}
+.record-dock .dock-actions .secondary{color:#49315d;background:#eee2f7;border-color:#b6a2c7}
+.record-dock .dock-actions .primary{color:#fff;background:#ad4934;border-color:#ad4934}
+.close-clip-editor,.clip-editor .delete-text{color:#5a365b}
+.clip-editor [data-action=playOriginal]{display:inline-flex;align-items:center;gap:6px}
+.clip-editor .close-clip-editor{display:block;float:none;margin-left:auto;min-height:44px;padding:8px 12px}
+.clip-editor button,.clip-editor input{min-height:44px}
+#settingsDialog .option-row small,#settingsDialog .muted,#settingsDialog .role-honesty,#settingsDialog .cloud-speech-note p{color:#526052;font-size:12px;line-height:1.65}
+#settingsDialog .role-paper label{color:#4d3a5b}
+#settingsDialog .role-paper input,#settingsDialog .role-paper select{color:#473354}
+#driveSettingsDialog .cloud-setup-note,#driveSettingsDialog .cloud-help{color:#526356}

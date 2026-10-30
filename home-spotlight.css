@@ -1,0 +1,30 @@
+/* No layout-sized animation: original pixels and card move as one group. */
+.spotlight-ready{isolation:auto}
+.spotlight-ready .scene-characters{isolation:auto;z-index:6}
+.spotlight-ready .club-portrait{visibility:hidden}
+.spotlight-ready .character-entrance{transform:none;transition:transform 180ms ease-out,filter 180ms ease-out;transform-origin:50% 85%;overflow:visible}
+.mascot-region{position:absolute;display:block;pointer-events:none;z-index:-1;filter:drop-shadow(0 5px 2px #51406824)}
+.mascot-region>svg{display:block;width:100%;height:100%;stroke:none;overflow:visible;pointer-events:none}
+.spotlight-ready .character-entrance .entry-label,.spotlight-ready .character-entrance:hover .entry-label{transform:translateX(-50%);transition:none}
+.spotlight-ready .character-entrance:before{display:none}
+.home-dimmer{position:fixed;inset:0;background:#25223a;opacity:0;pointer-events:none;z-index:5;transition:opacity 180ms ease-out}
+.has-spotlight .home-dimmer{opacity:.38}
+.has-spotlight .character-entrance:not(.spotlit){filter:brightness(.62)}
+.spotlight-ready .character-entrance.spotlit{z-index:10;transform:translateY(-7px) scale(1.035)}
+.spotlit .mascot-region{filter:drop-shadow(0 0 3px #fff7bf) drop-shadow(0 0 10px #ffe699) drop-shadow(0 10px 6px #45345130)}
+.spotlit .entry-label{box-shadow:0 0 0 2px #fff7bf,0 7px 16px #47336c30}
+.spotlight-ready .character-entrance:focus-visible{outline:3px solid #126b7a;outline-offset:4px}
+@media(max-width:600px){.spotlight-ready .character-entrance.spotlit{transform:translateY(-3px) scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.spotlight-ready .character-entrance.spotlit{transform:none}.home-dimmer,.spotlight-ready .character-entrance{transition:none}}
+.spotlight-ready .scene-characters{pointer-events:none}.spotlight-ready .character-entrance{pointer-events:auto}
+/* Cover the complete home document, including below-fold footer content. */
+.home-dimmer{position:absolute;inset:auto;left:calc(-1 * var(--home-left,0px));top:calc(-1 * var(--home-top,0px));width:var(--home-width,100vw);height:var(--home-height,100vh)}
+/* Library remains clickable, but belongs beneath the active spotlight dimmer. */
+.spotlight-ready.has-spotlight .cabinet-entry{z-index:4}
+
+/* Lower the existing left-hand Library without changing document flow. */
+.spotlight-ready .cabinet-entry{margin-top:16px}
+@media(max-width:600px){.spotlight-ready .cabinet-entry{margin-top:12px}}
+
+.mascot-floor-cable{position:absolute;inset:0;pointer-events:none;z-index:0}.mascot-floor-cable svg{width:100%;height:100%;display:block;pointer-events:none}
+.has-spotlight .mascot-floor-cable{filter:brightness(.62)}

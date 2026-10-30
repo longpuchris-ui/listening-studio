@@ -1,0 +1,109 @@
+/* v8: calm, tactile controls; no extra animation or audio processing. */
+:root{--ui-font:'Huninn','jf open 粉圓','Noto Sans TC','Noto Sans CJK TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;--serif:var(--ui-font);--control-radius:16px}
+body,button,input,select,textarea,summary,.clip-script{font-family:var(--ui-font)!important}
+button,summary{letter-spacing:.02em}
+button:not(.scene-entrance):not(.cabinet-entry),summary{min-height:44px;min-width:44px;border-radius:var(--control-radius)}
+button svg,a svg{width:21px;height:21px}
+.primary,.secondary,.quiet,.clip-bottom button,.clip-playback{padding:10px 14px;gap:8px;font-size:14px;line-height:1.45}
+.primary{min-height:48px;border-radius:18px;box-shadow:0 3px 0 #28334a26}
+.secondary,.clip-bottom button,.clip-playback{background:#fffaf0;border:1px solid #d9d4c8;box-shadow:0 2px 0 #6257750c}
+.quiet{color:#51445e}
+button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #126675;outline-offset:3px}
+button:disabled{cursor:not-allowed;box-shadow:none}
+input:not([type=checkbox]):not([type=file]),select,textarea{border-radius:14px;border:1px solid #d7d4ce;background:#fffdf8;padding:10px 12px;line-height:1.5;min-height:44px;max-width:100%}
+input[type=number]{min-width:70px;font-variant-numeric:tabular-nums}
+input[type=checkbox]{width:24px;height:24px;flex-shrink:0}
+label:has(>input[type=checkbox]){min-height:44px;cursor:pointer}
+.clip-script{border:0!important;background:transparent!important;padding:4px!important}
+.project-title,.chapter-rename{border-color:transparent!important;background:#ffffff70!important}
+.project-title:focus,.chapter-rename:focus{border-color:#a998bd!important}
+.arrangement-controls,.role-paper,.export-options,.waveform-paper{border-radius:18px!important}
+.arrangement-controls summary,#roleOptions>summary,.cloud-help>summary{padding:10px 12px;line-height:1.6}
+.arrangement-controls select,.role-paper select{min-height:44px}
+.dialog-top h2{line-height:1.5;letter-spacing:.02em}
+dialog{border-radius:24px!important}
+.option-row{padding:14px 0;gap:18px}
+.room-return>button{font-size:14px!important;display:inline-flex;align-items:center;gap:8px;border:1px solid #ddd0b8;background:#fff8e7;min-height:44px;padding:9px 14px}
+.room-return>button::after{content:none!important}
+.room-return>button svg{width:20px;height:20px}
+.clip-bottom,.intro-segment-tools,.dialogue-tools,.chapter-controls,.archive-actions{gap:8px;flex-wrap:wrap}
+.dialogue-tools button,.intro-segment-tools button,.question-tools button{min-width:44px;min-height:44px}
+.sound-preference button{font-size:13px;padding:8px 12px}
+.setting-card .icon-btn{width:48px;height:48px;min-width:48px;border-radius:50%;background:#fffaf0}
+.cloud-field input,.library-tools input{border-radius:16px}
+.top-actions button{min-height:44px;min-width:44px}
+@media(max-width:600px){
+ .room-return{min-height:54px;padding:5px 8px}
+ .room-return>button{font-size:14px!important}
+ .mobile-card-slot .clip-bottom button,.mobile-card-slot .clip-playback,.mobile-page-nav button{font-size:13px;min-height:44px;padding:8px 12px}
+ .mobile-deck-top>button{font-size:13px;padding:8px 10px}
+ .mobile-deck-top{gap:6px}
+ .record-tools{gap:6px!important}
+ .record-tools select{padding:5px;min-height:44px;font-size:16px}
+ .clip-illustrated-action{min-height:64px;min-width:56px;border-radius:20px}
+ .phone-room-record .chapter-button{border-radius:14px;min-height:44px}
+ .phone-room-record .mobile-card-slot .clip-editor{padding:10px}
+ .mobile-card-slot .clip-editor input{min-width:60px;width:64px;padding:8px 6px}
+ .mobile-card-slot .clip-editor>label{display:inline-flex;align-items:center;gap:4px}
+ .library-tools,.archive-actions,.chapter-controls{flex-wrap:wrap}
+ .option-row small,.muted,.role-honesty{font-size:13px!important;line-height:1.7}
+ .role-cast{grid-template-columns:1fr}
+ input:not([type=checkbox]):not([type=file]),select,textarea{font-size:16px}
+ .project-title{font-size:18px!important}
+ .book-meta{font-size:11px}
+ .room-return~.book-heading{padding-top:6px}
+}
+/* Mobile: script first, one recording action beside its playback/status strip. */
+@media(max-width:600px){
+ .mobile-card-slot .clip-card{display:grid!important;grid-template-columns:112px minmax(0,1fr);grid-template-rows:minmax(100px,1fr) auto auto;align-content:stretch}
+ .mobile-card-slot .clip-main{display:contents}
+ .mobile-card-slot .clip-main>.clip-badge{display:none}
+ .mobile-card-slot .clip-info{grid-column:1/-1;grid-row:1;padding:12px;min-width:0;width:100%;align-self:stretch}
+ .mobile-card-slot .clip-actions{grid-column:1;grid-row:2;padding:8px 0 8px 10px;margin:0;align-self:center}
+ .mobile-card-slot .clip-illustrated-action{display:flex;flex-direction:row;justify-content:center;gap:5px;min-width:0;width:100%;min-height:52px;padding:8px;border-radius:18px}
+ .mobile-card-slot .clip-illustrated-action svg{width:30px;height:30px}
+ .mobile-card-slot .clip-illustrated-action span{font-size:14px}
+ .mobile-card-slot .clip-audio-status{grid-column:2;grid-row:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 6px;padding:8px;background:transparent;border:0;align-self:center}
+ .mobile-card-slot .clip-audio-state{font-size:11px;line-height:1.4}
+ .mobile-card-slot .clip-time{grid-column:1;margin:0;font-size:11px;line-height:1.4}
+ .mobile-card-slot .clip-playback{grid-column:2;grid-row:1/3;padding:8px;min-height:52px}
+ .mobile-card-slot .clip-bottom{grid-column:1/-1;grid-row:3;padding:6px 10px;border-top:1px solid #e6dfd2}
+ .mobile-card-slot .clip-card:has(.clip-editor){display:flex!important}
+ .mobile-card-slot .clip-card:has(.clip-editor)>.clip-main{display:none}
+ .mobile-card-slot .clip-editor{width:100%}
+}
+/* Desktop follows the same read → capture/listen grouping, using the wider row. */
+@media(min-width:601px){
+ .clip-card{display:grid;grid-template-columns:176px minmax(0,1fr);grid-template-rows:auto auto auto}
+ .clip-card>.clip-main{display:contents}
+ .clip-main>.clip-badge{display:none}
+ .clip-card .clip-info{grid-column:1/-1;grid-row:1;padding:20px 24px 14px;min-width:0}
+ .clip-card .clip-script{min-height:88px;line-height:1.85}
+ .clip-card .clip-actions{grid-column:1;grid-row:2;padding:8px 0 12px 20px;margin:0;align-self:center}
+ .clip-card .clip-illustrated-action{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:10px;min-height:56px;width:144px;padding:8px 14px;border-radius:18px}
+ .clip-card .clip-illustrated-action svg{width:34px;height:34px}
+ .clip-card .clip-audio-status{grid-column:2;grid-row:2;align-self:center;border:0;background:transparent;padding:8px 20px 12px 12px}
+ .clip-card .clip-playback{min-height:56px;min-width:96px}
+ .clip-card .clip-bottom{grid-column:1/-1;grid-row:3;padding:8px 20px;border-top:1px solid #e6dfd2}
+ .clip-card>.clip-editor{grid-column:1/-1;grid-row:4}
+ .clip-card .status-tag{display:none}
+}
+@media(min-width:601px){.clip-card .clip-audio-status{justify-content:flex-start;gap:12px}.clip-card .clip-time{margin-left:0}.clip-card .clip-playback{margin-left:8px}}
+/* Restore large illustrated capture; matching headphone audition, below script. */
+.clip-card .clip-illustrated-action,.clip-card .clip-playback{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:80px!important;height:88px!important;min-width:80px!important;min-height:88px!important;max-height:88px;padding:7px!important;flex-shrink:0;border-radius:18px;transform:none}
+.clip-card .clip-illustrated-action svg{width:50px!important;height:44px!important}
+.clip-card .clip-playback svg{width:36px!important;height:36px!important;stroke-width:1.8;stroke:currentColor;fill:none}
+.clip-card .clip-playback span{font-size:13px;line-height:1.4;white-space:nowrap}
+.clip-card .clip-playback{background:#eaf5ed;color:#275b46;border:1px solid #8db39e}
+.clip-card .clip-playback[aria-pressed=true]{background:#dceee9;border:2px solid #246754}
+.clip-card .clip-playback:disabled{background:#eeece7;color:#5f625e;border-color:#bdbcb5}
+@media(max-width:600px){.mobile-card-slot .clip-card{grid-template-columns:94px minmax(0,1fr)}.mobile-card-slot .clip-illustrated-action,.mobile-card-slot .clip-playback{width:74px!important;min-width:74px!important}.mobile-card-slot .clip-actions{padding-left:10px}.mobile-card-slot .clip-audio-status{gap:0 8px}.mobile-card-slot .clip-playback{margin-left:0}}
+@media(min-width:601px){.clip-card{grid-template-columns:112px minmax(0,1fr)}}
+
+/* Dial numbers belong to the illustrated clock, not the general field skin. */
+.setting-card .dial-value input[type=number]{border:0;background:transparent;box-shadow:none;border-radius:8px;padding:0;min-width:0;color:var(--dial-edge)}
+.setting-card .dial-value input[type=number]:focus-visible{outline:2px dashed currentColor;outline-offset:2px}
+.setting-card .dial-value input[type=number]:focus-visible:invalid{outline:2px dashed #a64242;outline-offset:2px}
+.setting-card .dial-value input[type=number]:disabled{opacity:.6;background:transparent}
+.setting-card .dial-value input[type=number]{font-size:31px;line-height:1.2}
+@media(max-width:600px){.phone-room-arrange .dial-value input[type=number]{font-size:42px;width:110px}}
