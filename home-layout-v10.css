@@ -322,3 +322,14 @@
  body:not(.in-workroom) .wall-brand-drawing{display:block;position:absolute;pointer-events:none;top:-8px;left:0;width:200px;height:72px;overflow:visible}
 }
 @media(max-width:360px){body:not(.in-workroom) .wall-brand-drawing{width:180px;height:65px;top:-7px}}
+/* v48: halve only the desktop home's measured outer top space. */
+@media(min-width:1000px){
+ body:not(.in-workroom) main{padding-top:49.3984375px}
+ body:not(.in-workroom) .topbar{top:74.6015625px}
+}
+@media(min-width:1000px) and (max-height:800px){body:not(.in-workroom) .topbar{top:70.6015625px}}
+/* v49: keep the room frame, move the privacy link next to the retained message.
+   The former caption's room-floor space now follows the link, not between labels. */
+.finish-ticket:after{content:'';display:block;height:24.8px}
+@media(max-width:600px){.finish-ticket:after{height:22px}}
+@media(max-width:360px){.finish-ticket:after{height:40px}}

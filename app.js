@@ -47,7 +47,6 @@ function renderWorktable(){
  $('#exportEntryStatus').textContent=exportMade?'音檔已打包 ✓':ready?'全部就緒！點我輸出':'進入試聽與輸出';
  $('#finishTicket').classList.toggle('ready',ready);$('#worktable').classList.toggle('all-ready',ready);
  $('#finishTitle').textContent=exportMade?'你的聽力測驗，已經打包好了！':ready?'三、二、一，聽力測驗準備發聲！':'每完成一站，夥伴就會亮起來。';
- $('#finishDesc').textContent=exportMade?'點小封，試聽並下載完整音檔。':ready?'所有錄音與播放節奏都準備好了，點小封完成最後輸出。':'錄好所有片段 → 確認播放節奏 → 打包完整聽力測驗';
 
  $('#workroom').classList.toggle('export-ready',ready);$('#rhythmConfirmedText').textContent=arranged?'✓ 這份試卷的播放節奏已確認。調整後請再確認一次。':'按下確認，收好這份試卷的留白與重播設定。';
 }
