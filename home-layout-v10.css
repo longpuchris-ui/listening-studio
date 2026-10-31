@@ -1,7 +1,7 @@
 /* Home illustration slots: retain original cabinet until matching new art arrives. */
 .topbar{padding-top:14px;padding-bottom:10px;align-items:center}
 .brand{font-size:32px;line-height:1.25}.brand small{font-size:16px;line-height:1.8;letter-spacing:.05em}
-.top-actions{gap:10px}.top-actions .save-state{display:none}
+.top-actions{gap:10px}.top-actions .save-state{display:inline-block}
 .scene-heading{display:none}
 .worktable{min-height:650px;margin-top:4px;margin-bottom:0}
 .project-paper{top:4px;right:50%;transform:translateX(50%) rotate(1deg);width:min(540px,70%);padding:12px 22px}
@@ -173,3 +173,8 @@
 @media(max-width:600px){
  .worktable{--scene-lower:clamp(0px,calc(50svh - 348.404px - env(safe-area-inset-bottom,0px)),121.596px)}
 }
+
+/* One live status node follows the active workspace; never hidden with the topbar. */
+#workroom>#saveState,#finishTicket #saveState{display:block!important;position:relative;flex-shrink:0;max-width:100%;box-sizing:border-box;margin:0;padding:5px 16px;color:#504466;font-size:14px;line-height:1.45;white-space:normal;overflow-wrap:anywhere;background:#fff8e9;border:0;border-radius:8px;text-align:left}
+#finishTicket #saveState{text-align:center;margin:0 auto 5px;padding:4px 8px;background:transparent}
+@media(max-width:600px){#workroom>#saveState{padding:3px 10px;font-size:13px;line-height:1.4}#finishTicket #saveState{font-size:13px}}
