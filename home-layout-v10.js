@@ -1,6 +1,12 @@
 /* Home tools remain separate accessible controls; illustrated props retain independent semantic hit areas. */
 (()=>{
  const home=document.querySelector('#worktable'),scene=home.querySelector('.scene-characters');
+ const brandText=document.querySelector('.brand>span:last-child');
+ if(brandText){brandText.innerHTML='<span class="wall-brand-word">聽力錄音室</span><small>你今天，錄了嗎？</small><svg class="wall-brand-drawing" viewBox="0 0 310 112" aria-hidden="true" focusable="false"><path d="M3 46V29C3 2 60 2 60 29v17" fill="none" stroke="#a58ab6" stroke-width="3.4"/><path d="M4 39v14m54-14v14" stroke="#dfba70" stroke-width="8" stroke-linecap="round"/><path d="M70 66h20l5-5 6 10 6-17 7 23 7-16 6 5h126" fill="none" stroke="#c4a464" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M249 29q7 7 0 14m7-19q12 12 0 24" fill="none" stroke="#a58ab6" stroke-width="2.5" stroke-linecap="round"/></svg>'}
+
+ // Decorative floor spill only: no hit targets, layout height, or audio behavior.
+ const floor=document.createElement('div');floor.className='mobile-floor-atmosphere';floor.setAttribute('aria-hidden','true');
+ document.body.append(floor);
  home.querySelector('.scene-heading')?.remove();
  const stage=document.createElement('div');stage.className='studio-wood-stage';stage.setAttribute('aria-hidden','true');scene.prepend(stage);
  const backdrop=document.createElement('div');backdrop.className='studio-scene-backdrop';backdrop.setAttribute('aria-hidden','true');home.prepend(backdrop);
