@@ -28,3 +28,8 @@
 
 .mascot-floor-cable{position:absolute;inset:0;pointer-events:none;z-index:0}.mascot-floor-cable svg{width:100%;height:100%;display:block;pointer-events:none}
 .has-spotlight .mascot-floor-cable{filter:brightness(.62)}
+/* Completion is a steady glow on the same precision-masked character only.
+   Hover/focus still owns the lift and background spotlight; no completion pulse. */
+.spotlight-ready .character-entrance.complete:not(.spotlit) .mascot-region{
+ filter:brightness(1.14) saturate(1.06) drop-shadow(0 0 3px #fffbdcee) drop-shadow(0 0 9px #ffdf68ee) drop-shadow(0 0 23px #f4c54bcc);
+}

@@ -42,9 +42,10 @@ function renderWorktable(){
  $('.entrance-arrange').classList.toggle('complete',arranged);
  $('.entrance-export').classList.toggle('ready',ready&&!exportMade);
  $('.entrance-export').classList.toggle('complete',exportMade);
- $('#recordEntryStatus').textContent=recorded?'全部錄好了 ✓':done+' / '+clips.length+' 段已錄好';
- $('#arrangeEntryStatus').innerHTML=arranged?'節奏已確認 ✓':'<span class="arrange-status-full">點時鐘，排好播放節奏</span><span class="arrange-status-compact">留白與重播</span>';
- $('#exportEntryStatus').textContent=exportMade?'音檔已打包 ✓':ready?'全部就緒！點我輸出':'進入試聽與輸出';
+ for(const [role,label,complete] of [['record','點麥麥，進入錄音出題',recorded],['arrange','點拍仔，設定留白與重播',arranged],['export','點小封，試聽與輸出音檔',exportMade]])$('.entrance-'+role).setAttribute('aria-label',label+'；'+(complete?'已完成':'尚未完成'));
+ $('#recordEntryStatus').textContent=recorded?'全部錄好了':done+' / '+clips.length+' 段已錄好';
+ $('#arrangeEntryStatus').innerHTML=arranged?'節奏已確認':'<span class="arrange-status-full">點時鐘，排好播放節奏</span><span class="arrange-status-compact">留白與重播</span>';
+ $('#exportEntryStatus').textContent=exportMade?'音檔已打包':ready?'全部就緒！點我輸出':'進入試聽與輸出';
  $('#finishTicket').classList.toggle('ready',ready);$('#worktable').classList.toggle('all-ready',ready);
  $('#finishTitle').textContent=exportMade?'你的聽力測驗，已經打包好了！':ready?'三、二、一，聽力測驗準備發聲！':'每完成一站，夥伴就會亮起來。';
 
