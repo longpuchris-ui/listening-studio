@@ -7,10 +7,10 @@
  // The complementary static mask preserves every source pixel without moving background cables.
  const maskNames={enterRecord:'center',enterArrange:'left',enterExport:'right'};
  const floor=document.createElement('span');floor.className='mascot-floor-cable';floor.setAttribute('aria-hidden','true');
- floor.innerHTML=`<svg viewBox="0 0 1374 1145" xmlns="http://www.w3.org/2000/svg"><defs><mask id="static-background" maskUnits="userSpaceOnUse" x="0" y="0" width="1374" height="1145"><image href="assets/mask-static.png" width="1374" height="1145"/></mask></defs><image href="assets/microphone-friends-soft3d.png" width="1374" height="1145" mask="url(#static-background)"/></svg>`;scene.prepend(floor);
+ floor.innerHTML=`<svg viewBox="0 0 1374 1145" xmlns="http://www.w3.org/2000/svg"><defs><mask id="static-background" maskUnits="userSpaceOnUse" x="0" y="0" width="1374" height="1145"><image href="assets/mask-static.png" width="1374" height="1145"/></mask></defs><image href="assets/microphone-friends-soft3d.webp" width="1374" height="1145" mask="url(#static-background)"/></svg>`;scene.prepend(floor);
  for(const [i,b] of buttons.entries()){
   const art=document.createElement('span');art.className='mascot-region';art.setAttribute('aria-hidden','true');
-  art.innerHTML=`<svg viewBox="0 0 1374 1145" xmlns="http://www.w3.org/2000/svg"><defs><mask id="moving-${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="1374" height="1145"><image href="assets/mask-${maskNames[b.dataset.action]}.png" width="1374" height="1145"/></mask></defs><image href="assets/microphone-friends-soft3d.png" width="1374" height="1145" mask="url(#moving-${i})"/></svg>`;
+  art.innerHTML=`<svg viewBox="0 0 1374 1145" xmlns="http://www.w3.org/2000/svg"><defs><mask id="moving-${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="1374" height="1145"><image href="assets/mask-${maskNames[b.dataset.action]}.png" width="1374" height="1145"/></mask></defs><image href="assets/microphone-friends-soft3d.webp" width="1374" height="1145" mask="url(#moving-${i})"/></svg>`;
   b.prepend(art);
  }
  const dim=document.createElement('div');dim.className='home-dimmer';dim.setAttribute('aria-hidden','true');home.prepend(dim);

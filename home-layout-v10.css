@@ -43,7 +43,7 @@
 @media(max-width:600px){.studio-nameboard{transform:none;border-width:2px;border-radius:14px}.studio-scene-backdrop{background-position:50% 50%;border-radius:20px}}
 
 /* Integrated supplied paper-depth artwork; text and actions remain live DOM. */
-.studio-scene-backdrop{background-image:url('assets/recording-studio-background.png');opacity:.65;background-position:50% 68%}
+.studio-scene-backdrop{background-image:url('assets/recording-studio-background.png');background-image:image-set(url('assets/recording-studio-background.webp') type('image/webp'),url('assets/recording-studio-background.png') type('image/png'));opacity:.65;background-position:50% 68%}
 .studio-scene-backdrop:after{background:linear-gradient(#fff9ed22,#fff9ed66)}
 .worktable:before{opacity:.3}.worktable:after{opacity:.4}
 .worktable .cabinet-entry{width:100px;top:27%;left:-42px}
@@ -292,7 +292,7 @@
  body:not(.in-workroom) main{padding-top:98.796875px}
  .worktable{padding-top:94px}
  .worktable .finish-ticket,.worktable .finish-ticket.ready{width:min(700px,calc(100% - 32px));margin-top:18px;padding:0 12px 16px}
- .worktable .studio-scene-backdrop{bottom:44px;opacity:.65;background-image:url('assets/recording-studio-background.png');background-size:cover;background-position:50% 68%;background-repeat:no-repeat;background-color:transparent}
+ .worktable .studio-scene-backdrop{bottom:44px;opacity:.65;background-image:url('assets/recording-studio-background.png');background-image:image-set(url('assets/recording-studio-background.webp') type('image/webp'),url('assets/recording-studio-background.png') type('image/png'));background-size:cover;background-position:50% 68%;background-repeat:no-repeat;background-color:transparent}
  .worktable .studio-scene-backdrop:before{display:none}
  body:not(.in-workroom) .topbar{top:124px;padding-left:148px;padding-right:62px}
  body:not(.in-workroom) .brand{font-size:36px}
@@ -333,3 +333,5 @@
 .finish-ticket:after{content:'';display:block;height:24.8px}
 @media(max-width:600px){.finish-ticket:after{height:22px}}
 @media(max-width:360px){.finish-ticket:after{height:40px}}
+
+.studio-nameboard{background-image:image-set(url('assets/project-nameplate.webp') type('image/webp'),url('assets/project-nameplate.png') type('image/png'))}
