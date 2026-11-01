@@ -335,3 +335,5 @@
 @media(max-width:360px){.finish-ticket:after{height:40px}}
 
 .studio-nameboard{background-image:image-set(url('assets/project-nameplate.webp') type('image/webp'),url('assets/project-nameplate.png') type('image/png'))}
+
+@media(min-width:1001px){.worktable .studio-scene-backdrop{background-image:url("assets/studio-home-warm.png");background-image:image-set(url("assets/studio-home-warm.webp") type("image/webp"),url("assets/studio-home-warm.png") type("image/png"))}}
