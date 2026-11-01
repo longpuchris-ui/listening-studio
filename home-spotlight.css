@@ -33,3 +33,6 @@
 .spotlight-ready .character-entrance.complete:not(.spotlit) .mascot-region{
  filter:brightness(1.14) saturate(1.06) drop-shadow(0 0 3px #fffbdcee) drop-shadow(0 0 9px #ffdf68ee) drop-shadow(0 0 23px #f4c54bcc);
 }
+
+/* Initial composite remains visible while precise layers decode. */
+.worktable:not(.spotlight-ready) .mascot-region,.worktable:not(.spotlight-ready) .mascot-floor-cable{visibility:hidden}
