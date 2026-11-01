@@ -9,3 +9,6 @@
 .studio-guide-prop .guide-sheet-art{display:block;width:132px;height:110px;filter:drop-shadow(1px 2px 1px #59466a26)}
 .studio-guide-prop span{font-size:12px;margin-top:-3px;color:#655276}
 @media(max-width:600px){.studio-guide-prop{top:88px;left:8px;width:86px;max-width:86px}.studio-guide-prop .guide-sheet-art{width:86px;height:72px}.studio-guide-prop span{font-size:11px;margin-top:-2px}}
+
+.cloud-guide-steps{font-size:15px;padding-left:1.5em;line-height:1.7;margin:12px 0}.cloud-guide-steps li+li{margin-top:12px}.cloud-guide-steps strong{font-weight:600;font-synthesis:none}
+@media(max-width:600px){.cloud-guide-steps{font-size:16px}}

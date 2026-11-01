@@ -1,3 +1,9 @@
 .sync-dialog{width:min(560px,calc(100% - 24px));max-height:85dvh;overflow:auto;border:1px solid #b9cdbf;border-radius:24px;background:#fffdf5;color:#314e55;padding:20px;box-sizing:border-box}.sync-dialog::backdrop{background:#25223a66}.sync-dialog button{min-height:44px;padding:10px 16px;border:1px solid #9cb6aa;border-radius:14px;background:#eff7ee;color:#275b46;font:inherit;cursor:pointer}.sync-dialog .dialog-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.sync-dialog h2{margin:0;font-size:22px}.sync-dialog p{line-height:1.6}.sync-dialog #syncControls{display:flex;flex-wrap:wrap;gap:8px}.sync-project{display:block;width:100%;margin:8px 0;text-align:left;overflow-wrap:anywhere}.sync-entry{max-width:210px;white-space:normal;font-size:12px}.sync-dialog button:focus-visible{outline:3px solid #126b7a;outline-offset:2px}@media(max-width:600px){.top-actions .sync-entry{position:fixed;left:12px;bottom:10px;z-index:20;max-width:200px;background:#fffdf5;border:1px solid #9cb6aa;border-radius:14px;min-height:44px;padding:8px 12px}body.is-recording .sync-entry{display:none}.sync-dialog{padding:16px}.sync-dialog h2{font-size:20px}}
 
-.room-return .sync-entry{margin-left:auto;max-width:210px;font-size:12px}body.is-recording .sync-entry{display:none}@media(max-width:600px){.room-return .sync-entry{position:static;max-width:145px;padding:6px 9px;min-height:44px;font-size:11px}.room-return{gap:8px}}
+body.is-recording .sync-entry{display:none}@media(max-width:600px){.room-return{gap:8px}}
+
+.sync-entry[hidden]{display:none!important}
+.sync-browser-advice{font-weight:600;font-synthesis:none}
+
+/* Empty status/list placeholders must not repeat disconnected-state copy. */
+.sync-dialog #syncDetail:empty,.sync-dialog #syncPending:empty,.sync-dialog #syncProjects:empty,.sync-dialog h3:has(+ #syncProjects:empty),.sync-dialog h3:has(+ #syncPending:empty){display:none}
