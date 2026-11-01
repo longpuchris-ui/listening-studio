@@ -70,3 +70,10 @@
  .phone-room-library .archive-folder{overflow-y:auto;justify-content:flex-start;min-height:0}
  .phone-room-library .archive-folder h3,.phone-room-library .archive-folder p,.phone-room-library .archive-actions{flex-shrink:0}
 }
+
+/* v56 readable secondary recording tools; preserve existing hit areas/layout. */
+.cassette-card .clip-bottom button,.focus-recording-button,.chapter-actions button{font-size:13px}
+
+#chapterActions button{font-size:13px}
+
+.mobile-card-slot .cassette-card .clip-bottom button,.mobile-card-slot .clip-bottom [data-action=importAudio]{font-size:13px}
