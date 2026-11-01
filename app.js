@@ -14,8 +14,8 @@ const button=(action,id,ico,title,cls='small-action')=>`<button class="${cls}" d
 const time=n=>{n=Math.max(0,Math.round(n||0));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
 const find=id=>A.inventoryClips(state).find(c=>c.id===id);
 function rememberPreviousAudio(c){if(c.blob)lastAudioUndo={id:c.id,blob:c.blob,duration:c.duration,trimStart:c.trimStart,trimEnd:c.trimEnd}}
-function clearToast(){clearTimeout(toast.timer);$('#toast').classList.remove('show')}
-function toast(message){const el=$('#toast'),anchor=document.querySelector('dialog[open] .dialog-top')||(atWorktable?$('.topbar'):$('.room-return'));if(anchor)anchor.insertAdjacentElement('afterend',el);el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(clearToast,4200)}
+function clearToast(){clearTimeout(toast.timer);$('#toast').classList.remove('show');syncDesktopNotices()}
+function toast(message){const el=$('#toast'),anchor=document.querySelector('dialog[open] .dialog-top')||(atWorktable?$('.topbar'):$('.room-return'));if(anchor)anchor.insertAdjacentElement('afterend',el);el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(clearToast,4200);syncDesktopNotices()}
 async function initDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open('listening-picturebook',2);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('projects'))req.result.createObjectStore('projects');if(!req.result.objectStoreNames.contains('exports'))req.result.createObjectStore('exports',{keyPath:'id'})};req.onsuccess=()=>{req.result.onversionchange=()=>req.result.close();resolve(req.result)};req.onerror=()=>reject(req.error)})}
 let localRevision=null,localConflict=false;
 const localConflictId='local-tab-conflict-'+uid();
@@ -84,7 +84,7 @@ async function replaceLocalProject(incoming,prepare=async()=>{},isCurrent=()=>tr
 function invalidateAudioImport(){audioImportEpoch++}
 /* Desktop operation feedback is separate from persistence success. Never delays user activation. */
 let desktopTaskSequence=0;
-function desktopTask(message){const id=++desktopTaskSequence;let el=document.querySelector('#desktopTaskStatus');if(!el){el=document.createElement('p');el.id='desktopTaskStatus';el.className='desktop-task-status';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.append(el)}el.textContent=message;el.setAttribute('aria-busy','true');return()=>{if(id===desktopTaskSequence){el.textContent='';el.removeAttribute('aria-busy')}}}
+function desktopTask(message){const id=++desktopTaskSequence;let el=document.querySelector('#desktopTaskStatus');if(!el){el=document.createElement('p');el.id='desktopTaskStatus';el.className='desktop-task-status';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.append(el)}el.textContent=message;el.setAttribute('aria-busy','true');syncDesktopNotices();return()=>{if(id===desktopTaskSequence){el.textContent='';el.removeAttribute('aria-busy');syncDesktopNotices()}}}
 async function importAudio(file){const epoch=++audioImportEpoch,project=state,c=find(importTarget);if(!file||!c)return;const baseProjectId=state.projectId,baseVersion=c.version,baseBlob=c.blob,baseFields=JSON.stringify(c);if(file.size>100*1024*1024)return toast('單段音檔請小於 100 MB。');const finishFeedback=desktopTask('正在讀取與解碼音檔…原音尚未替換。');try{const b=await A.decode(file);if(epoch!==audioImportEpoch||state!==project||state.projectId!==baseProjectId||find(c.id)!==c||c.version!==baseVersion||c.blob!==baseBlob||JSON.stringify(c)!==baseFields||rec||building){toast('匯入已取消：專案或錄音狀態已變更，原音未替換。');return}if(!Number.isFinite(b.duration)||b.duration<.02)throw Error('音檔長度無效');if(b.duration>600)throw Error('單段音檔請小於 10 分鐘');rememberPreviousAudio(c);c.blob=new Blob([file],{type:file.type.startsWith('audio/')?file.type:'audio/octet-stream'});c.duration=b.duration;c.trimStart=0;c.trimEnd=b.duration;c.version++;A.clearCache();save();render();toast('音檔已載入，正在保存；請確認保存狀態後再離開。')}catch(e){if(epoch!==audioImportEpoch||state!==project||find(c.id)!==c)return;toast('無法匯入：'+e.message)}finally{finishFeedback()}}
 function toBase64(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(blob)})}
 async function backup(){if(rec||building)return;const finishFeedback=desktopTask('正在整理錄音與專案備份…');try{toast('正在收好錄音與設定…');await persist();const copy=structuredClone(state);for(const c of A.inventoryClips(copy))if(c.blob)c.blob=await toBase64(c.blob);download(new Blob([JSON.stringify(copy)],{type:'application/json'}),safeName()+'.listenbook');toast('專案備份已準備下載，換裝置時可重新開啟。')}catch(e){toast('備份失敗：'+e.message)}finally{finishFeedback()}}
@@ -118,3 +118,34 @@ window.addEventListener('pagehide',suspendCapture);
 document.getElementById('ambienceToggle').addEventListener('click',()=>StudioAmbience.toggle());StudioAmbience.label();
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&editClip&&!document.querySelector('dialog[open]')){e.preventDefault();action('closeClipEditor')}});
+
+// One desktop-only status shelf; reuse the original live nodes and async lifetimes.
+function syncDesktopNotices(){
+ const desktop=innerWidth>1000&&!atWorktable,notice=$('#toast'),task=$('#desktopTaskStatus'),saved=$('#saveState');
+ let shelf=$('#desktopNoticeSlot');
+ const visibleToast=notice?.classList.contains('show')&&!notice.closest('dialog[open]'),visibleTask=!!task?.textContent,visibleSave=saved&&!saved.classList.contains('routine-save');
+ if(!shelf&&(!desktop||!(visibleToast||visibleTask||visibleSave)))return;
+ if(!shelf){shelf=document.createElement('section');shelf.id='desktopNoticeSlot';shelf.className='desktop-notice-slot';shelf.setAttribute('aria-label','工作狀態與通知');document.body.append(shelf)}
+ if(desktop){
+  for(const el of [saved,task,notice])if(el&&!el.closest('dialog[open]')&&el.parentElement!==shelf)shelf.append(el);
+ }else{
+  if(saved?.parentElement===shelf){if(atWorktable)$('#finishTicket>div')?.prepend(saved);else $('.room-return')?.after(saved)}
+  if(task?.parentElement===shelf)document.body.append(task);
+  if(notice?.parentElement===shelf){const anchor=document.querySelector('dialog[open] .dialog-top')||(atWorktable?$('.topbar'):$('.room-return'));anchor?.after(notice)}
+ }
+ shelf.hidden=!desktop||!(visibleToast||visibleTask||visibleSave);if(shelf.hidden)return;
+ const dock=$('#recordDock'),dockTop=dock&&!dock.hidden?dock.getBoundingClientRect().top:innerHeight;
+ const bottom=Math.max(12,innerHeight-dockTop+8),upper=Math.max(112,($('.room-return')?.getBoundingClientRect().bottom||0)+12);
+ const roomBottom=$('#'+page+'Page')?.getBoundingClientRect().bottom||innerHeight;
+ const freeBelowRoom=innerHeight-bottom-roomBottom-8,available=Math.max(24,innerHeight-bottom-upper);
+ shelf.style.bottom=bottom+'px';shelf.style.maxHeight=Math.min(180,available,Math.max(120,freeBelowRoom))+'px';
+ shelf.tabIndex=0; // Always keyboard-scrollable if late status text makes the shelf overflow.
+}
+let noticeFrame=0;
+function queueDesktopNotices(){if(noticeFrame)return;noticeFrame=requestAnimationFrame(()=>{noticeFrame=0;syncDesktopNotices()})}
+window.addEventListener('resize',queueDesktopNotices);window.addEventListener('scroll',queueDesktopNotices,{passive:true});window.visualViewport?.addEventListener('resize',queueDesktopNotices);
+new MutationObserver(queueDesktopNotices).observe(document.body,{attributes:true,attributeFilter:['class']});
+new MutationObserver(queueDesktopNotices).observe($('#saveState'),{attributes:true,attributeFilter:['class'],childList:true,subtree:true,characterData:true});
+new MutationObserver(queueDesktopNotices).observe($('#recordDock'),{attributes:true,attributeFilter:['hidden']});
+new ResizeObserver(queueDesktopNotices).observe($('#recordDock'));
+document.addEventListener('close',queueDesktopNotices,true);
