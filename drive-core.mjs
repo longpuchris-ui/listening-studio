@@ -61,7 +61,8 @@ export class DriveStore{
   if(body.baseRevision&&!rows.some(r=>r.id===body.baseRevision))throw fail('基底版本已遺失，請保留本機副本。',409);
   const all=await this.listFiles('revision',null,context);if(!rows.length&&new Set(all.map(f=>f.appProperties.project)).size>=LIMITS.projects)throw fail('專案數達試版上限。',413);
   // Verify all immutable audio before publishing any revision manifest.
-  for(const c of SyncCodec.inventory(body.manifest))if(c.asset){const b=await this.asset(c.asset.id,context);if(b.size!==c.asset.size)throw fail('音訊尚未完整上傳。',422)}
+  const verifiedAssets=new Map();
+  for(const c of SyncCodec.inventory(body.manifest))if(c.asset){if(!verifiedAssets.has(c.asset.id))verifiedAssets.set(c.asset.id,this.asset(c.asset.id,context));const b=await verifiedAssets.get(c.asset.id);if(this.credential()!==context)throw fail('帳號已切換，未繼續傳送。',401);if(b.size!==c.asset.size)throw fail('音訊尚未完整上傳。',422)}
   const revision={schema:1,owner:context.owner,projectId:project,id:body.operationId,parents:body.baseRevision?[body.baseRevision]:[],digest,manifest:body.manifest,position:body.position};
   const blob=new Blob([JSON.stringify(revision)],{type:'application/json'});if(blob.size>LIMITS.manifestBytes)throw fail('專案資訊過大。',413);
   if(all.reduce((n,f)=>n+Number(f.size||0),0)+blob.size>LIMITS.historyBytes)throw fail('版本資訊達試版上限，未覆寫舊版。',413);let title=body.manifest.title;while(new TextEncoder().encode(title).length>80)title=title.slice(0,-1);

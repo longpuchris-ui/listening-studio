@@ -1,4 +1,4 @@
-import {DriveStore} from './drive-core.mjs';
+import {DriveStore} from './drive-core.mjs?v=55';
 let credential=null,client=null,pending=false,db,authEpoch=0,makeClient,waitTimer,deadlineTimer,profileController,connectionTimer,connectionFault=false;
 function connectionState(){const valid=!!credential&&!!bridge.account&&credential.expiresAt>Date.now()+5000;return {connected:navigator.onLine&&!pending&&valid&&!connectionFault,label:!navigator.onLine?'離線':pending?'正在確認連接':!valid?'未連接或需重新授權':connectionFault?'連接尚未確認，請重試':'已連接Google（非專案同步狀態）'}}
 function refreshConnection(){clearTimeout(connectionTimer);const left=credential?.expiresAt-Date.now()-5000;if(left>0)connectionTimer=setTimeout(refreshConnection,Math.min(left+1,2147483647));window.dispatchEvent(new Event('studio-drive-connection'))}
