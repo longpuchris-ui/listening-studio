@@ -111,3 +111,155 @@ body.text-editing :is(input,textarea){scroll-margin-block:16px}
  #structureDialogBody label{flex-wrap:wrap;gap:6px}
  #structureDialogBody label input{min-width:0;max-width:100%;font-size:16px}
 }
+
+/* v58: desktop worktables only; phone and narrow tablet screens retain v56 except rhythm. */
+@media(min-width:1001px){
+/* Workspace layout ownership (v57): content-sized studio desks. Home scene is excluded.
+   Supersedes the legacy full-height phone decks and oversized title gutters above. */
+.in-workroom #workroom{--desk-gap:12px;--desk-pad:20px}
+.in-workroom .book-heading{padding:12px var(--desk-pad);min-height:0;gap:12px;align-items:center}
+.in-workroom .book-heading:after,.in-workroom .book-ribbon,.in-workroom .book-heading .eyebrow{display:none}
+.in-workroom .project-title{font-size:22px;line-height:1.4;margin:0;max-width:100%}
+.in-workroom .book-meta{margin:3px 0 0;line-height:1.5}
+.in-workroom .completion{flex-shrink:0}
+.in-workroom .page-intro{padding:14px var(--desk-pad);min-height:0}
+.in-workroom .page-intro h2{margin:3px 0;font-size:23px;line-height:1.5}
+.in-workroom .page-intro p{margin:5px 0;font-size:14px;line-height:1.6}
+.in-workroom .page-intro .workspace-mascot{width:82px;height:86px;right:14px;top:8px}
+.in-workroom .page-intro:has(.workspace-mascot:not([hidden])) h2,.in-workroom .page-intro:has(.workspace-mascot:not([hidden])) p{max-width:calc(100% - 92px)}
+.in-workroom .page-intro .eyebrow{padding:2px 6px;font-size:10px}
+.in-workroom .workspace{align-items:start}
+.in-workroom .contents{padding:14px 12px}
+.in-workroom .record-content{padding:14px var(--desk-pad);min-width:0}
+.in-workroom .chapter-heading{padding:10px 12px;min-height:80px;margin-bottom:10px;align-items:center}
+.in-workroom .chapter-heading h2{margin:3px 0;font-size:23px}
+.in-workroom .chapter-heading p{margin:3px 0;line-height:1.6}
+.in-workroom .chapter-heading .workspace-mascot{width:80px;height:80px}
+.in-workroom .chapter-heading .page-number,.in-workroom .spread-edge{display:none}
+.in-workroom .record-tools{margin:8px 0 12px;padding:7px 10px;gap:8px 14px;background:#f8eedc;border-radius:14px;border-bottom:2px solid #e3cda9;align-items:center;flex-wrap:wrap}
+.in-workroom .record-tools button,.in-workroom .record-tools label{min-height:44px;font-size:13px}
+.in-workroom .clip-card{margin-bottom:10px}
+.in-workroom .clip-script{line-height:1.65}
+.in-workroom .clip-editor{padding:12px}
+.in-workroom .clip-editor button{min-height:44px}
+.in-workroom .intro-routing{padding:6px 10px;margin:6px 0 10px}.in-workroom .intro-segment{margin-bottom:8px}.in-workroom .intro-add-paper{padding:8px 12px;margin:12px 0 4px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px}.in-workroom .intro-add-paper p{margin:0}.in-workroom .intro-segment-tools{gap:6px;margin:6px 0}
+.in-workroom .tip{margin-top:10px;padding:8px 12px}
+.in-workroom .tip p{margin:0;font-size:13px}
+.in-workroom .setting-grid{padding:8px var(--desk-pad) 14px;gap:12px;align-items:start;background:none;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.in-workroom .setting-card{min-height:0;padding:12px 10px 8px;transform:none;box-shadow:none}
+.in-workroom .setting-card h3{margin:0;font-size:15px}
+.in-workroom .setting-card p{min-height:0;margin:5px 0;font-size:13px;line-height:1.5}
+.in-workroom .setting-card .painted-stepper{margin:2px auto}
+.in-workroom .setting-card .note-caption,.in-workroom .setting-card .setting-index,.in-workroom .setting-card .note-pin{display:none}
+.in-workroom .rhythm-confirm{margin:8px var(--desk-pad) 12px;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.in-workroom .rhythm-confirm p{margin:0;font-size:13px}
+.in-workroom .sequence-panel{margin:12px var(--desk-pad);padding:14px}
+.in-workroom .sequence-panel h3{margin:0 0 8px}
+.in-workroom .export-layout{padding:4px var(--desk-pad) 20px;gap:16px;align-items:start;grid-template-columns:minmax(0,1fr) 220px}
+.in-workroom .export-main{padding:16px;min-width:0;box-shadow:3px 4px 0 #d2ddec73;text-align:left}
+.in-workroom .export-main h3{margin:0 0 5px}
+.in-workroom .export-options{display:flex;align-items:center;justify-content:flex-start;margin:10px 0;padding:10px;gap:8px 16px;max-width:none}
+.in-workroom .assemble-button{margin:8px 0;max-width:100%}
+.in-workroom .export-note{padding:10px 12px;border-left:3px solid #d5c4a4;background:#fff8e8;border-radius:6px 12px 12px 6px}
+.in-workroom .export-note h3,.in-workroom .export-note h4{margin:0 0 6px;font-size:15px}
+.in-workroom .export-note p{font-size:13px;line-height:1.6;margin:6px 0}
+.in-workroom .export-note hr{margin:12px 0}
+.in-workroom .export-flow{gap:8px;margin:10px 0}
+.in-workroom .export-flow>li{padding:10px}
+.in-workroom .library-project-tools,.in-workroom .library-tools{margin:0;padding:8px var(--desk-pad);gap:8px;align-items:center;flex-wrap:wrap}
+.in-workroom .library-tools input:not([type=checkbox]){flex:1 1 220px;min-width:0;max-width:440px}
+.in-workroom .library-tools label{display:flex;align-items:center;gap:8px;min-height:44px}
+.in-workroom .library-tools input[type=checkbox]{flex:none;width:24px;height:24px}
+.in-workroom .library-list{padding:8px var(--desk-pad) 16px;gap:12px;align-items:start}
+.in-workroom .archive-folder{padding:12px;transform:none}
+.in-workroom .archive-folder h3{margin:4px 0}
+.in-workroom .archive-folder p{margin:6px 0;font-size:13px;line-height:1.6}
+.in-workroom .archive-actions{gap:6px;align-items:center}
+.in-workroom .archive-actions button{font-size:13px;min-height:44px}
+.in-workroom .library-empty{padding:18px 12px;min-height:0}.in-workroom .library-empty svg{width:90px;height:76px}.in-workroom .library-local-note{margin:8px var(--desk-pad);font-size:13px}
+.in-workroom .book-footer{padding:10px var(--desk-pad)}
+@media(min-width:601px){
+ .in-workroom .clip-card:not(.section-guide):not(.compact-stimulus){grid-template-columns:100px minmax(0,1fr) auto}
+ .in-workroom .clip-card:not(.section-guide):not(.compact-stimulus) .clip-bottom{grid-column:3;grid-row:2;display:flex;flex-direction:column;gap:4px;padding:6px 10px 6px 0;border:0;align-self:center}
+ .in-workroom .clip-card:not(.section-guide):not(.compact-stimulus) .clip-bottom button{padding:8px;min-width:60px;min-height:44px}
+ .in-workroom .clip-card .clip-audio-status{padding:8px;gap:6px}
+}
+/* Dialogs are small task trays: controls remain labeled, warnings remain visible. */
+dialog .dialog-top{margin-bottom:10px;gap:10px}dialog .dialog-top h2{margin:0;font-size:21px}
+dialog .option-row{padding:10px 0;gap:12px}dialog .option-row small{line-height:1.6}
+dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
+#structureDialogBody label{margin:6px 0}#structureDialogBody button{margin:3px 0}
+#scriptImportDialog .import-row{margin:8px 0;padding:10px;border-left:3px solid #a8bdb4;border-radius:4px 12px 12px 4px}
+#scriptImportDialog .import-row label{margin:5px 0}#scriptImportDialog .import-row pre{margin:6px 0}
+#scriptImportDialog .import-warning{margin:6px 0;font-size:14px}
+#scriptImportDialog .import-row-tools{gap:6px}#scriptImportDialog .import-row-tools select{flex:0 1 200px}
+.sync-dialog{padding:16px}.sync-dialog p{margin:8px 0}#syncControls{gap:6px}
+#syncControls button{display:inline-flex;align-items:center;gap:6px;font-size:14px;padding:8px 12px}
+.sync-project{padding:10px 12px!important;margin:6px 0}
+.item-playback-controls{padding:10px 12px;margin:8px 0}.code-tools{gap:8px;margin:8px 0}.code-editor{padding:10px}
+@media(max-width:1000px){.in-workroom .export-layout{grid-template-columns:1fr}.in-workroom .export-note{display:block}}
+
+}
+@media(max-width:600px){
+ body.phone-room-arrange{height:auto;min-height:100dvh;overflow:auto}
+ .phone-room-arrange main,.phone-room-arrange #workroom{height:auto!important;min-height:100dvh;overflow:visible!important}
+ .phone-room-arrange #arrangePage{flex:none;min-height:0;overflow:visible}
+ .phone-room-arrange .page-intro{padding:10px 12px;min-height:72px}
+ .phone-room-arrange .page-intro h2{font-size:18px}
+ .phone-room-arrange .page-intro .workspace-mascot{width:60px;height:64px;right:10px;top:3px}
+ .phone-room-arrange .page-intro h2,.phone-room-arrange .page-intro p{max-width:calc(100% - 68px)}
+ .phone-room-arrange .setting-card .note-caption,.phone-room-arrange .setting-card .setting-index,.phone-room-arrange .setting-card .note-pin{display:none}
+ body.phone-room-record,body.phone-room-arrange,body.phone-room-export,body.phone-room-library{height:auto;min-height:100dvh;overflow:auto}
+ .phone-room-arrange .setting-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:none;align-items:start;overflow:visible;padding:8px 12px;min-height:0;gap:8px}
+ .phone-room-arrange .setting-card:nth-child(n){display:flex!important;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;width:auto;margin:0;min-height:0!important;height:auto;padding:8px 3px;gap:0}
+ .phone-room-arrange .setting-card h3{font-size:14px;margin:0;padding:3px;min-height:44px;display:flex;align-items:center}
+ .phone-room-arrange .setting-card p{font-size:13px;line-height:1.5;margin:3px 2px;min-height:40px}
+ .phone-room-arrange .setting-card .painted-stepper{width:100%;height:130px;margin-top:auto}
+ .phone-room-arrange .dial-value input[type=number]{font-size:28px;width:52px;min-height:44px}
+ .phone-room-arrange .dial-minus,.phone-room-arrange .dial-plus{min-width:44px;min-height:44px;top:48px;font-size:23px}
+ .phone-room-arrange .timing-page-nav{display:none}
+ .phone-room-arrange .painted-stepper{flex:none}
+ .phone-room-arrange .rhythm-confirm{display:flex;padding:0;margin:8px 12px;gap:8px}
+}
+
+@media(min-width:1001px){
+ .in-workroom .setting-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+ .in-workroom .setting-card{min-width:0}
+ .in-workroom .export-layout{display:block}
+ .in-workroom .export-main{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,1fr);column-gap:24px;align-items:start}
+ .in-workroom #exportTitle,.in-workroom #exportSummary{grid-column:1/-1;margin:0 0 8px}
+ .in-workroom #exportWarnings{grid-column:1;grid-row:3/7}
+ .in-workroom .export-options{grid-column:2;grid-row:3;display:flex;flex-direction:column;align-items:stretch;margin:0 0 8px}
+ .in-workroom .assemble-button{grid-column:2;grid-row:4;width:100%;margin:4px 0}
+ .in-workroom #exportStatus{grid-column:2;grid-row:5}
+ .in-workroom #exportResult{grid-column:1/-1;margin-top:12px}
+ .in-workroom .export-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+ .in-workroom .export-flow>li{display:flex;flex-direction:column;gap:6px;padding:10px}
+ .in-workroom .export-flow .flow-icon{grid-column:1;grid-row:1/5}
+ .in-workroom .export-flow>li>*:not(.flow-icon){grid-column:2}
+ .in-workroom #exportTitle{display:none}
+ .in-workroom .export-note{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:4px 22px;margin-top:12px;padding:12px 16px}
+ .in-workroom .export-note h3{grid-column:1;grid-row:1;margin:0}
+ .in-workroom .export-note h4{grid-column:2;grid-row:1;margin:0}
+ .in-workroom .export-note p{margin:0}
+ .in-workroom .export-note p:nth-of-type(1){grid-column:1;grid-row:2}
+ .in-workroom .export-note p:nth-of-type(2){grid-column:1;grid-row:3}
+ .in-workroom .export-note p:nth-of-type(3){grid-column:2;grid-row:2/4}
+ .in-workroom .export-note hr{display:none}
+ .in-workroom #libraryPage:not([hidden]){display:grid;grid-template-columns:230px minmax(0,1fr);align-items:start;gap:10px 18px;padding:0 20px 16px}
+ .in-workroom #libraryPage .page-intro{grid-column:1/-1;padding:12px 0;min-height:0}
+ .in-workroom #libraryPage .page-intro .eyebrow{display:none}
+ .in-workroom #libraryPage .page-intro h2{margin:0;font-size:23px}
+ .in-workroom #libraryPage .page-intro p{margin:4px 0}
+ .in-workroom .library-project-tools{grid-column:1;grid-row:2/5;display:flex;flex-direction:column;padding:12px;background:#f8eedc;border-radius:16px;align-items:stretch}
+ .in-workroom .library-project-tools button{min-height:52px;text-align:left}
+ .in-workroom .library-tools{grid-column:2;padding:0;display:flex;gap:8px}
+ .in-workroom .library-tools input:not([type=checkbox]){order:-1;max-width:none;flex:1 1 220px}
+ .in-workroom .library-list{grid-column:2;padding:0;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+ .in-workroom .library-empty{display:grid;grid-template-columns:80px 1fr;align-items:center;text-align:left;padding:16px;gap:4px 14px}
+ .in-workroom .library-empty svg{grid-row:1/5;width:72px;height:72px}
+ .in-workroom .library-empty p{margin:2px 0}
+ .in-workroom .library-empty button{justify-self:start;min-height:44px}
+ .in-workroom .library-local-note{grid-column:2;margin:0;font-size:13px}
+ .in-workroom .archive-actions{display:flex;flex-wrap:wrap;gap:6px}
+}
