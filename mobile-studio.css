@@ -1,0 +1,136 @@
+/* v70 mobile workbench skin. Single owner for <=1000px presentation.
+   Native DOM, recording geometry/epochs and data handlers remain authoritative.
+   No desktop room bitmap, transformed inputs, fixed overlay or new image request. */
+@media (max-width:1000px){
+ body{--mobile-ink:#493b56;--mobile-line:#cbb798;--mobile-paper:#fffaf0}
+ .in-workroom #workroom{background:#fff9ed;color:var(--mobile-ink)}
+ .in-workroom .room-return{background:#f6ead5;border-bottom:1px solid #d8c6aa}
+ .in-workroom .book-heading{background:linear-gradient(100deg,#f4e5c8,#fff6e4);border-bottom:1px solid #d8c6aa}
+ .in-workroom .project-title{color:#4e3c62}
+ .in-workroom .book-meta{color:#65596b}
+ .in-workroom :is(#recordPage,#arrangePage,#exportPage,#libraryPage){background:#fffaf0}
+ .in-workroom .page-intro{background:transparent;border:0;box-shadow:none}
+ .in-workroom .page-intro h2{color:#564165}
+ .in-workroom :is(button,summary,a):focus-visible{outline:3px solid #176c79;outline-offset:2px}
+ :is(button,[role=button]):not(:disabled):active{filter:brightness(.91);box-shadow:inset 0 2px 4px #57402f30;outline:2px solid #ac844c;outline-offset:0}
+ button[aria-pressed=true],button[aria-selected=true]{border-color:#7b5c92}
+ button[aria-busy=true]{cursor:progress;outline:2px solid #a2783d}
+ button:disabled{opacity:.5}
+ .desktop-task-status:not(:empty){position:fixed;z-index:10000;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:600px;margin:auto;background:#fff5de;color:#493953;border:2px solid #b69462;border-radius:12px;padding:10px 14px;font-size:15px;box-shadow:0 4px 16px #49395322;pointer-events:none}
+ .desktop-task-status:empty{display:none}
+ .wave-load-status{font-size:15px;color:#493953;background:#fff4d8;padding:8px}
+ /* Manuscript tabs and paper; the large, stationary capture/listen pair is retained. */
+ .in-workroom .chapter-button{border:1px solid #d6c5ac;background:#efe4d3;color:#554660;box-shadow:none;transform:none}
+ .in-workroom .chapter-button.active{background:#fffaf0;border-color:#9773a7;box-shadow:inset 0 -3px #9773a7;color:#493057}
+ .in-workroom .mobile-deck-top{background:#f3e7d2;border-radius:12px 12px 0 0;color:#574268}
+ .in-workroom .mobile-deck-top .mascot-mobile{width:42px;height:48px;flex-shrink:0}
+ .in-workroom .mobile-card-slot .clip-card{border:1px solid #d7c3a1;outline:0;background:#fffdf7;box-shadow:inset 3px 0 #e8d5ac;border-radius:0 0 12px 12px}
+ .in-workroom .clip-card::before,.in-workroom .clip-card::after{display:none}
+ .in-workroom .clip-title{color:#4a3d58}
+ .in-workroom .clip-script{color:#43364c;line-height:1.65}
+ .in-workroom .clip-bottom{background:#f7efdf}
+ .in-workroom .mobile-page-nav{padding-bottom:calc(6px + env(safe-area-inset-bottom));background:#fff8e8}
+ .in-workroom .clip-illustrated-action{background:linear-gradient(#ffe9b3,#efcd86);color:#694826;border:1px solid #bc9254}
+ .in-workroom .clip-playback:not(:disabled){background:#eee3f5;color:#634776;border-color:#b49ac6}
+ /* Retain the original painted timing clocks and note labels. */
+ .in-workroom .setting-card p{font-size:14px;line-height:1.5;color:#526459}
+ .in-workroom .dial-value input[type=number]{min-width:44px;min-height:44px}
+ .in-workroom .dial-minus,.in-workroom .dial-plus{min-width:44px;min-height:44px}
+ .in-workroom .dial-value span{font-size:14px}
+ /* Packing tray: status first, native option switch, character carrying the action. */
+ .in-workroom .export-main{background:#fffdf6;border:1px solid #cdb58e;outline:0;box-shadow:none;border-radius:12px;transform:none}
+ .in-workroom .export-main::after{display:none}
+ .in-workroom .export-flow>li{border-color:#dac9ad;background:#f8efdf;transform:none}
+ .in-workroom .export-flow>li:nth-child(2){background:#eee9f4}.in-workroom .export-flow>li:nth-child(3){background:#f4eddf}
+ .in-workroom .export-options{background:#f1e7d3;border:1px solid #c8b18c;box-shadow:none;transform:none;padding:12px;gap:10px;border-radius:12px!important}
+ .in-workroom .export-options:before{display:none}.in-workroom .export-options label{font-size:16px;line-height:1.5;gap:10px;flex-wrap:nowrap;width:100%;text-align:left;min-height:44px}
+ .in-workroom .export-missing-original{display:none}.in-workroom .export-missing-desktop{display:block;font-size:15px}
+ .in-workroom #allowMissing{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:44px;height:26px;margin:9px 0;background:#b1a89c;border:1px solid #81786f;border-radius:20px;cursor:pointer}
+ .in-workroom #allowMissing:after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fffaf1;border-radius:50%;box-shadow:0 1px 3px #49395355}
+ .in-workroom #allowMissing:checked{background:#76538c;border-color:#644476}.in-workroom #allowMissing:checked:after{left:21px}
+ .in-workroom .export-options select{flex:1;min-width:0;font-size:16px;background:#fffbef;border:1px solid #c8b18c}
+ .in-workroom .assemble-button,.in-workroom .export-main .assemble-button{position:relative;width:100%;min-height:80px;padding:12px 10px 12px 70px;margin:12px 0;background:linear-gradient(#ffe5a2,#edc773);border:1px solid #b18b43;border-radius:14px;transform:none;justify-content:center;box-shadow:0 3px #c7a164}
+ .in-workroom .assemble-button .action-character{display:block;position:absolute;left:8px;top:4px;width:56px;height:72px;object-fit:contain;pointer-events:none}
+ .in-workroom .assemble-button>svg,.in-workroom .assemble-button small{display:none}
+ .in-workroom .assemble-button>span{font-size:18px;line-height:1.5;text-align:center;color:#503563}
+ /* Thin drawer fronts only for library actions. Saved items stay a light list. */
+ .in-workroom .library-project-tools{gap:8px;padding:0 12px;margin:0 0 12px}
+ .in-workroom .library-project-tools button{position:relative;background:linear-gradient(#f7e8c9,#e6c99e);border:1px solid #b79464;border-radius:8px;box-shadow:0 3px #bfa17a;min-height:52px;padding:9px 10px 15px;font-size:15px;color:#554060;transform:none}
+ .in-workroom .library-project-tools button:after{content:'';position:absolute;bottom:5px;left:calc(50% - 12px);width:24px;height:3px;border-radius:4px;background:#a18458;pointer-events:none}
+ .in-workroom .library-project-tools button.drawer-opening{filter:brightness(.93);box-shadow:0 4px #a98b65;transform:translateY(2px)}
+ .in-workroom .library-tools{padding:0 12px;gap:8px;align-items:center}.in-workroom .library-tools input[type=search]{max-width:none;width:100%;font-size:16px}
+ .in-workroom .library-tools label{font-size:14px;color:#554561;min-height:44px}.in-workroom .library-tools button{font-size:14px}
+ .in-workroom .library-empty{padding:24px 16px 22px;min-height:0;color:#594a63;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0}
+ .in-workroom .library-empty>svg{display:block;width:130px;height:98px;margin:0 0 8px}
+ .in-workroom .library-empty .mobile-empty-copy{display:block}
+ .in-workroom .library-empty .desktop-empty-copy{display:none}
+ .in-workroom .library-empty p{font-size:14px;color:#594a63;margin:6px 0 16px;line-height:1.6}
+ .in-workroom .library-empty small{font-size:14px;color:#66566c}
+ .in-workroom .library-empty button{min-height:44px;color:#654675;background:#f0e4f7;border-color:#c7acd7}
+ .in-workroom .library-local-note{margin:12px 16px 24px;padding:10px 0;border:0;font-size:14px;line-height:1.6;color:#615269;text-align:center}
+ .in-workroom .archive-folder{background:#fffcf4;border:1px solid #dbccb5;border-radius:12px;box-shadow:none}
+ /* Task sheets share the same paper/wood language; scrolling remains native. */
+ dialog,.sync-dialog{background:#fffaf0!important;color:#493b56;border:2px solid #bfa379!important;outline:0;border-radius:18px!important;padding:16px;box-shadow:0 12px 35px #48364a40}
+ dialog:before{display:none}dialog::backdrop{background:#35253b88}
+ dialog .dialog-top{position:relative;background:#f1e3cb;border-bottom:1px solid #d3b891;border-radius:10px;padding:8px;gap:8px;margin-bottom:12px}
+ dialog .dialog-top h2{font-size:20px;line-height:1.4;margin:0}
+ dialog button,dialog input:not([type=checkbox]),dialog select,dialog textarea{min-height:44px;font-size:16px}
+ dialog label,dialog p{font-size:16px;line-height:1.6}
+ dialog .option-row{gap:10px;padding:10px 0;align-items:center}dialog .option-row>div{min-width:0}
+ dialog .option-row small{font-size:14px!important;color:#675972}
+ dialog .primary{background:#79598c;color:#fffaf0}
+ dialog .secondary,dialog .quiet{background:#f5ead5;border:1px solid #c8b18d;color:#544060}
+ dialog .role-paper,dialog .import-row,dialog .code-editor{background:#fffdf7;border-color:#d7c4a5}
+ dialog input[type=checkbox]{flex-shrink:0}
+ #syncControls{gap:8px}#syncControls button{font-size:15px;min-height:44px}
+ .sync-project{background:#fffdf7!important;border-color:#d7c4a5!important;padding:10px!important}
+ @media(prefers-reduced-motion:reduce){button,.library-project-tools button.drawer-opening{transition:none;animation:none}.library-project-tools button.drawer-opening{transform:none}}
+}
+@media(max-width:600px){
+ .in-workroom .book-heading{padding:6px 12px}.in-workroom .project-title{font-size:18px!important;margin:0;padding:7px 10px}
+ .in-workroom .book-meta{font-size:12px;line-height:1.5}
+ .in-workroom .page-intro{padding:8px 12px;min-height:60px}
+ .in-workroom .page-intro h2{font-size:18px;line-height:1.5;margin:0;max-width:calc(100% - 58px)}
+ .in-workroom .page-intro .workspace-mascot{width:48px;height:52px;right:10px;top:4px}
+ .in-workroom .chapter-button{font-size:14px;min-height:44px;border-radius:10px 10px 0 0;margin:0}
+ .in-workroom .record-tools{margin-bottom:4px;font-size:13px}
+ .in-workroom .record-tools .switch-label,.in-workroom .record-tools .silence-label{font-size:12px}
+ .in-workroom .mobile-card-slot .clip-script{font-size:18px!important}
+ .in-workroom .mobile-deck-top{min-height:48px}.in-workroom .mobile-deck-top>span:not(.mascot-mobile){font-size:14px}
+ .in-workroom .mobile-deck-top>button{font-size:14px}
+ .phone-room-export .export-flow strong{font-size:16px}.phone-room-export .export-flow>li>span:not(.flow-icon),.phone-room-export .export-flow small,.phone-room-export .flow-sections>span{font-size:14px}
+ .phone-room-export .export-main .export-readiness{font-size:15px}
+ .phone-room-export .export-options{gap:10px}.phone-room-export .export-options label,.phone-room-export .export-options select{font-size:16px}
+ .phone-room-export .export-main{padding:12px}
+ .phone-room-library .library-list{flex:0 0 auto;min-height:0;padding:8px 12px}
+ .phone-room-library .library-local-note .mobile-preserved-copy{font-size:14px}
+ .phone-room-library #libraryPage{flex:0 0 auto}
+ .phone-room-export #exportTitle{display:none}
+ .phone-room-export #exportSummary{font-size:14px;margin:4px 0 8px;color:#62506b}
+ .phone-room-export .export-flow{gap:6px;margin:6px 0}
+ .phone-room-export .export-flow>li{padding:8px;gap:3px 8px}
+ .phone-room-export .export-control-group{margin-top:8px}
+ .phone-room-library .library-local-note{margin-top:12px}
+ dialog{max-width:calc(100vw - 16px);max-height:calc(100dvh - 24px);scroll-padding:12px}
+ dialog .role-cast{grid-template-columns:1fr}
+ body:not(.in-workroom) .entrance-label{color:#543b62}
+ body:not(.in-workroom) .finish-note{color:#63506c}
+}
+
+
+@media(max-width:1000px){
+ /* A paper ledge and two corner clips make the existing manuscript a small stand.
+    Decoration occupies the existing edge, never adds a spacer or hit target. */
+ .in-workroom .mobile-deck-top{position:relative;box-shadow:inset 0 3px #baa778,inset 0 5px #fffcf1}
+ .in-workroom .mobile-deck-top:before,.in-workroom .mobile-deck-top:after{content:'';position:absolute;top:-3px;width:13px;height:12px;border:2px solid #927c55;border-radius:3px;background:#d6c59f;box-shadow:0 2px 2px #715e3833;pointer-events:none}
+ .in-workroom .mobile-deck-top:before{left:12px}.in-workroom .mobile-deck-top:after{right:12px}
+ .in-workroom .export-main{box-shadow:inset 0 -5px #dcc398,0 2px 0 #c3a47b}
+}
+@media(max-width:600px){
+ .phone-room-arrange .setting-card p{font-size:14px;min-height:42px}
+ .phone-room-arrange .dial-minus{left:-3px}.phone-room-arrange .dial-plus{right:-3px}
+ .phone-room-arrange .dial-value input[type=number]{width:44px}
+ .phone-room-library .library-list{padding-top:12px}
+ .phone-room-library .library-empty{padding:12px 12px 18px}
+ .phone-room-library .library-local-note{margin:12px 16px 24px;padding:10px 0}
+}

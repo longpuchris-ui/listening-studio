@@ -1,3 +1,4 @@
+.export-guide-open{display:none}
 /* Content-sized fields: preserve DOM sequence and the large capture/listen controls. */
 .chapter-heading p{font-size:14px;line-height:1.7;max-width:55ch}
 .chapter-heading .eyebrow{font-size:11px}
@@ -271,7 +272,59 @@ dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
 .room-art,.action-character,.library-scene,.desktop-empty-copy,.export-missing-desktop,.desktop-refined-copy{display:none}
 .export-control-group,.library-board{display:contents}
 @media(min-width:1001px){
- .in-workroom #workroom{border:0;border-radius:18px;background:#f8efde;overflow:visible}
+ .in-workroom #workroom{border:0;border-radius:28px;background:transparent;box-shadow:none;overflow:visible;margin:12px auto 24px;width:100%;max-width:clamp(980px,calc((100svh - 110px)*1.5),1120px)}
+ .in-workroom #workroom:before,.in-workroom #workroom:after{content:none;display:none}
+ .in-workroom #workroom .page{border-radius:28px;overflow:hidden}
+ .in-workroom #workroom .book-footer{display:none}
+ /* Desktop scene objects use the original controls and event handlers. */
+ .in-workroom .room-return{position:absolute;justify-content:flex-start;top:14px;left:3%;right:3%;z-index:5;padding:0;background:transparent!important;min-height:72px;pointer-events:none}
+ .in-workroom .room-return>button{pointer-events:auto;background:transparent;border:0;box-shadow:none;padding:0;width:76px;height:80px;min-height:44px;font-size:0!important;position:relative;filter:drop-shadow(1px 3px 2px #49334b35)}
+ .in-workroom .room-return>button[data-action=home]>svg{display:none}
+ .in-workroom .room-return>button[data-action=home]:before{content:'';position:absolute;inset:0 0 10px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22wood%22%20x2%3D%22.7%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0cc%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23c49c60%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paper%22%20x2%3D%22.3%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fffdf2%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ead7b2%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20d%3D%22M22%2094V18Q22%208%2034%208h52q12%200%2012%2010v76%22%20fill%3D%22url%28%23wood%29%22%20stroke%3D%22%239d784d%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M32%2092V20h54v72%22%20fill%3D%22%23ac91b8%22%20stroke%3D%22%23715b80%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M40%2087V28h38v59%22%20fill%3D%22%23c9b7ce%22%20stroke%3D%22%23e7d8e2%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M45%2055V45a14%2014%200%200%201%2028%200v10%22%20fill%3D%22none%22%20stroke%3D%22%235b4c6f%22%20stroke-width%3D%224%22/%3E%3Crect%20x%3D%2242%22%20y%3D%2248%22%20width%3D%227%22%20height%3D%2215%22%20rx%3D%223%22%20fill%3D%22%23e8c776%22/%3E%3Crect%20x%3D%2269%22%20y%3D%2248%22%20width%3D%227%22%20height%3D%2215%22%20rx%3D%223%22%20fill%3D%22%23e8c776%22/%3E%3Ccircle%20cx%3D%2278%22%20cy%3D%2272%22%20r%3D%224%22%20fill%3D%22%23f5d67d%22%20stroke%3D%22%239d784d%22/%3E%3Cpath%20d%3D%22M16%2094h88%22%20stroke%3D%22%238b6f4a%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E")}
+ .in-workroom .room-return>button[data-action=home]:after{content:'回錄音室'!important;position:absolute;bottom:0;left:0;right:0;font-size:14px;color:#43314e;text-shadow:0 0 2px #fff9e4,0 0 5px #fff9e4,0 1px 1px #fff9e4;background:transparent;border-radius:0}
+ .in-workroom .room-return .sync-entry{position:absolute;right:0;width:124px;max-width:124px;height:52px;top:-12px;margin-left:auto;transform:none}
+ .in-workroom .room-return .sync-entry:before{content:'';position:absolute;inset:0 20px 14px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%224%209%2090%2072%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22c%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff9df%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e2c798%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20d%3D%22M78%2028h12v52H78z%22%20fill%3D%22%23b8a4c8%22%20stroke%3D%22%2389759a%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M82%2067H58L46%2052%22%20fill%3D%22none%22%20stroke%3D%22%23a790b8%22%20stroke-width%3D%229%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22m18%2016%2059%2011%201%2037-61-10Z%22%20fill%3D%22%23c0a4d5%22%20stroke%3D%22%238d729f%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22m12%2010%2060%2010%207%2010-64-10Z%22%20fill%3D%22%23fff3d1%22%20stroke%3D%22%23bd9e70%22%20stroke-width%3D%221.8%22/%3E%3Cpath%20d%3D%22m15%2020%2059%2010v29L16%2049Z%22%20fill%3D%22url%28%23c%29%22%20stroke%3D%22%23c3a677%22%20stroke-width%3D%221.8%22/%3E%3Cellipse%20cx%3D%2218%22%20cy%3D%2235%22%20rx%3D%2212%22%20ry%3D%2219%22%20fill%3D%22%23bba1d0%22%20stroke%3D%22%238d719f%22%20stroke-width%3D%222%22/%3E%3Cellipse%20cx%3D%2217%22%20cy%3D%2235%22%20rx%3D%228%22%20ry%3D%2213%22%20fill%3D%22%23514766%22%20stroke%3D%22%23e7d9ef%22%20stroke-width%3D%222%22/%3E%3Cellipse%20cx%3D%2215%22%20cy%3D%2231%22%20rx%3D%223%22%20ry%3D%225%22%20fill%3D%22%23cad6e1%22%20opacity%3D%22.7%22/%3E%3Cpath%20d%3D%22M40%2043a4%204%200%200%201%200-8%207%207%200%200%201%2012-2%205%205%200%201%201%202%2010Z%22%20fill%3D%22%23e5edf4%22%20stroke%3D%22%2384829e%22%20stroke-width%3D%221.5%22/%3E%3C/svg%3E")}
+ .in-workroom .room-return .sync-entry:after{content:'我的雲端專案'!important;position:absolute;bottom:0;left:0;right:0;line-height:14px;font-size:13px;color:#43314e;text-shadow:0 0 2px #fff9e4,0 0 5px #fff9e4,0 1px 1px #fff9e4;background:transparent}
+ .in-workroom .room-return .scene-sound-prop .sound-state{color:#43314e;text-shadow:0 0 2px #fff9e4,0 0 5px #fff9e4,0 1px 1px #fff9e4}
+
+ .in-workroom .room-return .cloud-connection-copy{display:none}
+ .in-workroom .room-return .cloud-connection-light{display:block;position:absolute;left:74px;top:28px;width:7px;height:7px;border-radius:50%;background:#773f46;box-shadow:0 0 0 1px #61404b;pointer-events:none}
+ .in-workroom .room-return [data-connected=true] .cloud-connection-light{background:#53c786;box-shadow:0 0 5px #6acb8d}
+ .in-workroom .book-heading{position:absolute;top:12px;left:32%;width:39%;z-index:4;padding:4px 18px!important;min-height:54px!important;background:linear-gradient(#fff9e7,#eedbb4)!important;border:1px solid #ad8e61!important;border-radius:4px 12px 3px 3px;box-shadow:0 2px 3px #60462c35;gap:8px!important;transform:rotate(-.5deg);transform-origin:bottom left}
+ .in-workroom .book-heading:before{content:'';position:absolute;left:16px;top:-7px;width:92px;height:7px;background:#e7cea0;border:1px solid #ad8e61;border-bottom:0;border-radius:6px 6px 0 0}
+ .in-workroom .book-heading:after{display:none}
+ .in-workroom .book-heading>div:first-child{display:block!important}
+ .in-workroom .book-heading .project-title{width:100%;min-width:0!important;font-size:16px!important;min-height:44px!important;line-height:1.4}
+ .in-workroom .book-heading .book-meta{font-size:12px;line-height:16px;padding-bottom:0}
+ .phone-room-record .book-heading{top:12px;padding-block:2px!important;min-height:48px!important}
+ .phone-room-record .book-heading .book-meta{display:none}
+ .phone-room-arrange .book-heading{left:33%;width:38%;top:22px;transform:none;border:3px solid #aa804c!important;border-radius:7px;background:linear-gradient(#f0e6ca,#c9ceb9)!important;box-shadow:inset 0 0 0 1px #fff1c9,0 1px 0 #795738,0 2px 3px #4a4b3033}
+ .phone-room-arrange .book-heading:before{left:7px;top:23px;width:4px;height:4px;border:1px solid #9b8c6f;border-radius:50%;background:#f4dca4;box-shadow:none}
+ .phone-room-export .book-heading{left:30%;width:42%;top:23px;transform:rotate(.6deg);border:3px solid #bf8c49!important;border-radius:6px 12px 12px 6px;background:linear-gradient(100deg,#dfc08a 0 14px,#fff6da 14px)!important;padding-left:28px!important;box-shadow:inset 0 0 0 1px #fff0be,0 1px 0 #805535,0 2px 3px #60462c35}
+ .phone-room-export .book-heading:before{left:5px;top:23px;width:5px;height:5px;border-radius:50%;border:1px solid #9d794b;background:#b49470}
+ .phone-room-library .book-heading{display:none!important}
+ .in-workroom #workroom>#saveState{position:absolute;top:88px;left:3%;z-index:8;width:auto;max-width:85%;margin:0;padding:8px 12px;background:#fff2d9;border:1px solid #b79a69;border-radius:8px;font-size:14px;line-height:1.5;box-shadow:0 3px 10px #432b3230}
+ .in-workroom #workroom>#saveState.routine-save{display:none!important}
+ .in-workroom .room-return>button:hover,.in-workroom .room-return>button:focus-visible{filter:drop-shadow(0 0 6px #ffe8a8)}
+ .in-workroom .room-return>button:active{transform:translateY(2px);filter:brightness(.92)}
+ .in-workroom .completion{margin:0 0 0 4px}
+ .in-workroom .book-footer{padding:6px 16px;min-height:0}
+ .in-workroom #arrangePage .sequence-open{display:flex;position:absolute;left:5.5%;top:49.5cqw;z-index:2;flex-direction:column;align-items:center;justify-content:end;width:142px;height:112px;min-height:48px;padding:0 0 4px;border:0;border-radius:10px;background:transparent;color:#493953;font-size:15px;font-weight:600;box-shadow:none}
+ .in-workroom .sequence-open:before,.in-workroom .export-guide-open:before{content:'';display:block;width:112px;height:84px;background:center/contain no-repeat;filter:drop-shadow(2px 3px 2px #66482c45);transition:transform .16s}
+ .in-workroom .sequence-open:before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22wood%22%20x2%3D%22.7%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0cc%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23c49c60%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paper%22%20x2%3D%22.3%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fffdf2%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ead7b2%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20d%3D%22m24%2013%2071%204-8%2076-72-5Z%22%20fill%3D%22url%28%23wood%29%22%20stroke%3D%22%23997647%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22m30%2019%2057%204-6%2061-57-4Z%22%20fill%3D%22url%28%23paper%29%22%20stroke%3D%22%23e1cba4%22/%3E%3Cpath%20d%3D%22m45%2011%2029%202-1%2013-29-2Z%22%20fill%3D%22%23a68db5%22%20stroke%3D%22%2370597d%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22m32%2042%2044%203m-45%207%2044%203m-45%207%2044%203m-45%207%2044%203%22%20stroke%3D%22%23b7a3c1%22%20stroke-width%3D%221.5%22/%3E%3Cpath%20d%3D%22m48%2047%201%2022m0-22%2016-3v23%22%20stroke%3D%22%23735986%22%20stroke-width%3D%223%22%20fill%3D%22none%22/%3E%3Cellipse%20cx%3D%2244%22%20cy%3D%2270%22%20rx%3D%226%22%20ry%3D%224%22%20fill%3D%22%23735986%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2268%22%20rx%3D%226%22%20ry%3D%224%22%20fill%3D%22%23735986%22/%3E%3C/svg%3E")}
+ .in-workroom .export-guide-open:before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22wood%22%20x2%3D%22.7%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0cc%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23c49c60%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22paper%22%20x2%3D%22.3%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fffdf2%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ead7b2%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20d%3D%22m15%2021%2047-5%2043%209-6%2066-40-8-47%206Z%22%20fill%3D%22%23aa87ba%22%20stroke%3D%22%23705783%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22m20%2017%2042-4%2038%209-5%2060-36-8-43%205Z%22%20fill%3D%22url%28%23paper%29%22%20stroke%3D%22%23bd9b68%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22m62%2014-3%2060%22%20stroke%3D%22%23bc9e7f%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22m28%2036%2023-3m-24%2012%2023-3m-24%2012%2023-3m18-15%2023%205m-24%205%2023%205m-24%205%2023%205%22%20stroke%3D%22%23ad98b6%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22m72%2021%209%202-2%2022-5-7-5%204Z%22%20fill%3D%22%23d3b36a%22/%3E%3C/svg%3E")}
+ .in-workroom :is(.sequence-open,.export-guide-open){text-shadow:0 1px 3px #fff9e8,0 0 5px #fff9e8}
+ .in-workroom :is(.sequence-open,.export-guide-open):hover:before{transform:translateY(-2px)}
+ .in-workroom :is(.sequence-open,.export-guide-open):active:before{transform:translateY(2px)}
+ @media(prefers-reduced-motion:reduce){.in-workroom :is(.sequence-open,.export-guide-open):before{transition:none;transform:none!important}}
+ .in-workroom #arrangePage .sequence-panel{display:none}
+ .in-workroom #arrangePage{padding-top:0!important;aspect-ratio:3/2!important}
+ body:has(#sequenceDialog[open],#exportGuideDialog[open]){overflow:hidden}
+ body #sequenceDialog{width:min(840px,92vw);max-height:85dvh;overflow:auto}
+ body #sequenceDialog .sequence-item{font-size:16px;line-height:1.6}
+ body #sequenceDialog .sequence-item span{font-size:14px}
+ .in-workroom #arrangePage #itemPlaybackEntry{top:62cqw;left:7%;width:86%!important;max-height:4cqw;overflow:auto!important;padding:2px 8px!important;background:#fff6e5dc;border-radius:6px}
+
  .in-workroom .book-heading{display:flex;align-items:center;padding:4px 20px;gap:12px;background:#fff6e5;border:0;min-height:52px}
  .in-workroom .book-heading>div:first-child{display:flex;align-items:center;gap:16px;flex:1;min-width:0}
  .in-workroom .book-heading .project-title{flex:0 1 350px;min-width:180px;min-height:44px;font-size:17px;margin:0;background:transparent}
@@ -289,7 +342,9 @@ dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
  .in-workroom #recordPage .workspace{display:block;background:none;min-height:66.6667cqw;transform-origin:65% 10.5cqw;transform:perspective(100cqw) rotateX(6deg)}
  .in-workroom .contents{position:absolute;left:27%;top:calc(10.5cqw - 48px);width:68%;height:54px;min-height:54px;display:flex;gap:6px;align-items:flex-start;overflow:visible;background:none;border:0;border-radius:0;padding:2px 3px;box-shadow:none;scroll-padding:8px}
  .in-workroom .aside-heading{display:none}
- .in-workroom #chapterNav{display:flex;flex-wrap:nowrap;gap:5px;width:auto;min-width:0;flex:1;overflow-x:auto;padding-bottom:0;scrollbar-width:thin;scrollbar-color:#ad906d #f8ecd6}
+ /* Keep the active tab's 5px paper overlap + focus inside one horizontal viewport.
+    overflow-x:auto otherwise promotes the default visible Y axis to auto. */
+ .in-workroom #chapterNav{display:flex;flex-wrap:nowrap;gap:5px;width:auto;min-width:0;flex:1;overflow-x:auto;overflow-y:hidden;height:64px;align-items:flex-start;padding:3px 4px 9px;scroll-padding-inline:4px;scrollbar-width:thin;scrollbar-color:#ad906d #f8ecd6}
  .in-workroom #chapterNav .chapter-button{width:auto;flex:0 0 auto;max-width:210px;min-height:46px;background:linear-gradient(#fff8e9,#e6d5b4);border:1px solid #b49872;border-bottom:0;border-radius:12px 12px 0 0;clip-path:none;transform:none;box-shadow:inset 0 2px 0 #fffaf1;color:#493954}
  .in-workroom #chapterNav .chapter-button:before,.in-workroom #chapterNav .chapter-button:after{display:none}.in-workroom #chapterNav .chapter-button.active{background:#fff4db;border-color:#ad9571;box-shadow:0 7px 0 #fff4db;position:relative;z-index:2;transform:translateY(5px)}
  .in-workroom #chapterNav .chapter-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -370,7 +425,10 @@ dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
  .in-workroom .assemble-button>svg,.in-workroom .assemble-button .action-character{display:none}
  .in-workroom #exportStatus{position:absolute;left:66%;top:61cqw;width:31%;background:#fff6e6de;border-radius:6px;font-size:12px}
  .in-workroom #exportResult{position:relative;margin:0 18px 12px;padding:14px;background:#fff9ed;border:1px solid #d0bc93;border-radius:8px}
- .in-workroom .export-note{position:relative;margin:0;padding:12px 18px;background:#fff6e5;border:0;box-shadow:none;display:flex;flex-wrap:wrap;gap:6px 16px}
+ .in-workroom .export-note{display:none}
+ .in-workroom .export-guide-open{display:flex;position:absolute;left:12%;top:54cqw;flex-direction:column;align-items:center;justify-content:end;width:166px;height:112px;min-height:48px;padding:0 0 4px;border:0;border-radius:10px;background:transparent;color:#493953;font-size:15px;font-weight:600;box-shadow:none}
+ #exportGuideDialog{max-height:85dvh;overflow:auto}
+
  .in-workroom .export-note:before,.in-workroom .export-note:after,.in-workroom .export-note hr{display:none}
  /* The illustrated cabinet drawers themselves are the buttons, not a second CSS cabinet. */
  .in-workroom #libraryPage:not([hidden]){display:block;min-height:0;width:100%}

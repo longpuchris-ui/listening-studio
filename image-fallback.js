@@ -1,5 +1,6 @@
-/* Lossless WebP fallback for HTML/SVG image decoders; never fetch both on success. */
-document.addEventListener('error',event=>{const image=event.target;if(!image||!['IMG','image'].includes(image.tagName))return;const attr=image.tagName==='IMG'?'src':'href',src=image.getAttribute(attr)||'';if(/^assets\/[a-z0-9-]+\.webp$/.test(src))image.setAttribute(attr,src.replace(/\.webp$/,'.png'));},true);
+/* High-quality WebP with original PNG fallback for HTML/SVG image decoders; never fetch both on success. */
+function originalScenePng(src){return src.replace(/(?:-delivery)?\.webp$/,'.png')}
+document.addEventListener('error',event=>{const image=event.target;if(!image||!['IMG','image'].includes(image.tagName))return;const attr=image.tagName==='IMG'?'src':'href',src=image.getAttribute(attr)||'';if(/^assets\/[a-z0-9-]+\.webp$/.test(src))image.setAttribute(attr,originalScenePng(src));},true);
 /* CSS image-set selects formats, not failed responses. Share the exact WebP URL
    with a decoder probe; only an error installs the original PNG background. */
 const checkedSceneImages=new Set();
@@ -19,7 +20,8 @@ for(const [name,selector] of [
   if(name==='recording-studio-background')rule.textContent='@media(max-width:1000px){'+rule.textContent+'}';
   document.head.append(rule);
  };
- probe.src='assets/'+name+'.webp';
+ const delivery=['recording-studio-background','project-nameplate'].includes(name)?'-delivery':'';
+ probe.src='assets/'+name+delivery+'.webp';
 }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkSceneBackgrounds,{once:true});else checkSceneBackgrounds();
