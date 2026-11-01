@@ -354,7 +354,7 @@ dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
  .in-workroom #chapterNav .chapter-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .in-workroom .contents .add-chapter{flex:0 0 112px;min-height:46px;width:112px;margin:0;background:#fff6e2;border:1px dashed #a78b64;border-radius:10px 10px 0 0}
  .in-workroom .contents button{min-height:44px;padding:5px 8px;font-size:13px;margin:0}
- .in-workroom .record-content{position:absolute;left:37%;top:calc(10.5cqw + 16px);bottom:15cqw;width:56%;height:auto;padding:0;background:none;overflow:auto;scrollbar-width:thin;scrollbar-color:#ad906d #f8ecd6;scroll-padding:12px;overscroll-behavior:contain}
+ .in-workroom .record-content{position:absolute;left:37%;top:calc(10.5cqw + 16px);bottom:15cqw;width:56%;height:auto;padding:0 4px;background:none;overflow:auto;scrollbar-width:thin;scrollbar-color:#ad906d #f8ecd6;scroll-padding:12px;overscroll-behavior:contain}
  .in-workroom .chapter-heading{min-height:0;margin:0;padding:0 4px;background:none;border:0}
  .in-workroom .chapter-heading h2{font-size:19px;margin:0}
  .in-workroom .chapter-heading :is(.workspace-mascot,.eyebrow,p,.chapter-art){display:none}
@@ -362,6 +362,15 @@ dialog .role-cast{gap:10px}dialog .role-paper{padding:12px}
  .in-workroom .record-tools .workspace-mascot{display:none}
  .in-workroom :is(.clip-card,.intro-segment,.clip-info,.intro-routing,.intro-add-paper,.tip,.item-playback-controls,.code-editor){background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important}
  .in-workroom .clip-card:before,.in-workroom .clip-card:after{display:none}
+ /* The whole manuscript already supplies perspective. Old postcard/tip rotations
+    softened glyphs a second time and enlarged the inner scrollable width. */
+ .in-workroom #recordPage :is(.clip-card,.clip-bottom button,.tip){transform:none}
+ .in-workroom #recordPage .clip-bottom{background:transparent;border:0;box-shadow:none}
+ .in-workroom #recordPage .tip{color:#524238}
+ .in-workroom #recordPage .tip p{font-size:15px;line-height:1.7;margin:6px 0;color:inherit}
+ .in-workroom #recordPage .tip strong{color:inherit;font-weight:600;font-synthesis:none}
+ .in-workroom #recordPage .arrangement-controls summary{font-size:16px;font-weight:500;font-synthesis:none;line-height:1.5;color:#34264a}
+ .in-workroom #recordPage :is(.intro-routing small,.intro-add-paper p,.start-cue-label){color:#67523f;font-size:14px;line-height:1.6}
  .in-workroom .intro-pair-grid{display:block}
  .in-workroom .intro-routing{padding:4px;margin:4px 0}
  .in-workroom .intro-segment .clip-card{margin-top:4px}

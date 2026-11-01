@@ -10,7 +10,7 @@ let previewEpoch=0;
 let state=fresh(),active='intro',page='record',db,saveTimer,saveChain=Promise.resolve(),rec=null,building=false,previewAudio=null,previewClipId=null,previewURL=null,fullURL=null,compiledBlob=null,importTarget=null,editClip=null;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon=n=>'<svg aria-hidden="true"><use href="#i-'+n+'"/></svg>';
-const button=(action,id,ico,title,cls='small-action')=>`<button class="${cls}" data-action="${action}" data-id="${id}" title="${title}" aria-label="${title}">${action==='record'?'<svg class="drawn-microphone" aria-hidden="true"><use href="#art-mic"/></svg>':icon(action.startsWith('up')?'up':action==='downIntro'?'down':ico)}${action==='importAudio'?'<span>匯入</span>':action==='playOriginal'?'<span>聽原音</span>':''}</button>`;
+const button=(action,id,ico,title,cls='small-action')=>`<button class="${cls}" data-action="${action}" data-id="${id}" title="${title}" aria-label="${title}">${action==='record'?'<svg class="drawn-microphone" aria-hidden="true"><use href="#art-mic"/></svg>':icon(action==='importAudio'?'download':action.startsWith('up')?'up':action==='downIntro'?'down':ico)}${action==='importAudio'?'<span>匯入</span>':action==='playOriginal'?'<span>聽原音</span>':''}</button>`;
 const time=n=>{n=Math.max(0,Math.round(n||0));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
 const find=id=>A.inventoryClips(state).find(c=>c.id===id);
 function rememberPreviousAudio(c){if(c.blob)lastAudioUndo={id:c.id,blob:c.blob,duration:c.duration,trimStart:c.trimStart,trimEnd:c.trimEnd}}
