@@ -4,6 +4,7 @@
  const $=s=>document.querySelector(s),narrow=matchMedia('(max-width:600px)'),mobile=matchMedia('(max-width:1000px)');
  let origin=null,readingId=null,lastSession=null,layoutNarrow=false,frame=0;
  let editor=null,editorPath=[],caretFrame=0,composing=false,selecting=false,caretMirror=null;
+ const saveStatus=document.getElementById('saveState');let saveStatusOrigin=null,saveStatusLive=null;
  const paperPositions=new Map(),readerPositions=new Map(),moved=[];
  const dialog=document.createElement('dialog');dialog.id='readingDialog';dialog.setAttribute('aria-labelledby','readingTitle');
  dialog.innerHTML='<header class="dialog-top reading-header"><div><strong id="readingTitle">麥麥 · 專心讀稿</strong><span id="readingTarget"></span></div><button type="button" id="readingClose" aria-label="返回一般稿頁">收起</button></header><div id="readingPaper" class="reading-paper" role="region" aria-label="本段朗讀稿" tabindex="0"></div><footer class="reading-footer"><p id="readingResult" role="status" aria-live="polite"></p><div id="readingIdle" class="reading-idle"><button type="button" id="readingPrevious" aria-label="上一段">←</button><button type="button" id="readingRecord" data-action="record">● 錄音</button><button type="button" id="readingPlay" data-action="toggleClipPlayback">試聽</button><button type="button" id="readingNext" aria-label="下一段">→</button></div><div id="readingDockSlot"></div></footer>';
@@ -24,12 +25,30 @@
   finishEditing();editor=el;editor.closest('.clip-card').classList.add('reading-editor-card');
   for(let node=editor.closest('.clip-card').parentElement;node&&node!==document.body;node=node.parentElement){node.classList.add('reading-editor-path');editorPath.push(node);if(node.id==='workroom')break}
   document.body.classList.add('reading-script-editing');editDone.hidden=false;viewport();scheduleCaret();
+  saveStatusOrigin=document.createComment('editing-save-status-origin');saveStatus.before(saveStatusOrigin);saveStatusLive=saveStatus.getAttribute('aria-live');placeEditStatus();
  }
  function finishEditing(){
   if(!editor)return;editor.closest('.clip-card')?.classList.remove('reading-editor-card');
   for(const node of editorPath)node.classList.remove('reading-editor-path');editorPath=[];editor=null;
   document.body.classList.remove('reading-script-editing');editDone.hidden=true;composing=false;selecting=false;
   cancelAnimationFrame(caretFrame);caretFrame=0;caretMirror?.remove();caretMirror=null;
+  if(saveStatus.parentElement===$('.room-return')&&saveStatusOrigin?.isConnected)saveStatusOrigin.replaceWith(saveStatus);else saveStatusOrigin?.remove();saveStatusOrigin=null;
+  if(saveStatusLive===null)saveStatus.removeAttribute('aria-live');else saveStatus.setAttribute('aria-live',saveStatusLive);
+  delete saveStatus.dataset.editorStatus;delete saveStatus.dataset.editorNotice;saveStatus.removeAttribute('title');
+ }
+ function placeEditStatus(){
+  if(!editor)return;if(saveStatus.parentElement!==$('.room-return'))$('.room-return').insertBefore(saveStatus,editDone);
+  const text=saveStatus.textContent.trim();let label,notice=false;
+  if(text==='正在收好這一頁…')label='待存本機';
+  else if(text==='已自動保存於這台裝置'||text==='已開啟上次的聽力試卷'||text==='這次錄音已保存於這台裝置')label='已存本機';
+  else if(text==='只存在這台裝置'||text==='錄音會自動保存於這台裝置')label='本機保存';
+  else if(text==='稿文與設定已保存；本次錄音尚在處理')label='稿文已存';
+  else{notice=true;label=text.includes('分頁衝突')?'分頁衝突・已保留草稿':text.includes('雲端排程')?'已存本機・雲端待重試':text.includes('尚未保存')||text.includes('保存無法')?'未保存・請備份':text}
+  if(saveStatus.dataset.editorStatus!==label)saveStatus.dataset.editorStatus=label;
+  saveStatus.dataset.editorNotice=String(notice);saveStatus.title=text;
+  // Routine autosave does not announce every pause. Real errors keep the existing
+  // live toast and status; the canonical status node/value is never duplicated.
+  saveStatus.setAttribute('aria-live',notice?'polite':'off');
  }
  function scheduleCaret(){cancelAnimationFrame(caretFrame);caretFrame=requestAnimationFrame(revealCaret)}
  function editorControl(el){return el===editDone||!!el?.closest('.room-return,#recordDock')}
@@ -47,7 +66,7 @@
   else if(y+line>editor.scrollTop+editor.clientHeight-pad)editor.scrollTop=y+line-editor.clientHeight+pad;
  }
  function layout(){
-  viewport();if(editor&&(!eligible()||!editor.isConnected))finishEditing();
+  viewport();if(editor&&(!eligible()||!editor.isConnected))finishEditing();if(editor)placeEditStatus();
   const compact=narrow.matches&&!atWorktable&&page==='record';
   if(compact!==layoutNarrow){if(typeof isTextEditor==='function'&&isTextEditor(document.activeElement))return;layoutNarrow=compact;
    for(const {el,mark}of moved){if(compact)$('.room-return').append(el);else mark.after(el)}
@@ -95,7 +114,7 @@
  $('#readingPrevious').addEventListener('click',()=>{if(!rec){stepMobileClip(-1);sync()}});$('#readingNext').addEventListener('click',()=>{if(!rec){stepMobileClip(1);sync()}});
  const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{layout();if(dialog.open)sync();if(editor)scheduleCaret()})};
  new ResizeObserver(schedule).observe(dock);
- new MutationObserver(()=>{if(dialog.open)sync()}).observe($('#saveState'),{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['class']});
+ new MutationObserver(()=>{if(editor)placeEditStatus();if(dialog.open)sync()}).observe($('#saveState'),{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['class']});
  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);window.visualViewport?.addEventListener('scroll',schedule);
  document.addEventListener('focusin',e=>{if(e.target.matches('.clip-script'))beginEditing(e.target);else if(editor&&!editorControl(e.target))finishEditing();layout()});
  document.addEventListener('focusout',()=>setTimeout(()=>{if(editor&&document.activeElement!==editor&&!editorControl(document.activeElement))finishEditing();layout()},0));
