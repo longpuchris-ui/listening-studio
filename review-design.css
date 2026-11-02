@@ -39,7 +39,7 @@ button:disabled{cursor:not-allowed}
  .top-actions button{min-width:44px;min-height:44px}
  .brand small{color:#596278;font-size:11px}
  .phone-room-record .chapter-button{min-height:44px;font-size:12px;padding:6px 10px}
- .phone-room-record .contents{height:52px;min-height:52px}
+ .phone-room-record .contents{height:54px;min-height:54px;overflow-x:auto;overflow-y:hidden;scroll-padding-inline:6px}
  .phone-room-record .record-tools{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;max-height:none;min-height:0}
  .phone-room-record .record-tools .role-studio-entry,.phone-room-record .record-tools .quiet{min-height:44px;font-size:12px;margin:0;justify-content:center}
  .phone-room-record .record-tools .switch-label,.phone-room-record .record-tools .silence-label{font-size:12px;min-height:44px;display:flex;align-items:center;justify-content:center}
