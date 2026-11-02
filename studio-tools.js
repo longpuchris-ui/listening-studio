@@ -58,7 +58,7 @@ function isTextEditor(el){return el?.matches('textarea,input:not([type=checkbox]
 function applyRecordLayout(){if(!recordLayoutPending||isTextEditor(document.activeElement))return;recordLayoutPending=false;if(typeof state!=='undefined'&&page==='record'){renderMobileDeck();mountWaveEditor()}}
 recordPhoneLayout.addEventListener('change',()=>{recordLayoutPending=true;applyRecordLayout()});
 function revealTextEditor(){
- const el=document.activeElement;if(!isTextEditor(el))return;
+ const el=document.activeElement;if(!isTextEditor(el)||window.MobileReading?.ownsEditor(el))return;
  const vv=window.visualViewport,top=vv?.offsetTop||0,bottom=top+(vv?.height||innerHeight);
  const r=el.getBoundingClientRect();
  if(r.top<top+12||r.bottom>bottom-12){

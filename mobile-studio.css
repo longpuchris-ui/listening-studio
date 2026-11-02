@@ -173,11 +173,6 @@
  .reading-compact .mobile-deck-top>span:not(.mascot-mobile){flex:1;min-width:0}
  .reading-compact .mobile-deck-top>button{min-height:44px;padding:4px 8px;font-size:14px;background:transparent;border:0}
  .reading-compact .mobile-card-slot{padding:0;min-height:0;flex:1}
- .reading-compact.reading-script-editing .contents,.reading-compact.reading-script-editing .record-tools,.reading-compact.reading-script-editing .mobile-deck-top,.reading-compact.reading-script-editing .mobile-page-nav{display:none!important}
- .reading-compact.reading-script-editing .mobile-card-slot>.clip-card{grid-template-rows:minmax(0,1fr)}
- .reading-compact.reading-script-editing .clip-actions,.reading-compact.reading-script-editing .clip-audio-status,.reading-compact.reading-script-editing .clip-bottom{display:none!important}
- .reading-compact #readingEditDone:not([hidden]){display:block;min-height:44px;min-width:44px;font-size:14px;padding:4px 8px;background:#f1dfb6;color:#503d50;border-radius:8px}
- .reading-compact.reading-script-editing #projectTitle,.reading-compact.reading-script-editing [data-action=micSettings]{display:none}
  .reading-compact .mobile-card-slot>.clip-card{margin:0!important;padding:0;flex:1;min-height:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) 78px 44px;border:0;border-top:1px solid #d4c4a7;border-radius:0;background:#fffdf7;box-shadow:none;outline:0}
  .reading-compact .mobile-card-slot .clip-main{display:contents}
  .reading-compact .mobile-card-slot .clip-info{grid-column:1/-1;grid-row:1;min-height:0;min-width:0;display:flex;flex-direction:column;padding:6px 8px 0}
@@ -244,3 +239,28 @@
  #readingDialog button:disabled{opacity:.55}
 }
 @media(max-width:360px){.reading-compact .record-tools .focus-recording-button{font-size:13px;padding:4px 5px}.reading-compact .mobile-deck-top{font-size:13px}#readingPaper{font-size:24px;padding:14px 14px 24px}}
+
+/* v31 keyboard editing: one actual textarea, one visual-viewport rectangle.
+   No dialog/reparenting, no guessed keyboard height, no whole-page caret scroll. */
+.reading-caret-measure{position:fixed!important;left:0!important;top:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-1!important;box-sizing:border-box!important;height:0!important;min-height:0!important;max-height:none!important;margin:0!important;border:0!important;white-space:pre-wrap!important;overflow:hidden!important;contain:layout style paint}
+@media(max-width:1000px){
+ body.phone-room-record.reading-script-editing{overflow:hidden}
+ body.phone-room-record.reading-script-editing #workroom{position:fixed;inset:auto;top:var(--reading-viewport-top,0px);left:var(--reading-viewport-left,0px);width:var(--reading-viewport-width,100%);height:var(--reading-viewport,100dvh);min-height:0;margin:0;padding:0;border:0;border-radius:0;transform:none;box-shadow:none;overflow:hidden;display:flex;flex-direction:column;background:#fffdf7;z-index:60}
+ .reading-script-editing .reading-editor-path>:not(.reading-editor-path):not(.reading-editor-card):not(.room-return):not(#saveState){display:none!important}
+ body.reading-script-editing #workroom .reading-editor-path{display:flex!important;flex-direction:column;flex:1;min-height:0!important;height:auto!important;min-width:0;width:100%;margin:0!important;padding:0!important;border:0;outline:0;box-shadow:none;transform:none;overflow:hidden!important;background:transparent}
+ body.reading-script-editing #workroom .reading-editor-card{display:flex!important;flex-direction:column;flex:1;min-height:0!important;height:auto!important;width:100%;margin:0!important;padding:0!important;border:0;outline:0;border-radius:0;box-shadow:none;transform:none;overflow:hidden;background:transparent}
+ .reading-script-editing .reading-editor-card>.clip-main{display:contents!important}
+ .reading-script-editing .reading-editor-card :is(.clip-badge,.clip-actions,.clip-audio-status,.clip-bottom,.clip-editor){display:none!important}
+ body.reading-script-editing #workroom .reading-editor-card .clip-info{display:flex;flex-direction:column;flex:1;min-height:0;min-width:0;padding:4px 12px max(8px,env(safe-area-inset-bottom));margin:0;overflow:hidden}
+ .reading-script-editing .reading-editor-card .clip-title{flex:none;font-size:14px;line-height:1.4;font-weight:600;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#493a52}
+ .reading-script-editing .reading-editor-card .status-tag{display:none}
+ body.reading-script-editing #workroom .reading-editor-card .clip-script{flex:1;box-sizing:border-box;height:0!important;min-height:0!important;max-height:none!important;width:100%;margin:0;padding:8px 4px 14px!important;font-size:20px!important;line-height:1.6;font-weight:400;white-space:pre-wrap;overflow-wrap:break-word;overflow:auto;overscroll-behavior:contain;resize:none;transform:none;border-radius:4px;background:#fffdf7;color:#3d3047;scroll-padding:8px;touch-action:auto}
+ body.reading-script-editing #workroom .room-return{display:flex;position:static;flex:none;min-height:48px;margin:0;padding:2px 8px;gap:8px;justify-content:space-between;align-items:center;background:#f4e7cf;border:0;border-bottom:1px solid #d1ba98;transform:none}
+ .reading-script-editing .room-return>:not([data-action=home]):not(#readingEditDone){display:none!important}
+ body.reading-script-editing .room-return>[data-action=home],body.reading-script-editing #readingEditDone:not([hidden]){display:inline-flex;align-items:center;justify-content:center;flex:none;min-height:44px;min-width:44px;padding:5px 9px;font-size:16px;font-weight:600;line-height:1.3;white-space:nowrap;transform:none;box-shadow:none;letter-spacing:normal}
+ body.reading-script-editing #readingEditDone:not([hidden]){background:#ead6ac;color:#493650;border:1px solid #b79b73;border-radius:8px}
+ .reading-script-editing #saveState.routine-save{display:none!important}
+ .reading-script-editing #saveState:not(.routine-save){flex:none;max-height:48px;overflow:auto;font-size:14px;line-height:1.4;padding:3px 10px;margin:0}
+ body.phone-room-record.reading-script-editing.is-recording #workroom{padding-bottom:var(--reading-dock-height,120px)}
+ body.reading-script-editing:not(.reading-open) #recordDock{position:fixed;left:var(--reading-viewport-left,0px);bottom:calc(100% - var(--reading-viewport-top,0px) - var(--reading-viewport,100dvh));width:var(--reading-viewport-width,100%);transform:none;z-index:65}
+}
