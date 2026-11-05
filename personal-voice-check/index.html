@@ -1,0 +1,90 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-DS0OyQGAT2YsMBkyJYIjnHCMlqOLigUCkSVdslC2m9A='; connect-src 'none'; frame-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="color-scheme" content="light"><title>個人配音安全檢查 · 聽力錄音室</title><style>:root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#40344d;background:#f6eedf;font-size:16px;line-height:1.6}*{box-sizing:border-box}body{margin:0;padding:24px 16px}main{max-width:780px;margin:auto;background:#fffbf1;border:1px solid #cbb48f;border-radius:24px;overflow:hidden;box-shadow:0 12px 40px #59412d14}header{padding:28px;background:linear-gradient(135deg,#f3e2ba,#f4e6d4);border-bottom:6px solid #b68d60}.eyebrow{font-size:14px;font-weight:650;letter-spacing:.1em}h1{font-size:clamp(25px,4vw,34px);line-height:1.35;margin:10px 0}h2{font-size:20px;margin:0 0 10px}p{margin:8px 0 14px}#mode{display:inline-block;color:#633c79}section,details{padding:22px 28px;border-bottom:1px solid #dccbb1}.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}button,a{font:inherit;min-height:46px;display:inline-flex;align-items:center;justify-content:center}button{padding:8px 15px;border:1px solid #a1856a;border-radius:12px;background:#f3e3bf;color:#49364f;cursor:pointer;box-shadow:0 3px 0 #b99b77;font-weight:650}button:hover:not(:disabled){background:#efdbab}button:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #b99b77}button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #087886;outline-offset:3px}a{color:#603f80;padding:4px;text-underline-offset:4px}dl{display:grid;grid-template-columns:8em 1fr;gap:5px 12px;margin:12px 0}dt{font-weight:650}dd{margin:0;overflow-wrap:anywhere}.note{font-size:15px;background:#f6ecd5;border-left:4px solid #b68d60;padding:10px 12px}.consent{display:flex;gap:10px;align-items:flex-start;margin:18px 0;min-height:44px;cursor:pointer}.consent input{width:22px;height:22px;flex-shrink:0;margin:3px 0;accent-color:#725091}#googleButton{margin-top:14px;min-height:0;max-width:100%;overflow-x:auto}.result{background:#fcf8ed}#status{font-weight:650;padding:12px;background:#eae3f2;border-radius:10px;overflow-wrap:anywhere}.result[data-state=error] #status{background:#fce4df;color:#7e2924}.result[data-state=ok] #status{background:#e7efe0;color:#2e5336}#detail{overflow-wrap:anywhere}#voices{padding-left:24px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:650}ol{padding-left:22px}li{margin:8px 0}footer{padding:18px 28px;font-size:14px;color:#64596b}code{overflow-wrap:anywhere}[hidden]{display:none!important}@media(max-width:500px){body{padding:10px 8px}header,section,details{padding:18px}h2{font-size:19px}dl{grid-template-columns:1fr;gap:0}dd{margin-bottom:8px}button{flex:1 1 auto}footer{padding:16px 18px}.actions{gap:12px}}@media(prefers-reduced-motion:reduce){button:active:not(:disabled){transform:none}}
+</style></head><body>
+<main><header><span class="eyebrow">聽力錄音室 · 個人測試桌</span><h1>先確認身分，再試聲音</h1><p>這一頁只檢查服務與本人登入，沒有語音生成、考題輸入或金鑰欄位。</p><strong id="mode">本機模擬預覽 · 未連線</strong></header>
+<section aria-labelledby="reviewTitle"><h2 id="reviewTitle">先看檢查流程</h2><p>三種情境都在本機模擬，按下不會連接 Google、Worker 或 ElevenLabs。</p><div class="actions"><button id="demoOff">模擬服務停用</button><button id="demoOwner">模擬本人通過</button><button id="demoOther">模擬其他帳號拒絕</button></div></section>
+<section aria-labelledby="liveTitle"><h2 id="liveTitle">實際連線檢查</h2><p id="availability"></p><dl><dt>檢查端點</dt><dd id="endpoint">尚未填入</dd><dt>預定網站來源</dt><dd>https://longpuchris-ui.github.io</dd></dl>
+<p class="note">已回報的後端上限：每天 200 字、1 次生成。這不是帳戶餘額，也不是費用估算；本頁不查詢或變更限額。</p>
+<div class="actions"><button id="probe" disabled>① 檢查服務回覆</button><a id="statusLink" hidden target="_blank" rel="noopener noreferrer">另開服務狀態頁 ↗</a></div>
+<label class="consent"><input id="consent" type="checkbox" disabled><span>我同意載入 Google 登入元件，並只將這次登入憑證送到上列本人 Worker 核對身分；不傳送台詞或錄音。</span></label>
+<div class="actions"><button id="signIn" disabled>② 顯示 Google 登入按鈕</button><button id="cancel" hidden>取消本頁等待</button></div><div id="googleButton"></div>
+</section>
+<section class="result" aria-labelledby="resultTitle" aria-busy="false"><h2 id="resultTitle">檢查結果</h2><p id="status" role="status" aria-live="polite">尚未執行；沒有傳送資料。</p><p id="detail"></p><ul id="voices"></ul><button id="reset">清除本頁結果</button></section>
+<details><summary>下一步怎麼做？</summary><ol><li>先提供本人 Worker 的正式 <code>https://…workers.dev</code> 網址，不提供 Secret。</li><li>此檔可離線看模擬。真登入需另批准後，將測試頁加到現有 GitHub 來源的獨立子目錄；不覆蓋錄音室或遊戲。</li><li>v39 Worker 停用時不會驗證 Google 身分，而且跨來源瀏覽器可能看不到停用回覆。另開狀態頁可看原始回覆，但不能據此判定登入成功。</li><li>只有另行批准啟用 Worker 後，才能做真身分檢查。<strong>v39 啟用也會開放給本人的生成 API</strong>；本頁仍不會呼叫它。</li><li>本人身分通過只證明設定與身分，不代表音色、Secret 權限、實際扣額或語音生成已成功。第一筆合成短句需再明確確認。</li></ol></details>
+<footer>v40 檢查頁候選 · 不開麥克風、不存登入憑證、不讀寫錄音室 IndexedDB。<br>一般網頁請求仍可能使用 Cloudflare 平台額度；不保證平台完全無紀錄。</footer>
+</main><script id="configuration" type="application/json">{"liveCheckEnabled":false,"endpoint":"","clientId":"964857001905-feio66b11q9vmm1uje930cejhf1pcfk9.apps.googleusercontent.com","pageOrigin":"https://longpuchris-ui.github.io"}</script><script>(()=>{'use strict';
+ const $=id=>document.getElementById(id),config=JSON.parse($('configuration').textContent),result=document.querySelector('.result');
+ let epoch=0,active=null,serviceAcceptsAuth=false,gsiPromise=null;
+ function configured(){try{const u=new URL(config.endpoint);return config.liveCheckEnabled===true&&location.origin==='https://longpuchris-ui.github.io'&&config.pageOrigin===location.origin&&u.protocol==='https:'&&u.origin===config.endpoint&&/^[-a-z0-9]+\.[-a-z0-9]+\.workers\.dev$/.test(u.hostname)&&/^[-\w]+\.apps\.googleusercontent\.com$/.test(config.clientId)}catch{return false}}
+ const live=configured();
+ function display(title,detail='',state='idle'){result.dataset.state=state;$('status').textContent=title;$('detail').textContent=detail;$('voices').replaceChildren()}
+ function controls(){const busy=!!active;result.setAttribute('aria-busy',String(busy));$('probe').disabled=!live||busy;$('consent').disabled=!live||busy||!serviceAcceptsAuth;$('signIn').disabled=!live||busy||!serviceAcceptsAuth||!$('consent').checked;$('cancel').hidden=!busy;for(const id of ['demoOff','demoOwner','demoOther'])$(id).disabled=busy}
+ function clearAttempt(){epoch++;const old=active;active=null;old?.controller.abort();clearTimeout(old?.timer);$('googleButton').replaceChildren();window.google?.accounts?.id?.cancel?.();controls()}
+ function begin(){clearAttempt();const ticket={id:epoch,controller:new AbortController(),timer:null,nonce:''};active=ticket;controls();return ticket}
+ const current=t=>active===t&&t.id===epoch&&!t.controller.signal.aborted;
+ function finish(t){if(!current(t))return;clearTimeout(t.timer);active=null;$('googleButton').replaceChildren();controls()}
+ function reset(note='已清除本頁結果；沒有刪除 Google、Drive 或錄音室資料。'){clearAttempt();serviceAcceptsAuth=false;$('consent').checked=false;display(note);controls()}
+ function localDemo(kind){reset();const messages={off:['本機模擬：服務停用','v39 停用時在身分驗證前回覆 503；跨來源可能因 CORS 看不到內容。這不是實際 Worker 檢查結果。','idle'],owner:['本機模擬：本人身分可通過','只示範成功畫面，沒有登入或傳送資料。真檢查通過仍不代表聲音、Secret 權限、D1 交易或語音生成已驗證。','ok'],other:['本機模擬：其他帳號被拒絕','未符合指定本人時不允許生成。這是本機範例，不是真 Google 拒絕結果。','error']};display(...messages[kind])}
+ async function jsonBody(response,signal){
+  if(!/^application\/json(?:;|$)/i.test(response.headers.get('content-type')||'')||Number(response.headers.get('content-length'))>16384||!response.body)throw Error('INVALID_RESPONSE');
+  const reader=response.body.getReader(),parts=[];let size=0;
+  const abort=()=>reader.cancel().catch(()=>{});signal.addEventListener('abort',abort,{once:true});
+  try{while(true){const v=await reader.read();if(signal.aborted)throw Error('CANCELLED');if(v.done)break;size+=v.value.length;if(size>16384)throw Error('INVALID_RESPONSE');parts.push(v.value)}
+   const bytes=new Uint8Array(size);let offset=0;for(const p of parts){bytes.set(p,offset);offset+=p.length}return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+  }finally{signal.removeEventListener('abort',abort);await reader.cancel().catch(()=>{});reader.releaseLock()}
+ }
+ // Only this read-only endpoint is reachable. No POST, synthesis, Drive or database API.
+ async function accountRequest(ticket,credential){
+  if(!live||!current(ticket))throw Error('CANCELLED');
+  const headers={Accept:'application/json'};if(credential)headers.Authorization='Bearer '+credential;
+  const response=await fetch(config.endpoint+'/v1/account',{method:'GET',headers,credentials:'omit',cache:'no-store',redirect:'error',referrerPolicy:'no-referrer',signal:ticket.controller.signal});
+  return {status:response.status,body:await jsonBody(response,ticket.controller.signal)};
+ }
+ function responseMessage(code){return {UNAUTHENTICATED:'身分未通過或已過期；請核對所選 Google 帳號。',FORBIDDEN:'此帳號或網站來源不符合本人服務限制。',UNAVAILABLE:'服務未啟用或設定／驗證暫時不可用；本頁不能判定是哪一項。'}[code]||'服務回覆不符合預期；未視為登入成功。'}
+ function fail(ticket,error){if(!current(ticket))return;display('檢查未完成',error?.message==='INVALID_RESPONSE'?'服務回覆格式不符，已停止。沒有生成語音。':'無法讀取服務回覆。可能是 Worker 停用、CORS、網路或逾時；不能據此判定登入或設定成功。可另開狀態頁核對。','error');finish(ticket)}
+ function timeout(ticket,ms,message){clearTimeout(ticket.timer);ticket.timer=setTimeout(()=>{if(current(ticket)){clearAttempt();display('等待已逾時',message,'error')}},ms)}
+ async function probe(){
+  if($('probe').disabled)return;serviceAcceptsAuth=false;$('consent').checked=false;const ticket=begin();display('正在檢查服務回覆…','只送不含登入憑證的 GET；不傳送台詞。');timeout(ticket,12000,'未完成服務檢查；請確認設定後再明確重試。');
+  try{const r=await accountRequest(ticket);if(!current(ticket))return;
+   if(r.status===401&&r.body?.code==='UNAUTHENTICATED'){serviceAcceptsAuth=true;display('服務正在要求本人登入','已收到未登入拒絕。這只確認端點有回覆，不證明本人、音色或生成已可用。')}
+   else display('尚未完成服務檢查',r.status===503?responseMessage('UNAVAILABLE'):responseMessage(r.body?.code),'error');
+   finish(ticket);
+  }catch(e){fail(ticket,e)}
+ }
+ function loadGoogle(){
+  if(window.google?.accounts?.id)return Promise.resolve();if(gsiPromise)return gsiPromise;
+  gsiPromise=new Promise((resolve,reject)=>{const script=document.createElement('script'),timer=setTimeout(()=>{script.remove();gsiPromise=null;reject(Error('GIS_TIMEOUT'))},10000);script.src='https://accounts.google.com/gsi/client';script.async=true;script.referrerPolicy='no-referrer';script.onload=()=>{clearTimeout(timer);if(window.google?.accounts?.id)resolve();else{gsiPromise=null;reject(Error('GIS_UNAVAILABLE'))}};script.onerror=()=>{clearTimeout(timer);script.remove();gsiPromise=null;reject(Error('GIS_UNAVAILABLE'))};document.head.append(script)});return gsiPromise;
+ }
+ function tokenNonce(token){
+  if(typeof token!=='string'||token.length>8192)return null;
+  try{const segment=token.split('.')[1],bytes=Uint8Array.from(atob(segment.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes)).nonce}catch{return null}
+ }
+ function validAccount(a){return a?.status==='ready'&&a.mode==='personal-rest'&&a.verification==='configuration-only'&&a.billingOwner==='service-owner'&&a.capabilities?.dialogue===true&&/^[0-9a-f]{64}$/.test(a.revision)&&a.catalog?.model==='eleven_v3'&&Array.isArray(a.catalog.voices)&&a.catalog.voices.length>=2&&a.catalog.voices.length<=20&&new Set(a.catalog.voices.map(v=>v.id)).size===a.catalog.voices.length&&a.catalog.voices.every(v=>/^[-\w]{1,80}$/.test(v.id)&&typeof v.label==='string'&&v.label.length<=100)}
+ async function signIn(){
+  if($('signIn').disabled)return;const ticket=begin();ticket.nonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),b=>b.toString(16).padStart(2,'0')).join('');
+  display('正在準備 Google 登入按鈕…','登入只辨識本人；不會讀取 Drive 或呼叫 ElevenLabs。');timeout(ticket,60000,'已停止本頁等待；若 Google 視窗仍開著，請關閉後再重試。');
+  try{await loadGoogle();if(!current(ticket))return;
+   google.accounts.id.initialize({client_id:config.clientId,nonce:ticket.nonce,auto_select:false,callback:async response=>{
+    if(!current(ticket)||ticket.credentialHandled)return;ticket.credentialHandled=true;
+    // Nonce correlates this browser attempt only. The Worker verifies signature and identity.
+    if(tokenNonce(response?.credential)!==ticket.nonce){display('登入回覆已失效','未送到 Worker；請重試。','error');finish(ticket);return}
+    const credential=response.credential;response=null;$('googleButton').replaceChildren();display('正在核對本人身分…','只將本次 Google ID token 送到本人 Worker；不會生成語音。');timeout(ticket,12000,'身分檢查尚未完成；未生成語音，不自動重送。');
+    try{const r=await accountRequest(ticket,credential);if(!current(ticket))return;
+     if(r.status===200&&validAccount(r.body)){display('本人身分與後端設定已核對','尚未試音；未驗證 ElevenLabs key 權限、音色可用性、D1 寫入或實際扣額。以下僅列後端設定的聲音。','ok');
+      for(const voice of r.body.catalog.voices){const li=document.createElement('li');li.textContent=voice.label;$('voices').append(li)}
+     }else display('身分檢查未通過',responseMessage(r.body?.code),'error');finish(ticket);
+    }catch(e){fail(ticket,e)}
+   }});
+   google.accounts.id.renderButton($('googleButton'),{type:'standard',size:'large',width:Math.min(280,$('googleButton').clientWidth||280)});
+   display('請按下 Google 登入按鈕','登入視窗由 Google 提供。取消或逾時不會自動重新開啟。');
+  }catch(e){if(current(ticket)){display('Google 登入元件未就緒','尚未傳送登入憑證；可取消或稍後重試。','error');finish(ticket)}}
+ }
+ $('mode').textContent=live?'本人檢查頁 · 不生成語音':'本機模擬預覽 · 真連線停用';
+ $('endpoint').textContent=config.endpoint||'尚未填入；不要填 API key 或 Secret';
+ $('availability').textContent=live?'可先檢查服務回覆，再由本人按 Google 登入。沒有自動登入。':'目前不載入 Google、不連接 Worker。需核對公開 Worker 網址、同一 Client ID 與部署來源，並另批准真檢查設定。';
+ if(live){$('statusLink').href=config.endpoint+'/v1/account';$('statusLink').hidden=false}
+ for(const [id,kind] of [['demoOff','off'],['demoOwner','owner'],['demoOther','other']])$(id).onclick=()=>localDemo(kind);
+ $('probe').onclick=probe;$('signIn').onclick=signIn;$('consent').onchange=controls;
+ $('cancel').onclick=()=>{clearAttempt();display('已取消本頁等待','遲到回覆不再採用；若 Google 視窗仍開啟，可手動關閉。')};
+ $('reset').onclick=()=>reset();window.addEventListener('pagehide',()=>reset('頁面已離開，本頁檢查停止。'));controls();
+})();
+</script></body></html>
