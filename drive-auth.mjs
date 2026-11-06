@@ -5,7 +5,7 @@ let credential=null,client=null,pending=false,db,authEpoch=0,makeClient,waitTime
 const RENEW_WINDOW=5*60*1000;let renewing=false,renewTriedToken=null,needRenew=false,renewTimer,renewMessage='';
 const expiring=()=>!!credential&&!!bridge.account&&credential.expiresAt-Date.now()<RENEW_WINDOW;
 function renewState(){const tried=!!credential&&renewTriedToken===credential.token;return{needed:!!credential&&!!bridge.account&&(needRenew||expiring()),renewing,tried,message:renewMessage,expiresAt:credential?.expiresAt||0}}
-function connectionState(){const valid=!!credential&&!!bridge.account&&credential.expiresAt>Date.now()+5000,r=renewState();return {connected:navigator.onLine&&!pending&&valid&&!connectionFault,renew:r,label:!navigator.onLine?'離線':pending?'正在確認連接':renewing?'正在續期Google授權':!valid?(credential&&bridge.account&&!r.tried?'授權已到期 · 點畫面任一處續期':'未連接或需重新授權'):connectionFault?'連接尚未確認，請重試':r.needed&&!r.tried?'授權即將到期 · 下次點選時自動續期':'已連接Google（非專案同步狀態）'}}
+function connectionState(){const valid=!!credential&&!!bridge.account&&credential.expiresAt>Date.now()+5000,r=renewState();return {connected:navigator.onLine&&!pending&&valid&&!connectionFault,renew:r,label:!navigator.onLine?'離線':pending?'正在確認連接':renewing?'正在續期Google授權':!valid?(credential&&bridge.account&&!r.tried?'授權已到期 · 點畫面任一處續期':(credential||bridge.account?'需重新授權':'尚未連接')):connectionFault?'連接尚未確認，請重試':r.needed&&!r.tried?'授權即將到期 · 下次點選時自動續期':'已連接Google（非專案同步狀態）'}}
 function refreshConnection(){clearTimeout(connectionTimer);const now=Date.now(),next=[credential?.expiresAt-RENEW_WINDOW-now,credential?.expiresAt-5000-now].filter(x=>x>0);if(next.length)connectionTimer=setTimeout(refreshConnection,Math.min(Math.min(...next)+1,2147483647));window.dispatchEvent(new Event('studio-drive-connection'))}
 function progress(stage,message){refreshConnection();bridge.authStage=stage;bridge.authMessage=message;window.dispatchEvent(new Event('studio-drive-ready'))}
 function clearWait(){clearTimeout(waitTimer);clearTimeout(deadlineTimer);waitTimer=deadlineTimer=undefined}
@@ -59,4 +59,4 @@ if(config.clientId&&/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.clientI
   }catch(e){if(epoch!==authEpoch)return;credential=null;bridge.account=null;window.dispatchEvent(new Event('studio-drive-account'));bridge.error=e.name==='AbortError'?'確認Google帳號逾時或已中止，請檢查網路後重新點選授權；本機內容保留。':e.message;window.dispatchEvent(new Event('studio-drive-ready'))}finally{clearTimeout(profileTimer);if(epoch===authEpoch){pending=false;profileController=null;progress('idle','')}}}
  });client=makeClient(authEpoch);bridge.ready=true;window.dispatchEvent(new Event('studio-drive-ready'))};document.head.append(script);
 }else bridge.error=error||'尚未設定Google OAuth Client ID，私人Drive同步尚未啟用。';
-await import('./drive-ui.js?v=100');
+await import('./drive-ui.js?v=101');
