@@ -1,5 +1,7 @@
 /* Converts reviewed rows only; this function never touches the active project. */
 (function(root){'use strict';
+/* Tab label: marker + the English instruction before any Chinese ("A. Listen and Mark O or X"); the full line stays in the spoken guide. */
+function shortSectionTitle(marker,text){const en=String(text).split(/[\u3400-\u9fff（]/)[0].replace(/[\s,.:;，。：]+$/,'').trim();const base=en.length>=4?en:String(text).trim();return((marker||'')+' '+base).trim().slice(0,32)||'大題'}
 function projectFromReview(review,defaults,{id=()=>crypto.randomUUID(),title='匯入的聽力錄音稿',readOptionCodes=true}={}){
  const make=(label,script='',r)=>({id:id(),label,script,blob:null,duration:0,trimStart:0,trimEnd:null,version:0,...(r?{importSource:{location:r.source,raw:r.raw,marker:r.marker}}:{})});
  const s={format:'listenbook',version:1,title,intro:[],start:make('測驗開始提醒'),end:make('測驗結束提醒'),sections:[],roles:{A:{name:'說話者 1',tone:'natural'},B:{name:'說話者 2',tone:'natural'}},settings:{...defaults,itemRepeat:false,optionLabelsEnabled:readOptionCodes},optionLabels:[],importReview:{version:1,rows:structuredClone(review.rows),sourceBlocks:structuredClone(review.sourceBlocks),warnings:review.warnings}};
@@ -7,8 +9,8 @@ function projectFromReview(review,defaults,{id=()=>crypto.randomUUID(),title='�
  const requireSection=()=>{if(!sec)throw Error('請先指定大題，再放入題目或內容。')};
  const addContent=(c)=>{requireSection();if(q){q.contentClips.push(c)}else if(group)group.clips.push(c);else sec.prompt.script+=(sec.prompt.script?'\n':'')+c.script};
  for(const r of review.rows){const text=r.text.trim();if(r.kind==='unknown')throw Error('還有未分類文字，請先指定用途或標為不朗讀。');if(r.kind==='omit')continue;
- if(r.kind==='intro'){s.intro.push(make('開場 '+(s.intro.length+1),text,r));continue}if(r.kind==='end'){s.end.script+=(s.end.script?'\n':'')+text;continue}
- if(r.kind==='section'){sec={id:id(),title:(r.marker+' '+text).trim().slice(0,60)||'大題',heading:make('大題標號',r.speakMarker?r.marker:'',r),prompt:make('大題引導語',text,r),questions:[],passages:[]};if(!sec.heading.script)delete sec.heading;s.sections.push(sec);q=null;group=null;continue}
+ if(r.kind==='intro'){const zh=/[\u3400-\u9fff]/.test(text)&&!/[A-Za-z]{3,}/.test(text.replace(/[\u3400-\u9fff].*$/,''));s.intro.push({...make((zh?'中文':'英文')+'開場 '+(s.intro.length+1),text,r),lang:zh?'zh':'en'});continue}if(r.kind==='start'){s.start.script+=(s.start.script?'\n':'')+text;continue}if(r.kind==='end'){s.end.script+=(s.end.script?'\n':'')+text;continue}
+ if(r.kind==='section'){sec={id:id(),title:shortSectionTitle(r.marker,text),heading:make('大題標號',r.speakMarker?r.marker:'',r),prompt:make('大題引導語',text,r),questions:[],passages:[]};if(!sec.heading.script)delete sec.heading;s.sections.push(sec);q=null;group=null;continue}
  if(r.kind==='group'){requireSection();group={id:id(),title:r.marker||text||'共用題組',clips:[],source:r.source};if(r.speakMarker&&r.marker)group.clips.push(make('題組名稱',r.marker,r));if(text)group.clips.push(make('題組引導',text,r));sec.passages.push(group);q=null;continue}
  if(['question','example'].includes(r.kind)){requireSection();q={id:id(),stem:make('題目內容',text,r),numberClip:r.speakMarker&&r.marker?make(r.kind==='example'?'例題標記':'題號',r.marker,r):null,isExample:r.kind==='example',arrangement:{mode:'single',recordOptions:false,optionCount:3},options:[],contentClips:[],passageId:group?.id||null};sec.questions.push(q);if(text)q.contentClips.push(make('題目內容',text,r));continue}
  if(r.kind==='instruction'){requireSection();sec.prompt.script+=(sec.prompt.script?'\n':'')+text;continue}
