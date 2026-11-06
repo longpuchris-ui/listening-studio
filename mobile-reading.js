@@ -76,7 +76,7 @@
   if(mode!==toolbarMode){toolbarMode=mode;toolbar.innerHTML=mode==='original'?toolbarOriginal.html:icon(mode==='import'?'download':'book')+'<span>'+(mode==='import'?'匯入':'返回讀稿')+'</span>';for(const [key,value]of Object.entries(mode==='original'?{'aria-label':toolbarOriginal.label,title:toolbarOriginal.title}:{'aria-label':mode==='import'?'匯入本段音檔':'返回專心讀稿，錄音繼續',title:mode==='import'?'匯入本段音檔':'返回專心讀稿，錄音繼續'})){if(value===null)toolbar.removeAttribute(key);else toolbar.setAttribute(key,value)}}
   if(compact||mode==='reading'){toolbar.disabled=mode!=='reading'&&(building||arrangementBusy);if(rec)toolbar.setAttribute('aria-pressed',String(dialog.open));else toolbar.removeAttribute('aria-pressed')}else toolbar.disabled=!!rec||building||arrangementBusy;
 
-  if(compact){const top=$('.mobile-deck-top'),nav=$('.mobile-page-nav');if(top&&nav&&!top.querySelector('[data-action=mobilePrevious]')){const prev=nav.querySelector('[data-action=mobilePrevious]'),next=nav.querySelector('[data-action=mobileNext]'),manage=top.querySelector('[data-action=mobileStructure]');prev.textContent='←';next.textContent='→';prev.setAttribute('aria-label','上一段');next.setAttribute('aria-label','下一段');top.prepend(prev);manage.before(next);manage.innerHTML=icon('plus')+'段落';nav.hidden=true;}}
+  if(compact){const top=$('.mobile-deck-top'),nav=$('.mobile-page-nav');if(top&&nav&&!top.querySelector('[data-action=mobilePrevious]')){const prev=nav.querySelector('[data-action=mobilePrevious]'),next=nav.querySelector('[data-action=mobileNext]'),manage=top.querySelector('[data-action=mobileStructure]');prev.textContent='←';next.textContent='→';prev.setAttribute('aria-label','上一段');next.setAttribute('aria-label','下一段');top.prepend(prev);manage.before(next);manage.innerHTML=icon('book')+'段落';nav.hidden=true;}}
 
   if(editor&&(!eligible()||!editor.isConnected))finishEditing();
   if(dialog.open&&!eligible())close();
@@ -92,7 +92,7 @@
   const target=paper(rec?.clipId||readingId);if(target)target.scrollTop=paperPositions.get(rec?.clipId||readingId)||0;
   layout();if(rec&&!narrow.matches)toolbar.scrollIntoView({block:'nearest',behavior:'instant'});const focus=rec?dock.querySelector('[data-action=stopRecord]'):origin?.isConnected?origin:$('.focus-recording-button');focus?.focus({preventScroll:true});
  }
- function playback(){const playing=previewClipId===readingId&&previewAudio&&!previewAudio.paused;$('#readingPlay').textContent=playing?'停止試聽':'試聽';$('#readingPlay').setAttribute('aria-pressed',String(!!playing))}
+ function playback(){const playing=previewClipId===readingId&&previewAudio&&!previewAudio.paused;$('#readingPlay').innerHTML=icon(playing?'stop':'headphones')+'<span>'+(playing?'停止試聽':'試聽')+'</span>';$('#readingPlay').setAttribute('aria-pressed',String(!!playing))}
  function sync(){
   if(!dialog.open){layout();return}
   if(pendingRecording){close();return} // Existing recovery panel must remain reachable.
@@ -100,7 +100,7 @@
   const list=currentClips(),i=list.findIndex(x=>x.id===c.id),p=$('#readingPaper'),changed=readingId!==c.id;
   if(changed)readerPositions.set(readingId,p.scrollTop);
   readingId=c.id;
-  if(p.dataset.clip!==c.id||p.textContent!==(c.script||'這一段還沒有朗讀稿；可收起後編輯。')){p.dataset.clip=c.id;p.textContent=c.script||'這一段還沒有朗讀稿；可收起後編輯。';p.scrollTop=readerPositions.get(c.id)||0}
+  if(p.dataset.clip!==c.id||p.textContent!==(c.script||'這一段還沒有朗讀稿；可收起後編輯。')){p.dataset.clip=c.id;p.textContent=c.script||'這一段還沒有朗讀稿；可收起後編輯。';p.scrollTop=readerPositions.get(c.id)||0}p.classList.toggle('empty',!c.script);
   $('#readingTarget').textContent=(c.speaker?roleName(c.speaker)+' · ':'')+c.label+' · '+(i+1)+' / '+list.length;
   $('#readingIdle').hidden=!!rec;$('#readingRecord').dataset.id=c.id;$('#readingRecord').disabled=!!rec||building||arrangementBusy;
   $('#readingRecord').textContent=c.blob?'● 重錄':'● 錄音';$('#readingPlay').dataset.id=c.id;$('#readingPlay').disabled=!c.blob||!!rec||building;$('#readingPrevious').disabled=!!rec||i<=0;$('#readingNext').disabled=!!rec||i>=list.length-1;

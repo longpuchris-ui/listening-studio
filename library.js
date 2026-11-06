@@ -35,7 +35,7 @@ async function loadDraftShelf(){
  catch(e){if(epoch!==draftShelfEpoch||!$('#draftShelfDialog').open)return;draftShelfMessage('無法讀取書架：'+e.message+'。原有內容未變更。',true);const b=document.createElement('button');b.type='button';b.textContent='重新讀取';b.onclick=()=>loadDraftShelf();$('#draftShelfBooks').append(b);}
  finally{if(epoch===draftShelfEpoch){draftShelfLoading=false;$('#draftShelfDialog').setAttribute('aria-busy',String(draftShelfBusy))}}
 }
-function openDraftShelf(kind='draft'){if(rec||building||arrangementBusy||projectSwitching)return;const dialog=$('#draftShelfDialog');if(dialog.open)return;draftShelfReturn=document.activeElement;draftShelfSearch='';$('#draftShelfSearch').value='';setDraftShelfBusy(false);selectShelfKind(kind);dialog.showModal();$('#draftShelfSearch').focus({preventScroll:true});loadDraftShelf();}
+function openDraftShelf(kind='draft'){if(rec||building||arrangementBusy||projectSwitching)return;const dialog=$('#draftShelfDialog');if(dialog.open)return;draftShelfReturn=document.activeElement;draftShelfSearch='';$('#draftShelfSearch').value='';setDraftShelfBusy(false);selectShelfKind(kind);dialog.showModal();(matchMedia('(max-width:1000px)').matches?$('#draftShelfTitle'):$('#draftShelfSearch'))?.focus({preventScroll:true});loadDraftShelf();}
 function closeDraftShelf(){if(draftShelfBusy){draftShelfMessage('正在處理，完成後即可關閉。');return}$('#draftShelfDialog').close()}
 document.addEventListener('DOMContentLoaded',()=>{
 $('#draftShelfClose').onclick=closeDraftShelf;

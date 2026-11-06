@@ -1,0 +1,34 @@
+/* 手機版細修（夜間巡檢 2026-11-07）。只在 1000px 以下生效；桌機不受影響。 */
+@media (max-width:1000px){
+/* 專心讀稿：保存提示暫時蓋在上方標題列（不是稿子上），不再把稿子往下推。 */
+#readingDialog #toast{position:absolute!important;top:calc(env(safe-area-inset-top) + 6px)!important;left:8px!important;right:96px!important;z-index:6;pointer-events:none;max-height:none!important;box-shadow:0 4px 14px #2a234040}
+/* 錄音時看得到音量。 */
+#readingDialog #recordDock canvas{display:block!important;width:100%!important;height:12px!important;margin:6px 0 2px;border-radius:6px;background:#efe6d3}
+/* 試聽跟錄音一樣好按，並有耳機圖示。 */
+#readingIdle button{min-height:68px}
+#readingIdle #readingPlay{flex:.85;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:18px}
+#readingIdle #readingPlay svg{width:26px;height:26px}
+/* 尚無稿子時的提示用小字，不像要唸的內容。 */
+#readingPaper.empty{font-size:18px!important;line-height:1.6!important;color:#8b7d92!important;font-style:italic}
+/* 稿架上緣：拿掉右邊那個方塊（兩個方塊看起來像滑桿），左邊留一個小夾子。 */
+.in-workroom .mobile-deck-top:after{display:none!important}
+.in-workroom .mobile-deck-top:before{width:9px!important;height:15px!important;top:-7px!important;left:10px!important;border-radius:3px 3px 6px 6px!important}
+/* 分頁上的「0/3」用一般數字字型，不再像 o/ɜ。 */
+.chapter-button .nav-count{font:600 12px/1 system-ui,-apple-system,"PingFang TC",sans-serif!important;font-variant-numeric:lining-nums tabular-nums;letter-spacing:0}
+.reading-compact .chapter-button>span{max-width:150px!important}
+/* 小封：串接按鈕固定在畫面下方，不用捲到裡層最底。 */
+.phone-room-export .export-main{overflow:visible!important;max-height:none!important}
+.phone-room-export #buildButton{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom));z-index:3;box-shadow:0 -6px 18px #fff8ea,0 4px 12px #3a2c1f33}
+#exportStatus,.phone-room-export .export-readiness,.phone-room-export small{font-size:14px!important}
+/* 匯入預覽：建立草稿的區塊固定在下方，不必滑過所有段落；原文來源只給電腦版看。 */
+#scriptImportDialog .import-actions{position:sticky;bottom:-20px;z-index:4;margin:10px -20px -20px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:#fffaf0;border-top:2px solid #e3cfa9;box-shadow:0 -6px 16px #3a2c1f1f}
+#scriptImportDialog .import-actions label{display:flex;align-items:center;gap:8px;font-size:15px;margin:4px 0}
+#scriptImportDialog .import-actions input[type=checkbox]{width:24px;height:24px;flex:none}
+#scriptImportDialog .import-actions #scriptCreate{width:100%;min-height:52px;font-size:17px}
+#scriptImportDialog .import-row details{display:none}
+/* 小字加大到可讀。 */
+#recordEntryStatus,.arrange-status-compact,.cloud-connection-copy{font-size:12px!important}
+.speaker-dot{font-size:12px!important}
+.wave-help,.clip-editor label,.clip-editor>div{font-size:14px!important}
+#settingsDialog .option-row{min-height:56px}
+}

@@ -1,0 +1,63 @@
+/* 電腦版細修（夜間巡檢 2026-11-07）。只在 1001px 以上生效；手機不受影響。 */
+@media (min-width:1001px){
+
+/* ── 小封：串接完成後，告示板上的進度清單換成「成品區」（試聽、下載、交件）。
+   原本這些按鈕被推到畫面外，只能去資料庫下載。 ── */
+.in-workroom #exportPage{position:relative}
+.in-workroom #exportPage:has(#exportResult:not([hidden])) #exportWarnings{display:none!important}
+.in-workroom #exportResult:not([hidden]){position:absolute!important;left:9cqw;top:22cqw;width:50cqw;margin:0!important;padding:14px 16px!important;display:grid!important;grid-template-columns:auto 1fr;grid-template-areas:"head head" "audio audio" "download drive" "target target";gap:12px 12px;align-items:center;background:#fffaf0;border:2px solid #e3cfa9;border-radius:18px;box-shadow:0 6px 18px #3a2c1f22;z-index:4}
+.in-workroom #exportResult::before{content:'完整聽力檔完成了：先試聽，再下載或交件';grid-area:head;font-weight:800;font-size:17px;color:#5a3b55}
+.in-workroom #exportResult #fullAudio{grid-area:audio;width:100%!important;margin:0!important}
+.in-workroom #exportResult #downloadAudio{grid-area:download;width:auto!important;height:auto!important;white-space:nowrap;writing-mode:horizontal-tb!important;display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:54px;margin:0!important;padding:0 22px!important;font-size:18px!important;border-radius:16px!important;position:static!important;transform:none!important}
+.in-workroom #exportResult .shared-drive-action{grid-area:drive;justify-self:start;width:auto!important;display:flex!important;align-items:center;gap:6px;margin:0!important;padding:0!important;position:static!important;background:none!important;border:0!important}
+.in-workroom #exportResult .shared-drive-action>.primary{min-height:54px;padding:0 18px!important;font-size:16px!important;border-radius:16px!important;background:#f3ecff!important;color:#4b3a6b!important;border:1.5px solid #cdb8e6!important;box-shadow:none!important}
+.in-workroom #exportResult .shared-drive-action{flex-wrap:wrap}
+.in-workroom #exportResult .shared-drive-action #sharedDriveTarget{flex-basis:100%;font-size:13px!important;color:#6b5a48;margin:0}
+.in-workroom #exportResult::after{content:none}
+.in-workroom #exportResult #sharedDriveTarget{grid-area:target;font-size:14px!important;color:#6b5a48;position:static!important}
+/* 分享至 LINE 是手機功能，電腦版不顯示。 */
+.in-workroom #exportResult .file-share-actions,.in-workroom #exportResult .file-share-note{display:none!important}
+.in-workroom #exportPage:has(#exportResult:not([hidden])) #exportStatus{display:none!important}
+
+/* ── 麥麥：大題分頁不會被擠出畫面（真實稿子有 5 個以上大題）。 ── */
+.in-workroom #chapterNav .chapter-button{max-width:132px!important;min-width:0}
+.in-workroom #chapterNav .chapter-button>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.in-workroom #chapterNav{scroll-behavior:smooth}
+/* 只有一個字的段落（題號 1.、例.）不用佔三行高。 */
+#recordPage .clip-card .clip-script{min-height:52px!important;field-sizing:content;max-height:42vh}
+/* 開場段落：上方的名稱欄已經寫了「英文開場」，卡片內不再重複。 */
+#recordPage .intro-segment .clip-card .clip-title{display:none!important}
+
+/* ── 拍仔：下方那句長說明蓋在圖上，且同一句在麥麥、小封都有，電腦版拿掉。 ── */
+.in-workroom #arrangePage #itemPlaybackEntry{display:none!important}
+
+/* ── 匯入錄音稿預覽：每段改成一列，建立草稿的區塊固定在下方。 ── */
+#scriptImportDialog .import-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:start;padding:8px 10px!important}
+#scriptImportDialog .import-row>*{grid-column:2}
+#scriptImportDialog .import-row>.import-row-tools{grid-column:1/-1}
+#scriptImportDialog .import-row textarea{min-height:44px;field-sizing:content}
+#scriptImportDialog .import-row details{opacity:.75}
+#scriptImportDialog .import-actions{position:sticky;bottom:-20px;z-index:4;margin:12px -20px -20px;padding:12px 20px 16px;background:#fffaf0;border-top:2px solid #e3cfa9;box-shadow:0 -6px 16px #3a2c1f1a}
+
+/* ── 看不清楚的小字 ── */
+.chapter-button .nav-count{font:600 12px/1 system-ui,-apple-system,"PingFang TC",sans-serif!important;font-variant-numeric:lining-nums tabular-nums}
+.speaker-dot{font-size:12px!important;color:#7a5530!important}
+.segment-number{color:#8a6f50!important}
+.intro-routing span{font-size:13px!important}
+.cloud-connection-copy{font-size:13px!important}
+.delete-text{color:#8b4a3c!important}
+.site-footer,footer.site-footer{font-size:12px!important;color:#7d6a5a!important}
+/* 雲端視窗裡「請用 Safari／Chrome 開啟」是給手機 App 內建瀏覽器的提醒。 */
+.sync-browser-advice{display:none!important}
+
+/* ── 首頁：照製作順序標上步驟 ①錄音 ②節奏 ③輸出 ── */
+.character-entrance.entrance-record .entry-label strong::before{content:'① '}
+.character-entrance.entrance-arrange .entry-label strong::before{content:'② '}
+.character-entrance.entrance-export .entry-label strong::before{content:'③ '}
+
+/* 程式捲動時不再讓房間整個位移（overflow:hidden 會被 scrollIntoView 捲動）。 */
+.in-workroom #recordPage,.in-workroom #exportPage,.in-workroom #arrangePage,.in-workroom #libraryPage{overflow:clip!important}
+}
+
+/* 開場段落的上下移按鈕改用上下箭頭圖示（原本兩顆都顯示成「‹」）。 */
+.intro-segment-tools button[data-action=upIntro] svg,.intro-segment-tools button[data-action=downIntro] svg{transform:none!important}
