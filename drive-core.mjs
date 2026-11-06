@@ -10,7 +10,7 @@ const FIELDS='id,name,size,createdTime,appProperties,ownedByMe,sha256Checksum';
 const fail=(message,status)=>Object.assign(Error(message),{status});
 const parentKeys=Array.from({length:LIMITS.maxParents},(_,i)=>i?'parent'+(i+1):'parent');
 const parentsOf=f=>parentKeys.map(k=>f.appProperties?.[k]).filter(Boolean);
-const rowOf=f=>({id:f.appProperties.operation,fileId:f.id,projectId:f.appProperties.project,parents:parentsOf(f),title:f.appProperties.title||'聽力專案',updatedAt:f.createdTime||null,size:Number(f.size||0)});
+const rowOf=f=>({id:f.appProperties.operation,fileId:f.id,projectId:f.appProperties.project,parents:parentsOf(f),title:f.appProperties.title||'聽力專案',updatedAt:f.createdTime||null,size:Number(f.size||0),device:f.appProperties.device||null});
 export class DriveStore{
  constructor({credential,fetch=(...args)=>globalThis.fetch(...args),ids}){this.credential=credential;this.fetch=fetch;this.ids=ids}
  context(){const c=this.credential();if(!c||c.expiresAt<=Date.now()+5000)throw fail('Google授權已到期，請按重新授權；本機內容保留。',401);return c}
@@ -45,8 +45,8 @@ export class DriveStore{
   if(typeof file.sha256Checksum==='string'&&file.sha256Checksum)return file.sha256Checksum.toLowerCase()===hash;
   const blob=await this.readFile(file.id,context);return blob.size===size&&await SyncCodec.hash(await blob.arrayBuffer())===hash;
  }
- async create(key,blob,properties,context=this.context()){
-  const hash=await SyncCodec.hash(await blob.arrayBuffer());
+ async create(key,blob,properties,context=this.context(),knownHash=null){
+  const hash=knownHash||await SyncCodec.hash(await blob.arrayBuffer());
   const storageKey=context.owner+':'+key;let id=await this.ids.get(storageKey);
   if(!id){const data=await(await this.request(ROOT+'/files/generateIds?count=1&space=drive&type=files',{},context)).json();id=data.ids[0];await this.ids.put(storageKey,id)}
   const existing=await this.metadata(id,context);
@@ -69,10 +69,11 @@ export class DriveStore{
  }
  async putAsset(hash,blob,context=this.context()){
   if(blob.size>LIMITS.assetBytes||await SyncCodec.hash(await blob.arrayBuffer())!==hash)throw fail('音訊大小或校驗不符。',413);
-  const found=await this.findAsset(hash,context);if(found&&await this.matches(found,hash,blob.size,context))return;
-  const used=async()=>(await this.listFiles('audio',null,context)).reduce((n,f)=>n+Number(f.size||0),0);
-  if(await used()+blob.size>LIMITS.ownerBytes){await this.cleanup(context);if(await used()+blob.size>LIMITS.ownerBytes)throw fail('雲端錄音空間已滿（清理舊錄音後仍不足），不會自動升級。',413)}
-  await this.create('audio-'+hash,blob,{kind:'audio',hash},context);
+  // One listing answers both "already there?" and "how much space is used?" (was three listings per recording).
+  const used=async()=>{const files=await this.listFiles('audio',null,context);return{files,bytes:files.reduce((n,f)=>n+Number(f.size||0),0)}};
+  let usage=await used();const found=usage.files.find(f=>f.appProperties.hash===hash);if(found&&await this.matches(found,hash,blob.size,context))return;
+  if(usage.bytes+blob.size>LIMITS.ownerBytes){await this.cleanup(context);usage=await used();if(usage.bytes+blob.size>LIMITS.ownerBytes)throw fail('雲端錄音空間已滿（清理舊錄音後仍不足），不會自動升級。',413)}
+  await this.create('audio-'+hash,blob,{kind:'audio',hash},context,hash);
  }
  async revisionRows(project,context=this.context()){return(await this.listFiles('revision',project,context)).map(rowOf)}
  async readRevision(row,context=this.context()){
@@ -80,9 +81,9 @@ export class DriveStore{
   if(r.schema!==1||r.owner!==context.owner||r.projectId!==row.projectId||r.id!==row.id||!Array.isArray(r.parents)||r.parents.some(x=>typeof x!=='string'))throw fail('雲端版本格式不符。',422);return r;
  }
  heads(rows){const parents=new Set(rows.flatMap(r=>r.parents));const seen=new Set();return rows.filter(r=>!parents.has(r.id)&&!seen.has(r.id)&&seen.add(r.id))}
- async projects(){const rows=(await this.listFiles('revision')).map(rowOf);const result=[];for(const id of new Set(rows.map(r=>r.projectId))){const heads=this.heads(rows.filter(r=>r.projectId===id));for(const r of heads)result.push({id,revision:r.id,title:r.title,updatedAt:r.updatedAt,conflict:heads.length>1,heads:heads.map(h=>h.id)})}return result}
- async get(project,revision){const context=this.context(),rows=await this.revisionRows(project,context),heads=this.heads(rows);const row=revision?rows.find(r=>r.id===revision):heads.length===1?heads[0]:null;if(!row)throw fail(heads.length>1?'有多個並行版本，請從清單選擇；每一份都已保留。':'找不到專案版本。',heads.length>1?409:404);const r=await this.readRevision(row,context);return{manifest:r.manifest,position:r.position,revision:r.id,heads:heads.map(h=>h.id)}}
- async commit(project,body){const context=this.context();let rows=await this.revisionRows(project,context);const digest=await SyncCodec.hash(new TextEncoder().encode(JSON.stringify(body)));
+ async projects(){const rows=(await this.listFiles('revision')).map(rowOf);const result=[];for(const id of new Set(rows.map(r=>r.projectId))){const heads=this.heads(rows.filter(r=>r.projectId===id));for(const r of heads)result.push({id,revision:r.id,title:r.title,updatedAt:r.updatedAt,device:r.device,conflict:heads.length>1,heads:heads.map(h=>h.id)})}return result}
+ async get(project,revision){const context=this.context(),rows=await this.revisionRows(project,context),heads=this.heads(rows);const row=revision?rows.find(r=>r.id===revision):heads.length===1?heads[0]:null;if(!row)throw fail(heads.length>1?'有多個並行版本，請從清單選擇；每一份都已保留。':'找不到專案版本。',heads.length>1?409:404);const r=await this.readRevision(row,context);return{manifest:r.manifest,position:r.position,revision:r.id,updatedAt:row.updatedAt,device:row.device,heads:heads.map(h=>h.id)}}
+ async commit(project,body,device=null){const context=this.context();let rows=await this.revisionRows(project,context);const digest=await SyncCodec.hash(new TextEncoder().encode(JSON.stringify(body)));
   const oldRow=rows.find(r=>r.id===body.operationId);
   if(oldRow){const old=await this.readRevision(oldRow,context);if(old.digest!==digest)throw fail('重試操作內容不一致。',409);return this.commitResult(rows,old.id)}
   if(body.manifest.projectId!==project)throw fail('專案識別不符。',422);
@@ -104,6 +105,8 @@ export class DriveStore{
   if(all.reduce((n,f)=>n+Number(f.size||0),0)+blob.size>LIMITS.historyBytes){await this.prune(project,context);const again=await this.listFiles('revision',null,context);if(again.reduce((n,f)=>n+Number(f.size||0),0)+blob.size>LIMITS.historyBytes)throw fail('版本資訊達試版上限，未覆寫舊版。',413)}
   let title=body.manifest.title;while(new TextEncoder().encode(title).length>80)title=title.slice(0,-1);
   const props={kind:'revision',project,operation:body.operationId,title};parents.forEach((id,i)=>props[parentKeys[i]]=id);if(!parents.length)props.parent='';
+  // Which browser wrote it (random id, not personal data) so the panel can say 這台裝置／另一台. Not part of the digest: old outbox retries stay valid.
+  if(typeof device==='string'&&/^[\w-]{8,40}$/.test(device))props.device=device;
   await this.create('revision-'+body.operationId,blob,props,context);
   const observed=await this.revisionRows(project,context);if(!observed.some(r=>r.id===revision.id))observed.push({id:revision.id,parents});
   const result=this.commitResult(observed,body.operationId);
@@ -132,7 +135,7 @@ export class DriveStore{
   if(url.pathname==='/projects')return this.projects();
   if(url.pathname==='/cleanup'&&options.method==='POST')return this.cleanup(context);
   if(url.pathname==='/assets/missing'&&options.method==='POST')return this.missingAssets(JSON.parse(options.body).items,context);
-  const m=url.pathname.match(/^\/projects\/(.+)$/);if(m)return options.method==='POST'?this.commit(decodeURIComponent(m[1]),JSON.parse(options.body)):this.get(decodeURIComponent(m[1]),url.searchParams.get('revision'));
+  const m=url.pathname.match(/^\/projects\/(.+)$/);if(m)return options.method==='POST'?this.commit(decodeURIComponent(m[1]),JSON.parse(options.body),options.device):this.get(decodeURIComponent(m[1]),url.searchParams.get('revision'));
   const a=url.pathname.match(/^\/assets\/([a-f0-9]{64})$/);if(a&&options.method==='PUT')return this.putAsset(a[1],options.body);
   throw fail('不支援的同步操作。',400)}
 }
