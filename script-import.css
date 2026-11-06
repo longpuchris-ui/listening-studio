@@ -5,3 +5,5 @@
 #scriptImportDialog #scriptChooseFile:focus-visible{outline:3px solid #126b7a;outline-offset:3px}
 #scriptImportDialog #scriptFileName{font-size:14px;overflow-wrap:anywhere;min-width:0}
 #scriptImportDialog #scriptFile[hidden]{display:none}
+.import-guide-links{margin:-4px 0 10px;font-size:15px}
+.import-guide-links a{display:inline-flex;align-items:center;min-height:40px;padding:0 4px;font-weight:700;color:#6b3f8f}
