@@ -1,0 +1,77 @@
+/* 麥麥錄音間 · 電腦版（設定站）
+   The desktop is where teachers prepare everything; the phone is for recording.
+   So on desktop the script text gets the full row width, recording/listening/import
+   sit in one compact strip under it, duplicate titles and statuses are hidden, and
+   question settings open as a tidy two-column panel. Phone layout is untouched.
+   Loaded last; scoped to #recordPage at desktop widths only. */
+@media (min-width:1001px){
+
+/* One title per section: the editable name replaces the duplicate heading. */
+/* The active tab already names the page; the big in-page heading repeated it. */
+#recordPage .record-content .chapter-heading{display:none!important}
+#recordPage #clips>.chapter-rename{display:block;width:100%!important;box-sizing:border-box;height:auto!important;min-height:0!important;margin:0 0 6px!important;padding:4px 6px!important;font-size:22px!important;font-weight:800;letter-spacing:.02em;color:#5a3b55;background:transparent!important;border:0!important;border-bottom:2px dashed #d8c2a0!important;border-radius:6px 6px 0 0!important;box-shadow:none!important;transform:none!important}
+#recordPage #clips>.chapter-rename:hover{background:#fff8ea!important}
+#recordPage #clips>.chapter-rename:focus{outline:none;background:#fffaf0!important;border-bottom-color:#8661a4!important}
+
+/* Recording tools: one slim row. */
+#recordPage .record-tools{min-height:0!important;margin:0 0 4px!important;padding:0!important;gap:10px!important;align-items:center}
+#recordPage .record-tools>button,#recordPage .record-tools label,#recordPage .record-tools select{min-height:38px!important}
+#recordPage .record-tools>button{height:38px!important;padding:0 12px!important}
+
+/* ---- Clip card: text across the full width, actions in one strip below ---- */
+#recordPage .clip-card{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"title title title" "text text text" "rec status tools";gap:8px 12px!important;align-items:center;height:auto!important;min-height:0!important;padding:12px 14px!important;margin:0 0 12px!important;transform:none!important}
+#recordPage .clip-card>.clip-main,#recordPage .clip-card .clip-info,#recordPage .clip-card .clip-actions{display:contents!important}
+#recordPage .clip-card>:not(.clip-main):not(.clip-audio-status):not(.clip-bottom){grid-column:1/-1}
+#recordPage .clip-card .clip-badge{display:none!important}
+#recordPage .clip-card .clip-title{grid-area:title;margin:0!important;font-size:15px!important;font-weight:800;color:#5a4636;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* The status is already shown next to the record button; drop the duplicate tag. */
+#recordPage .clip-card .clip-title .status-tag{display:none!important}
+#recordPage .clip-card .clip-script{grid-area:text;display:block;box-sizing:border-box;width:100%!important;max-width:none!important;min-height:84px!important;margin:0!important;padding:10px 12px!important;font-size:18px!important;line-height:1.65!important;color:#3e3550;background:#fffdf7!important;border:1.5px solid #e4d3b6!important;border-radius:12px!important;resize:vertical;overflow-y:auto}
+#recordPage .clip-card .clip-script:focus{outline:none;border-color:#8661a4!important;box-shadow:0 0 0 3px #8661a422}
+
+#recordPage .clip-card .clip-illustrated-action{grid-area:rec;display:inline-flex!important;flex-direction:row!important;align-items:center;justify-content:center;gap:6px;width:auto!important;min-width:112px;height:50px!important;min-height:50px!important;margin:0!important;padding:0 18px 0 10px!important;font-size:17px!important;border-radius:14px!important}
+#recordPage .clip-card .clip-illustrated-action svg{width:34px!important;height:34px!important;margin:0!important}
+#recordPage .clip-card .clip-audio-status{grid-area:status;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:12px;width:auto!important;min-width:0;height:auto!important;margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;position:static!important}
+#recordPage .clip-card .clip-audio-state,#recordPage .clip-card .clip-time{width:auto!important;margin:0!important;font-size:15px!important;white-space:nowrap}
+#recordPage .clip-card .clip-time:empty,#recordPage .clip-card:not(.has-audio) .clip-time{display:none}
+#recordPage .clip-card .clip-playback{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;width:auto!important;min-width:104px;height:50px!important;min-height:50px!important;margin:0 0 0 auto!important;padding:0 16px!important;font-size:17px!important;border-radius:14px!important}
+#recordPage .clip-card .clip-playback svg{width:26px!important;height:26px!important;margin:0!important}
+#recordPage .clip-card .clip-bottom{grid-area:tools;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-end;gap:8px;width:auto!important;margin:0!important;padding:0!important;position:static!important;border:0!important;background:none!important}
+#recordPage .clip-card .clip-bottom>button{display:inline-flex;align-items:center;gap:5px;height:50px!important;min-height:50px!important;width:auto!important;margin:0!important;padding:0 14px!important;font-size:16px!important;white-space:nowrap;border-radius:14px!important}
+
+/* Intro segments: language / name / order tools stay on their own row above the card. */
+#recordPage .intro-pair-grid{display:block!important}
+#recordPage .intro-segment{width:auto!important;margin:0 0 14px!important;transform:none!important}
+#recordPage .intro-segment-tools{gap:8px!important;margin:0 0 6px!important}
+#recordPage .intro-segment-tools input{flex:1;min-width:0}
+
+/* ---- Question header: slimmer bar ---- */
+#recordPage .question-label{min-height:0!important;height:auto!important;padding:6px 10px!important;margin:16px 0 8px!important}
+#recordPage .question-label .question-number{width:32px!important;height:32px!important;font-size:15px!important}
+#recordPage .question-tools button{width:40px!important;height:40px!important;min-height:40px!important}
+
+/* ---- Question / section settings: compact chip, opens as a two-column panel ---- */
+#recordPage details.arrangement-controls{display:block!important;width:auto!important;max-width:none!important;margin:0 0 10px!important;padding:0!important;background:none;border:0;transform:none!important}
+#recordPage details.arrangement-controls>summary{display:inline-flex!important;align-items:center;gap:6px;width:auto!important;min-height:40px!important;height:auto!important;padding:6px 16px!important;font-size:16px!important;font-weight:700;color:#4b3a6b!important;background:#f3ecff!important;border:1.5px solid #cdb8e6!important;border-radius:999px!important;box-shadow:0 2px 0 #d9c8ef;cursor:pointer;white-space:normal;list-style:none}
+#recordPage details.arrangement-controls>summary::-webkit-details-marker{display:none}
+#recordPage details.arrangement-controls>summary::before{content:'⚙︎';font-size:15px;opacity:.75}
+#recordPage details.arrangement-controls>summary:hover{background:#ebe0fb!important}
+#recordPage details.arrangement-controls[open]{padding:10px 14px 12px!important;background:#fffaf0!important;border:1.5px solid #e3cfa9!important;border-radius:16px!important}
+#recordPage details.arrangement-controls[open]>summary{margin:0 0 8px!important}
+#recordPage details.arrangement-controls>p{margin:0 0 8px!important;font-size:14px!important;line-height:1.55;color:#6b5a48;width:auto!important;max-width:none!important}
+#recordPage details.arrangement-controls>label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:10px;box-sizing:border-box;width:calc(50% - 10px)!important;min-height:48px!important;height:auto!important;margin:0 8px 6px 0!important;padding:4px 0!important;font-size:16px!important;vertical-align:top;transform:none!important}
+#recordPage details.arrangement-controls>label select{flex:1;min-width:0;width:auto!important;height:44px!important;min-height:44px!important;font-size:16px!important}
+#recordPage details.arrangement-controls>label input[type=checkbox]{flex:none;width:22px!important;height:22px!important;margin:0!important}
+#recordPage details.arrangement-controls>.apply-defaults{display:inline-flex;align-items:center;min-height:44px;margin:6px 0 0!important;padding:0 18px!important;font-size:16px!important;border-radius:14px!important}
+
+/* Section footer actions in one row. */
+#recordPage .chapter-controls{gap:10px!important;align-items:center}
+#recordPage .chapter-controls button{min-height:46px!important;height:46px!important}
+
+/* Dialogue lines: the caption already says "說話者 1 · 第 1 句"; the card's own title repeated the speaker twice. */
+#recordPage .dialogue-turn .clip-card .clip-title{display:none!important}
+#recordPage .dialogue-turn .turn-caption{display:flex!important;align-items:center;justify-content:space-between;min-height:40px;margin:10px 0 4px!important;padding:0 4px!important}
+#recordPage .dialogue-turn .turn-caption>span{font-size:16px!important;font-weight:800;color:#5a4636!important;opacity:1!important}
+#recordPage .dialogue-turn.turn-A .turn-caption>span{color:#b0532f!important}
+#recordPage .dialogue-turn.turn-B .turn-caption>span{color:#3d6f9e!important}
+}
