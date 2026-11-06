@@ -4,20 +4,25 @@
 *{box-sizing:border-box}body{margin:0;background:#fff8e9;color:#394c50;font:17px/1.85 system-ui,-apple-system,'Noto Sans CJK TC','Microsoft JhengHei',sans-serif}main{max-width:790px;margin:32px auto;padding:24px clamp(18px,5vw,42px);background:#fffdf7;border:1px solid #e3d8c8;border-radius:24px;box-shadow:0 8px 24px #8f755916}h1{font-size:clamp(25px,5vw,34px);line-height:1.4;color:#545b85}h2{font-size:21px;color:#637c7c;margin-top:30px}p,li{overflow-wrap:anywhere}a{color:#555a8c;text-underline-offset:4px}a:focus-visible{outline:3px solid #008c9b;outline-offset:4px;border-radius:4px}.back{display:inline-flex;align-items:center;min-height:48px;padding:6px 14px;background:#edf4ef;border-radius:14px}.note{padding:12px 16px;border-left:4px solid #aa90bf;background:#f5eef9;border-radius:8px}.date{font-size:15px;color:#6e7474}li{margin-bottom:10px}footer{margin-top:32px;padding-top:16px;border-top:1px solid #e2ddd2}@media(max-width:600px){main{margin:12px 8px;padding:18px 16px}}
 </style></head><body><main>
 <a class="back" href="./">← 回到錄音室</a>
-<h1>隱私與資料說明</h1><p class="date">聽力錄音室 · 說明版本：2026年10月30日</p>
+<h1>隱私與資料說明</h1><p class="date">聽力錄音室 · 說明版本：2026年11月6日</p>
 <p class="note">本頁說明目前的資料處理方式，不是安全認證。Google 同步仍供指定測試帳號試用；不是所有老師都已開放。教育帳號能否授權，也受學校管理政策限制。</p>
 <h2>先保存在你使用的裝置</h2>
-<p>朗讀稿、專案結構、原始錄音、剪輯範圍、匯出紀錄與待同步副本，儲存在這個瀏覽器的本機資料庫（IndexedDB）。部分介面偏好與分頁識別使用瀏覽器儲存。這些內容不會因換電腦就自動出現；清除網站資料、無痕視窗結束或瀏覽器回收空間，可能使本機內容遺失。重要錄音請另存專案備份。</p>
+<p>朗讀稿、專案結構、原始錄音、剪輯範圍、匯出紀錄與待同步副本，儲存在這個瀏覽器的本機資料庫（IndexedDB）。啟用同步後，另有兩個本機資料庫：「待同步佇列」（尚未上傳的專案副本，含錄音）與「Drive 檔案識別碼」（只記錄檔案代號）。瀏覽器儲存（localStorage）另記：介面偏好、共同資料夾接收端網址與資料夾名稱，以及一個隨機的「裝置代號」（用來分辨「這台裝置／另一台」，不含個人資料）。這些內容不會因換電腦就自動出現；清除網站資料、無痕視窗結束或瀏覽器回收空間，可能使本機內容遺失。重要錄音請另存專案備份。</p>
 <p>錄音需要你允許麥克風。DOCX／TXT 稿文在瀏覽器解析，需先預覽、核對，再建立草稿。本站不把錄音或稿文送到 AI、語音生成或外部解析服務。</p>
 <h2>Google Drive 同步由你選擇啟用</h2>
 <p>只有你完成 Google 授權，並確認啟用某份專案後，才會把該專案的腳本、設定與原音（包含保留的停用片段）傳到目前帳號的私人 Drive。之後修改會進入同步佇列；斷線時留在本機，恢復連線且授權仍有效時再嘗試。其他本機素材庫不會整批上傳。</p>
-<p>本站以專案版本與音訊檔保存內容，不設定公開分享權限。手機與電腦續編必須選擇同一個 Google 帳號。帳號篩選只是前端提示，不是組織安全門禁；實際 Drive 存取由 Google 授權與檔案權限控管。若你自行在 Drive 分享檔案，則依你所設定的分享權限處理。</p>
+<p>在你的私人 Drive 中，本工具建立兩種檔案：「版本檔」（朗讀稿、設定、編輯位置）與「音訊檔」（原始錄音）。檔案的附加屬性記有專案代號、標題、版本關係與上述隨機裝置代號。每份專案只保留最近約 30 個版本，舊版與不再使用的錄音會被清理；錄音總量上限約 100 MB。本站不設定公開分享權限。手機與電腦續編必須選擇同一個 Google 帳號。帳號篩選只是前端提示，不是組織安全門禁；實際 Drive 存取由 Google 授權與檔案權限控管。若你自行在 Drive 分享檔案，則依你所設定的分享權限處理。</p>
 <ul><li><strong>openid、email：</strong>向 Google 確認帳號識別碼、電子郵件及驗證狀態，用來區分個人專案與待同步資料。</li><li><strong>drive.file：</strong>存取本工具建立，或你另外授權給本工具的特定檔案；不是讀取整個 Drive 的權限。詳見 <a href="https://developers.google.com/workspace/drive/api/guides/api-specific-auth" rel="noreferrer">Google 的 Drive 權限說明</a>。</li></ul>
-<p>Google 存取 token 只留在目前頁面記憶體，不存入專案、瀏覽器資料庫或公開程式碼。重開頁面或授權到期時，需要你再次點選授權；本站不保存 Google 密碼或長期 refresh token。</p>
+<p>Google 存取 token 只留在目前頁面記憶體，不存入專案、瀏覽器資料庫或公開程式碼。token 約一小時到期；到期前後，你在本站下一次點選時，本站會以<strong>同一個帳號</strong>向 Google 要求新 token（可能短暫出現 Google 視窗）。若 Google 回應的是其他帳號，本站會忽略、不切換；續期失敗時請按「重新授權」。重開頁面後需要你再次點選授權；本站不保存 Google 密碼或長期 refresh token。</p>
 <h2>切換帳號、刪除資料與撤銷授權</h2>
 <ul><li><strong>關閉頁面或切換帳號：</strong>不會自動刪除本機專案、待同步副本或已上傳的 Drive 檔案。使用共用電腦時，請留意本機錄音仍在；Google 帳號登出也不等於清除本站資料。</li><li><strong>刪除本機資料庫紀錄：</strong>可在資料庫對指定紀錄按「刪除」並確認。這只刪除該筆紀錄，不會同步刪除目前編輯內容、其他備份或 Drive 副本。本站沒有一鍵刪除所有資料的功能。</li><li><strong>完整清除本機內容：</strong>先備份要保留的內容，並暫停同步、關閉其他本站分頁，再使用瀏覽器對本網站的「清除網站資料」功能。這會移除本機專案與待同步資料；不會移除已下載到裝置的備份或 Drive 檔案。瀏覽器可能以整個網域清除資料，連帶影響同一網域上的其他網站；請先確認範圍。</li><li><strong>刪除 Drive 副本：</strong>本站目前沒有雲端刪除按鈕。請先暫停同步／關閉本站，再到自己的 Google Drive 確認並刪除本工具建立的相關版本與音訊檔。只刪一個版本不代表所有相關音訊都已刪除；共用於多份專案的音訊被刪後，其他版本也可能無法還原。本站不會代你自動清理 Drive。</li><li><strong>撤銷 Google 存取：</strong>到 <a href="https://myaccount.google.com/connections" rel="noreferrer">Google 帳戶的第三方連結管理</a>，找到本應用程式並移除其存取權；介面步驟請依 <a href="https://support.google.com/accounts/answer/13533235?hl=zh-Hant" rel="noreferrer">Google 官方說明</a>。撤銷會停止後續授權存取，但不會替你刪除已保存的本機或 Drive 資料。</li></ul>
 <h2>網站平台與其他傳送</h2>
 <p>GitHub Pages 提供靜態網站程式與插圖；你自己的錄音和稿文不會因此加入公開 GitHub 儲存庫。載入網站時，託管平台可能處理 IP 位址、瀏覽器與基本請求紀錄等資料；啟動 Google 元件或授權時也會與 Google 連線。因此不能將本站描述為「完全沒有第三方記錄」。詳見 <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noreferrer">GitHub 隱私聲明</a>及 <a href="https://policies.google.com/privacy?hl=zh-TW" rel="noreferrer">Google 隱私權政策</a>。</p>
-<p>「共同資料夾交件」與「我的雲端專案」是不同功能。共同交件只有在你設定接收端並主動操作時，才傳送選定內容到該接收端；請先確認接收端管理者與分享安排。自行下載、系統分享或寄送的檔案，則由你選擇的裝置或服務處理。</p>
+<h2>共同資料夾交件（另一個功能）</h2>
+<p>「共同資料夾交件」與「我的雲端專案」是不同功能，只有在你設定接收端並主動按交件時才傳送。內容是完成的 WAV 音檔；若勾選「同時上傳專案備份」，還會附上 <code>.listenbook</code>，其中含<strong>所有原始錄音與朗讀稿</strong>。</p>
+<ul><li><strong>接收端是什麼：</strong>學校管理者自行部署的 Google Apps Script 網頁程式，不是本站伺服器。它以<strong>你的 Google 身分</strong>執行，把檔案放進管理者指定的資料夾；有該資料夾權限的人都看得到你交的檔案。</li>
+<li><strong>授權範圍較大：</strong>接收端要求完整 Google Drive 權限（drive）。程式只寫入指定資料夾，但這項授權在技術上可存取你帳號可存取的 Drive 檔案；請確認接收端由你信任的管理者部署。不需要時，可在 Google 帳戶的第三方連結管理移除它的存取權。</li>
+<li><strong>接收端保存什麼：</strong>指令碼屬性存管理者信箱與資料夾代號；上傳過程的暫存紀錄（續傳位置、每小時交件次數）最多保留約 6 小時。交出的檔案留在共同資料夾，要刪除請到該資料夾處理或洽管理者。</li></ul>
+<p>自行下載、系統分享或寄送的檔案，則由你選擇的裝置或服務處理。</p>
 <footer><h2>聯絡</h2><p>資料處理問題或刪除方式諮詢：<a href="mailto:longpuchris@gmail.com">longpuchris@gmail.com</a>。來信請避免直接附上含學生個資的錄音或完整試卷。</p><a class="back" href="./">← 回到錄音室</a></footer>
 </main></body></html>
