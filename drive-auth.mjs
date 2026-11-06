@@ -1,4 +1,4 @@
-import {DriveStore} from './drive-core.mjs?v=55';
+import {DriveStore} from './drive-core.mjs?v=88';
 let credential=null,client=null,pending=false,db,authEpoch=0,makeClient,waitTimer,deadlineTimer,profileController,connectionTimer,connectionFault=false;
 function connectionState(){const valid=!!credential&&!!bridge.account&&credential.expiresAt>Date.now()+5000;return {connected:navigator.onLine&&!pending&&valid&&!connectionFault,label:!navigator.onLine?'離線':pending?'正在確認連接':!valid?'未連接或需重新授權':connectionFault?'連接尚未確認，請重試':'已連接Google（非專案同步狀態）'}}
 function refreshConnection(){clearTimeout(connectionTimer);const left=credential?.expiresAt-Date.now()-5000;if(left>0)connectionTimer=setTimeout(refreshConnection,Math.min(left+1,2147483647));window.dispatchEvent(new Event('studio-drive-connection'))}
@@ -35,4 +35,4 @@ if(config.clientId&&/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.clientI
   }catch(e){if(epoch!==authEpoch)return;credential=null;bridge.account=null;window.dispatchEvent(new Event('studio-drive-account'));bridge.error=e.name==='AbortError'?'確認Google帳號逾時或已中止，請檢查網路後重新點選授權；本機內容保留。':e.message;window.dispatchEvent(new Event('studio-drive-ready'))}finally{clearTimeout(profileTimer);if(epoch===authEpoch){pending=false;profileController=null;progress('idle','')}}}
  });client=makeClient(authEpoch);bridge.ready=true;window.dispatchEvent(new Event('studio-drive-ready'))};document.head.append(script);
 }else bridge.error=error||'尚未設定Google OAuth Client ID，私人Drive同步尚未啟用。';
-await import('./drive-ui.js?v=79');
+await import('./drive-ui.js?v=88');
