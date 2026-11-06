@@ -1,4 +1,4 @@
-import {DriveStore} from './drive-core.mjs?v=96';
+import {DriveStore} from './drive-core.mjs?v=100';
 let credential=null,client=null,pending=false,db,authEpoch=0,makeClient,waitTimer,deadlineTimer,profileController,connectionTimer,connectionFault=false;
 // Quiet renewal: Google tokens last ~1 h. Near expiry (or after a 401) the next click inside the app asks Google for a
 // new token for the SAME account (prompt:'' + login_hint), at most once per token, so it can never loop.
@@ -59,4 +59,4 @@ if(config.clientId&&/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.clientI
   }catch(e){if(epoch!==authEpoch)return;credential=null;bridge.account=null;window.dispatchEvent(new Event('studio-drive-account'));bridge.error=e.name==='AbortError'?'確認Google帳號逾時或已中止，請檢查網路後重新點選授權；本機內容保留。':e.message;window.dispatchEvent(new Event('studio-drive-ready'))}finally{clearTimeout(profileTimer);if(epoch===authEpoch){pending=false;profileController=null;progress('idle','')}}}
  });client=makeClient(authEpoch);bridge.ready=true;window.dispatchEvent(new Event('studio-drive-ready'))};document.head.append(script);
 }else bridge.error=error||'尚未設定Google OAuth Client ID，私人Drive同步尚未啟用。';
-await import('./drive-ui.js?v=96');
+await import('./drive-ui.js?v=100');
