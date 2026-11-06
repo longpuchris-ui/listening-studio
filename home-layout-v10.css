@@ -337,3 +337,11 @@
 .studio-nameboard{background-image:image-set(url('assets/project-nameplate-delivery.webp') type('image/webp'),url('assets/project-nameplate.png') type('image/png'))}
 
 @media(min-width:1001px){.worktable .studio-scene-backdrop{background-image:url("assets/studio-home-warm.png");background-image:image-set(url("assets/studio-home-warm.webp") type("image/webp"),url("assets/studio-home-warm.png") type("image/png"))}}
+
+/* Home (desktop and phone): notices (e.g. music on/off) float above the scene instead of
+   being inserted into the page flow, which pushed the stage and characters down
+   while the wall title and monitor stayed put. Rooms use #desktopNoticeSlot. */
+@media all{
+ body:not(.in-workroom)>#toast.show{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:22px!important;transform:translateX(-50%)!important;z-index:1000;width:max-content;max-width:min(680px,calc(100% - 48px))!important;margin:0!important;padding:10px 20px;border-radius:999px;box-shadow:0 6px 24px #2a234055;font-size:15px;text-align:center;pointer-events:none}
+}
+@media (max-width:1000px){body:not(.in-workroom)>#toast.show{left:12px!important;right:12px!important;transform:none!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;font-size:14px;padding:9px 16px;border-radius:14px;width:auto;max-width:none!important}}
