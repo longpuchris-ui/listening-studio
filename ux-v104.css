@@ -106,3 +106,62 @@
  body #recordPage .intro-segment .clip-card:not(.has-audio) .clip-audio-state{display:none}
  body #recordPage .intro-segment .clip-card>*,body #recordPage .intro-segment .clip-card button{align-self:center}
 }
+
+/* ---------- 拍仔：確認後直接去小封 ---------- */
+.ux-go-export{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:6px auto 0;padding:4px 16px 4px 6px!important;border:1.5px solid #b79be0!important;border-radius:999px!important;background:#f4edff!important;color:#4b3477!important;width:auto!important;height:auto!important;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 2px 0 #d6c6f0}
+.ux-go-export img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 15%;background:#fff}
+.ux-go-export:hover{background:#ebdfff!important}
+@media(min-width:1001px){
+ .in-workroom #arrangePage .ux-go-export{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);margin:0;white-space:nowrap;z-index:3;min-height:40px;font-size:14px}
+ .in-workroom #arrangePage .ux-go-export img{width:30px;height:30px}
+ .in-workroom #arrangePage .rhythm-confirm:has(.ux-go-export) #rhythmConfirmedText{display:none}
+}
+
+/* ---------- 手機：拍仔／小封／資料庫也能直接換房間 ---------- */
+@media(max-width:1000px){
+ body.in-workroom:not(.phone-room-record) .room-dock{display:flex;order:5;margin-left:auto;gap:6px;align-items:center}
+ body.in-workroom:not(.phone-room-record) .room-dock .dock-home{display:none}
+ body.in-workroom:not(.phone-room-record) .room-dock .dock-rooms{display:flex;gap:6px}
+ .room-dock .dock-room{all:unset;box-sizing:border-box;position:relative;width:44px;height:44px;border-radius:50%;background:#f3e6cc;cursor:pointer}
+ .room-dock .dock-face{display:block;width:44px;height:44px;border-radius:50%;overflow:hidden}
+ .room-dock .dock-face img{width:100%;height:100%;object-fit:cover;transform:scale(1.9);transform-origin:50% 22%}
+ .room-dock .dock-export .dock-face img{transform:scale(2.1);transform-origin:52% 20%}
+ .room-dock .dock-library .dock-face img{transform:scale(1.35);transform-origin:50% 50%}
+ .room-dock .dock-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .room-dock .dock-room i{position:absolute;right:-3px;bottom:-3px;min-width:16px;height:16px;border-radius:8px;background:#fff8e8;border:1.5px solid #b89a6c;color:#4b3a5c;font:700 10px/13px system-ui,sans-serif;font-style:normal;text-align:center}
+ .room-dock .dock-room.is-current{box-shadow:0 0 0 3px #f2a33a}
+ .room-dock .dock-room.is-current i{background:#f2a33a;border-color:#f2a33a;color:#fff}
+ .ux-flow-jump{min-height:36px;padding:2px 12px;margin:6px 0 0}
+}
+
+/* ---------- 手機：拍仔 8 個時鐘改成一行一項，一個畫面看完 ---------- */
+@media(max-width:1000px){
+ body.phone-room-arrange #timingSettings{display:flex!important;flex-direction:column!important;gap:0!important;padding:0 4px!important;background:#fffaf0;border:1px solid #e6d5b6;border-radius:14px;overflow:hidden}
+ body.phone-room-arrange #timingSettings .setting-card{display:grid!important;box-sizing:border-box!important;align-self:stretch!important;max-width:none!important;flex:none!important;grid-template-columns:minmax(0,1fr) 152px;grid-template-areas:"title step" "desc step";align-items:center;column-gap:10px;row-gap:0;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;padding:9px 8px!important;background:none!important;border:0!important;border-bottom:1px dashed #e3cfaa!important;border-radius:0!important;box-shadow:none!important;transform:none!important;text-align:left!important}
+ body.phone-room-arrange #timingSettings .setting-card:last-child{border-bottom:0!important}
+ body.phone-room-arrange #timingSettings .setting-card h3{grid-area:title;display:block!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:none!important;font-size:16px!important;line-height:1.35!important;text-align:left!important;color:#3f3350!important;transform:none!important}
+ body.phone-room-arrange #timingSettings .setting-card p{grid-area:desc;width:auto!important;margin:1px 0 0!important;font-size:12.5px!important;line-height:1.4!important;color:#7a6a58!important;text-align:left!important}
+ body.phone-room-arrange #timingSettings .painted-stepper{grid-area:step;display:flex!important;align-items:center;gap:4px;width:auto!important;height:auto!important;margin:0!important;padding:0!important}
+ body.phone-room-arrange #timingSettings .timer-paint{display:none!important}
+ body.phone-room-arrange #timingSettings .painted-stepper>button{position:static!important;width:44px!important;height:44px!important;min-height:44px!important;margin:0!important;padding:0!important;border-radius:50%!important;font-size:22px!important;transform:none!important}
+ body.phone-room-arrange #timingSettings .dial-value{position:static!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;width:56px!important;height:48px!important;margin:0!important;padding:0!important;background:#fff!important;border:1.5px solid #d9c49f!important;border-radius:10px!important;transform:none!important}
+ body.phone-room-arrange #timingSettings .dial-value input{width:52px!important;height:26px!important;min-height:0!important;padding:0!important;font-size:20px!important;font-weight:800;line-height:1;text-align:center;background:none!important;border:0!important}
+ body.phone-room-arrange #timingSettings .dial-value span{font-size:11px!important;line-height:1.1;color:#8a7760}
+ body.phone-room-arrange #timingSettings .note-pin,body.phone-room-arrange #timingSettings .setting-index,body.phone-room-arrange #timingSettings .note-caption{display:none!important}
+}
+@media(max-width:1000px){
+ body.phone-room-arrange .rhythm-confirm{flex-wrap:wrap!important}
+ body.phone-room-arrange .rhythm-confirm .ux-go-export{order:-1;flex:1 1 100%;justify-content:center;margin:0!important;white-space:nowrap;font-size:14.5px}
+ body.phone-room-arrange .rhythm-confirm:has(.ux-go-export) #rhythmConfirmedText{display:none}
+}
+/* 工具列太擠時：「下一段未錄」只留圖示＋數字 */
+.record-tools.ux-tight .ux-next-missing span{display:none}
+.record-tools.ux-tight .ux-next-missing{padding:4px 8px}
+
+/* ---------- 手機錄音頁：拿掉像滑桿的夾子裝飾；分頁數字不被切 ---------- */
+@media(max-width:1000px){
+ .in-workroom .mobile-deck-top:before,.in-workroom .mobile-deck-top:after{display:none!important}
+ .in-workroom .mobile-deck-top{box-shadow:none!important;border-top:1px solid #e2d2b3!important}
+ #chapterNav .nav-count{overflow:visible!important;padding-right:2px;flex:none!important;font-variant-numeric:tabular-nums}
+ #chapterNav .chapter-button{padding-right:15px!important}
+}

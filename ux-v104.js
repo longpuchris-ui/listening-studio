@@ -74,7 +74,13 @@ function labelIconButtons(){
   document.querySelectorAll('#clips [data-action=editClip]:not([title])').forEach(b=>{b.title='剪輯這一段';b.setAttribute('aria-label','剪輯這一段')});
   document.querySelectorAll('#clips [data-action=importAudio]').forEach(b=>{if(!b.title)b.title='匯入音檔'});
 }
+function fitTools(){
+  const t=q('.record-tools');if(!t||!t.offsetParent)return;
+  t.classList.remove('ux-tight');
+  if(t.scrollWidth>t.clientWidth+1)t.classList.add('ux-tight');
+}
 function fitScripts(){
+  fitTools();
   if(innerWidth<=1000)return;
   document.querySelectorAll('#clips .clip-script').forEach(t=>{if(!t.offsetParent)return;t.style.height='auto';t.style.height=Math.min(160,Math.max(40,t.scrollHeight+2))+'px'});
 }
@@ -109,9 +115,20 @@ function linkExportOverview(){
   make(rows[2],'end',[state.end],'結束提醒');
 }
 
+/* ---------- 拍仔確認後：直接去小封 ---------- */
+function syncRhythmNext(){
+  const p=q('#rhythmConfirmedText');if(!p)return;
+  let b=q('#uxGoExport');
+  const arranged=!!state.workflow?.arranged;
+  if(!arranged){b?.remove();return}
+  if(!b){b=document.createElement('button');b.id='uxGoExport';b.type='button';b.className='ux-go-export';b.dataset.action='enterExport';b.innerHTML='<img src="assets/xiaofeng-export.webp" alt="" aria-hidden="true">✓ 節奏已確認・找小封串成聽力檔 →';p.after(b)}
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-action=focusRecording]'))setTimeout(queueFit,0);if(e.target.closest('[data-action=confirmRhythm]'))setTimeout(()=>{syncRhythmNext();toast('播放節奏已確認。點「找小封」或右上角的小封，就能串成完整聽力檔。')},0)});
+
 /* ---------- 4. 鍵盤快捷鍵 ---------- */
 function onKey(e){
   if(!e.altKey||e.metaKey||e.ctrlKey||document.querySelector('dialog[open]'))return;
+  const t=e.target;if(t&&(t.isContentEditable||t.tagName==='TEXTAREA'||(t.tagName==='INPUT'&&!['checkbox','radio','button','range'].includes(t.type))))return;
   const k=e.code;
   const map={Digit1:'record',Digit2:'arrange',Digit3:'export',Digit4:'library'};
   if(k==='Digit0'){e.preventDefault();goWorktable();return}
@@ -129,10 +146,13 @@ function init(){
   wrap('renderNav',renderNextButton);
   wrap('renderChapter',renderNextButton);
   wrap('renderExport',linkExportOverview);
+  wrap('renderWorktable',syncRhythmNext);
+  wrap('renderSettings',syncRhythmNext);
   wrap('meta',renderNextButton);
+  wrap('renderBusy',()=>document.body.classList.toggle('ux-busy',busy()));
   document.addEventListener('keydown',onKey);
   addEventListener('resize',queueFit,{passive:true});
-  linkExportOverview();
+  linkExportOverview();syncRhythmNext();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
