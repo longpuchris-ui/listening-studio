@@ -234,3 +234,12 @@
  .ux-next-up:focus-visible{outline:3px solid #087886;outline-offset:2px}
  body.ux-busy .ux-deck-extra{opacity:.45;pointer-events:none}
 }
+
+/* v107：開場段落與對話句，卡片不夠寬時改成兩行（按鈕在上、稿子整行），避免稿子被擠窄 */
+@media(min-width:1001px){
+ body #recordPage .intro-segment,body #recordPage .dialogue-turn{container-type:inline-size}
+ @container (max-width:880px){
+  body #recordPage .intro-segment .clip-card,body #recordPage .dialogue-turn .clip-card{grid-template-columns:auto minmax(0,1fr) auto auto auto!important;grid-template-areas:"status . rec play tools" "text text text text text"!important;align-items:center!important;row-gap:6px!important}
+  body #recordPage .intro-segment .clip-card .clip-script,body #recordPage .dialogue-turn .clip-card .clip-script{min-height:44px!important}
+ }
+}

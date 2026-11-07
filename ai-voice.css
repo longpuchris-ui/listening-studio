@@ -34,3 +34,23 @@
 #aiVoiceDialog #aiStatus[data-kind=error]{background:#fce4df;color:#79251f}
 #aiVoiceDialog .ai-actions{display:flex;justify-content:flex-end;gap:8px}
 @media(prefers-reduced-motion:reduce){#recordPage .clip-card .clip-bottom>.ai-clip.is-working .ai-spark{animation:none}}
+/* v107 生成清單 */
+#aiVoiceDialog .ai-scope{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;font-size:14.5px}
+#aiVoiceDialog .ai-scope label,#aiVoiceDialog .ai-cats label{display:inline-flex;align-items:center;gap:6px;min-height:36px;cursor:pointer}
+#aiVoiceDialog input[type=radio],#aiVoiceDialog input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:#7a55b8;flex:none}
+#aiVoiceDialog .ai-cats{display:flex;flex-wrap:wrap;gap:0 14px;margin:0 0 8px;padding:6px 10px 4px;border:1px solid #e3d3b5;border-radius:12px;font-size:14px}
+#aiVoiceDialog .ai-cats legend{padding:0 4px;font-size:12.5px;color:#7a6a58}
+#aiVoiceDialog .ai-list{list-style:none;margin:0;padding:4px;max-height:min(40vh,320px);overflow:auto;border:1px solid #e3d3b5;border-radius:12px;background:#fff}
+#aiVoiceDialog .ai-list li label{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:8px;min-height:38px;padding:2px 8px;border-radius:8px;cursor:pointer;font-size:14px}
+#aiVoiceDialog .ai-list li:not(.is-on) label{color:#9a8d80}
+#aiVoiceDialog .ai-list li label:hover{background:#f6f0ff}
+#aiVoiceDialog .ai-n{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#aiVoiceDialog .ai-v{font-size:12.5px;color:#7a6a58;white-space:nowrap}
+#aiVoiceDialog .is-stale .ai-v{color:#a5551f;font-weight:700}
+#aiVoiceDialog .ai-k{min-width:2.6em;text-align:right;font-size:12.5px;color:#7a6a58;font-variant-numeric:tabular-nums}
+#aiVoiceDialog .ai-k::after{content:' cr'}
+#aiVoiceDialog .ai-empty{margin:4px 0;padding:12px;border-radius:12px;background:#f3eee4;font-size:14px}
+#aiVoiceDialog .ai-go{width:100%;min-height:48px;margin:2px 0 10px;border:0;border-radius:14px;background:#6e4aa8;color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+#aiVoiceDialog .ai-go:disabled{background:#d8cde8;color:#fff;cursor:not-allowed}
+#aiVoiceDialog .ai-go:focus-visible{outline:3px solid #087886;outline-offset:2px}
+@media(max-width:600px){#aiVoiceDialog .ai-list li label{grid-template-columns:auto minmax(0,1fr) auto}#aiVoiceDialog .ai-v{display:none}}
