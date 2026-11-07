@@ -1,0 +1,108 @@
+/* v104 操作順暢化（最後載入；整檔移除即可退回 v103） */
+
+/* ---------- 房間切換列（電腦） ---------- */
+.room-dock{display:none}
+@media(min-width:1001px){
+ .in-workroom .room-return>button[data-action=home]{display:none!important}
+ .in-workroom .room-dock{display:flex;align-items:center;gap:4px;position:absolute;right:0;top:-4px;padding:4px;pointer-events:auto;background:#fff8e8f2;border:1.5px solid #d9c29a;border-radius:999px;box-shadow:0 4px 14px #4a33282e,inset 0 1px 0 #fff;z-index:6}
+ .room-dock button{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;position:relative;border-radius:999px;transition:background .15s,box-shadow .15s,transform .1s}
+ .room-dock button:focus-visible{outline:3px solid #7a5cc0;outline-offset:2px}
+ .room-dock button:active{transform:translateY(1px)}
+ .room-dock .dock-home{gap:6px;height:40px;padding:0 13px 0 10px;background:#5b4270;color:#fff8ea;font-size:14px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+ .room-dock .dock-home:hover{background:#4a345d}
+ .room-dock .dock-home svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+ .room-dock .dock-rooms{display:flex;gap:2px;padding-left:2px}
+ .room-dock .dock-room{width:40px;height:40px;background:#f3e6cc;overflow:visible}
+ .room-dock .dock-room:hover{background:#ecd8b0}
+ .room-dock .dock-face{display:block;width:40px;height:40px;border-radius:50%;overflow:hidden;background:#fbefd6}
+ .room-dock .dock-face img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.9);transform-origin:50% 22%}
+ .room-dock .dock-arrange .dock-face img{transform-origin:42% 30%}
+ .room-dock .dock-export .dock-face img{transform:scale(2.1);transform-origin:52% 20%}
+ .room-dock .dock-library .dock-face img{transform:scale(1.35);transform-origin:50% 50%}
+ .room-dock .dock-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .room-dock .dock-room i{position:absolute;right:-3px;bottom:-3px;min-width:16px;height:16px;border-radius:8px;background:#fff8e8;border:1.5px solid #b89a6c;color:#4b3a5c;font:700 10px/13px system-ui,sans-serif;font-style:normal;text-align:center}
+ .room-dock .dock-room.is-current{box-shadow:0 0 0 3px #f2a33a,0 0 0 5px #fff8e8;background:#ffe3a6}
+ .room-dock .dock-room.is-current i{background:#f2a33a;border-color:#f2a33a;color:#fff}
+ /* 滑過時顯示房間名稱 */
+ .room-dock .dock-room:hover .dock-label,.room-dock .dock-room:focus-visible .dock-label{width:auto;height:auto;clip:auto;overflow:visible;top:calc(100% + 8px);left:50%;transform:translateX(-50%);padding:3px 8px;border-radius:6px;background:#3d2c4a;color:#fff;font-size:12px;font-weight:600;white-space:nowrap;pointer-events:none}
+ /* 錄音或串接時不能切換：變淡提示 */
+ body.ux-busy .room-dock button{opacity:.45;cursor:not-allowed}
+ /* 一般筆電：資料庫收進首頁，不擠到標題卡 */
+ @media(max-width:1439px){.room-dock .dock-library{display:none}.room-dock .dock-home{padding:0 11px 0 9px;font-size:13.5px}}
+ /* 錄音工具列收成一行：錄音設定只留圖示 */
+ .in-workroom .record-tools{flex-wrap:nowrap!important;gap:6px!important}
+ .in-workroom .record-tools>*,.in-workroom .record-tools>* *{white-space:nowrap!important}
+ .in-workroom .record-tools>*{flex-shrink:0}
+ .in-workroom .record-tools .switch-label,.in-workroom .record-tools .silence-label{font-size:13px!important;gap:5px!important}
+ .in-workroom .record-tools .focus-recording-button{padding-left:10px!important;padding-right:10px!important}
+ .in-workroom .record-tools [data-action=micSettings]{flex:none;width:38px;min-width:38px!important;height:38px;min-height:38px!important;padding:0!important;justify-content:center;border-radius:50%!important}
+ .in-workroom .record-tools [data-action=micSettings] span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .in-workroom .record-tools [data-action=micSettings] svg{margin:0!important}
+}
+
+/* ---------- 下一段未錄 ---------- */
+.ux-next-missing{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 10px 4px 9px;border:1.5px solid #e2a35a;border-radius:999px;background:#fff3dc;color:#7a4a1c;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;margin-left:auto}
+.ux-next-missing svg{width:15px;height:15px;fill:currentColor}
+.ux-next-missing b{min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#e8913a;color:#fff;font-size:12px;line-height:20px;text-align:center}
+.ux-next-missing:hover{background:#ffe7bd}
+.ux-next-missing.is-done{border-color:#9cc7a4;background:#eef8ef;color:#3d6b47}
+.ux-next-missing.is-done svg{fill:none;stroke:currentColor;stroke-width:3}
+.ux-next-missing+[data-action=micSettings]{margin-left:6px!important}
+.clip-card.ux-flash{animation:uxFlash 1.6s ease-out}
+@keyframes uxFlash{0%,35%{box-shadow:0 0 0 3px #f2a33a,0 0 18px #f2a33a88}100%{box-shadow:none}}
+@media(max-width:1000px){.ux-next-missing{display:none}}
+
+/* ---------- 小封完成度：直接去錄 ---------- */
+.ux-flow-jump{margin-left:10px;min-height:30px;padding:2px 10px;border:1px solid #e2a35a;border-radius:999px;background:#fff3dc;color:#7a4a1c;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ux-flow-jump:hover{background:#ffe2ad}
+.ux-flow-jump.is-done{border-color:#c9dccb;background:transparent;color:#55805e;font-weight:600}
+.export-flow .flow-sections>span{align-items:center}
+
+/* ---------- 麥麥：大題分頁平均縮放，不被「添一個大題」蓋住 ---------- */
+@media(min-width:1001px){
+ .in-workroom #chapterNav .chapter-button{flex:1 1 0!important;min-width:92px!important;max-width:160px!important;gap:5px!important;padding-left:8px!important;padding-right:8px!important}
+ .in-workroom #chapterNav .chapter-button>span:not(.nav-count){min-width:0;flex:1 1 auto}
+ .in-workroom #chapterNav .chapter-button .nav-count{flex:none;font-variant-numeric:tabular-nums}
+ .in-workroom #chapterNav .chapter-button svg{flex:none;width:15px;height:15px}
+ .in-workroom .contents .add-chapter{flex:0 0 46px!important;width:46px!important;padding:0!important;font-size:0!important;display:inline-flex;align-items:center;justify-content:center}
+ .in-workroom .contents .add-chapter svg{width:20px!important;height:20px!important;margin:0!important}
+}
+
+/* ---------- 麥麥：每段從三行收成兩行（標題＋按鈕同一行，稿子在下） ---------- */
+@media(min-width:1001px){
+ body #recordPage .clip-card{grid-template-columns:minmax(0,1fr) auto auto auto auto!important;grid-template-areas:"title rec status play tools" "text text text text text"!important;gap:6px 8px!important;padding:8px 12px 10px!important;margin:0 0 8px!important}
+ body #recordPage .clip-card .clip-title{font-size:14px!important;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:block!important}
+ body #recordPage .clip-card .clip-script{min-height:50px!important;padding:8px 12px!important;font-size:17px!important;line-height:1.55!important}
+ body #recordPage .clip-card .clip-illustrated-action{min-width:0!important;height:40px!important;min-height:40px!important;padding:0 12px 0 6px!important;font-size:15px!important;border-radius:12px!important;gap:4px!important}
+ body #recordPage .clip-card .clip-illustrated-action svg{width:26px!important;height:26px!important}
+ body #recordPage .clip-card .clip-audio-status{display:contents!important}
+ body #recordPage .clip-card .clip-audio-state,body #recordPage .clip-card .clip-time{grid-area:status;font-size:13px!important;color:#7a6650}
+ body #recordPage .clip-card.has-audio .clip-audio-state{display:none}
+ body #recordPage .clip-card.has-audio .clip-time::before{content:'✓ ';color:#3f8a55;font-weight:700}
+ body #recordPage .clip-card .clip-playback{grid-area:play;min-width:0!important;height:40px!important;min-height:40px!important;margin:0!important;padding:0 12px!important;font-size:15px!important;border-radius:12px!important}
+ body #recordPage .clip-card .clip-playback svg{width:20px!important;height:20px!important}
+ body #recordPage .clip-card .clip-bottom{gap:4px!important}
+ body #recordPage .clip-card .clip-bottom>button{width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;justify-content:center;font-size:0!important;border-radius:12px!important;gap:0!important}
+ body #recordPage .clip-card .clip-bottom>button>span{display:none}
+ body #recordPage .clip-card .clip-bottom>button svg{width:19px!important;height:19px!important;margin:0!important}
+ /* 開場段落：語言／名稱列與卡片之間更緊 */
+ body #recordPage .intro-segment{margin:0 0 8px!important}
+ body #recordPage .intro-segment-tools{margin:0 0 2px!important;gap:6px!important}
+ body #recordPage .intro-segment-tools select,body #recordPage .intro-segment-tools input{height:38px!important;min-height:38px!important}
+ body #recordPage .intro-segment-tools .small-action{width:34px!important;height:34px!important;min-height:34px!important}
+ body #recordPage .intro-routing{margin:0 0 4px!important;font-size:13px}
+ body #recordPage .intro-routing small{display:inline!important;margin-left:8px;font-size:12.5px;opacity:.8}
+ @media(max-width:1439px){body #recordPage .intro-routing small{display:none!important}}
+ /* 題目標題列與對話說話者列 */
+ body #recordPage .question-label{margin:10px 0 6px!important;padding:4px 8px!important}
+ body #recordPage .dialogue-turn .turn-caption{min-height:30px!important;margin:6px 0 2px!important}
+ body #recordPage details.arrangement-controls{margin:0 0 6px!important}
+}
+@media(min-width:1001px){
+ /* 開場段落：名稱列一行；稿子與按鈕同一行 */
+ body #recordPage .intro-segment .clip-card{grid-template-columns:minmax(0,1fr) auto auto auto auto!important;grid-template-areas:"text rec status play tools"!important;align-items:start!important}
+ body #recordPage .intro-segment .clip-card .clip-title{display:none!important}
+ body #recordPage .intro-segment .clip-card .clip-script{min-height:40px!important}
+ body #recordPage .intro-segment .clip-card:not(.has-audio) .clip-audio-state{display:none}
+ body #recordPage .intro-segment .clip-card>*,body #recordPage .intro-segment .clip-card button{align-self:center}
+}
