@@ -28,6 +28,11 @@
 /* 開場段落：上方的名稱欄已經寫了「英文開場」，卡片內不再重複。 */
 #recordPage .intro-segment .clip-card .clip-title{display:none!important}
 
+/* 有「復原」鈕時按鍵比較多：工具鈕換到下一列靠右，不再把試聽擠到看不見。 */
+#recordPage .clip-card:has(.clip-bottom>[data-action=undoAudio]){grid-template-areas:"title title title" "text text text" "rec status status" "tools tools tools"!important}
+#recordPage .clip-card:has(.clip-bottom>[data-action=undoAudio]) .clip-bottom{justify-content:flex-end!important}
+#recordPage .clip-card [data-action=undoAudio]{color:#6b4a2b}
+
 /* ── 拍仔：下方那句長說明蓋在圖上，且同一句在麥麥、小封都有，電腦版拿掉。 ── */
 .in-workroom #arrangePage #itemPlaybackEntry{display:none!important}
 

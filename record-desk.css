@@ -9,9 +9,9 @@
 /* One title per section: the editable name replaces the duplicate heading. */
 /* The active tab already names the page; the big in-page heading repeated it. */
 #recordPage .record-content .chapter-heading{display:none!important}
-#recordPage #clips>.chapter-rename{display:block;width:100%!important;box-sizing:border-box;height:auto!important;min-height:0!important;margin:0 0 6px!important;padding:4px 6px!important;font-size:22px!important;font-weight:800;letter-spacing:.02em;color:#5a3b55;background:transparent!important;border:0!important;border-bottom:2px dashed #d8c2a0!important;border-radius:6px 6px 0 0!important;box-shadow:none!important;transform:none!important}
-#recordPage #clips>.chapter-rename:hover{background:#fff8ea!important}
-#recordPage #clips>.chapter-rename:focus{outline:none;background:#fffaf0!important;border-bottom-color:#8661a4!important}
+#recordPage #clips .chapter-rename{display:block;width:100%!important;box-sizing:border-box;height:auto!important;min-height:0!important;margin:0 0 6px!important;padding:4px 6px!important;font-size:22px!important;font-weight:800;letter-spacing:.02em;color:#5a3b55;background:transparent!important;border:0!important;border-bottom:2px dashed #d8c2a0!important;border-radius:6px 6px 0 0!important;box-shadow:none!important;transform:none!important}
+#recordPage #clips .chapter-rename:hover{background:#fff8ea!important}
+#recordPage #clips .chapter-rename:focus{outline:none;background:#fffaf0!important;border-bottom-color:#8661a4!important}
 
 /* Recording tools: one slim row. */
 #recordPage .record-tools{min-height:0!important;margin:0 0 4px!important;padding:0!important;gap:10px!important;align-items:center}

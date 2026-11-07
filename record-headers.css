@@ -1,0 +1,17 @@
+/* 題型設定移到標題旁（2026-11-07）：「第一大題」「第 1 題」右邊直接顯示「⚙ 單人朗讀」，
+   點開時設定面板在標題下方展開；收起時不佔一整列。電腦與手機共用。 */
+#recordPage .chapter-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 6px}
+#recordPage .chapter-head>.chapter-rename{flex:1 1 160px;min-width:0;width:auto!important;margin:0!important}
+#recordPage .question-label{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px 8px}
+#recordPage .question-label>span{flex:1 1 auto;min-width:0}
+#recordPage :is(.chapter-head,.question-label)>details.arrangement-controls{flex:none;margin:0 0 0 auto!important;width:auto!important}
+#recordPage .question-label>details.arrangement-controls+.question-tools{margin-left:0}
+#recordPage :is(.chapter-head,.question-label) .arr-scope{display:none}
+#recordPage :is(.chapter-head,.question-label)>details.arrangement-controls>summary{min-height:38px!important;padding:4px 14px!important;font-size:15px!important;white-space:nowrap}
+/* 展開時：面板換到標題下一列，佔滿寬度。 */
+#recordPage :is(.chapter-head,.question-label)>details.arrangement-controls[open]{order:5;flex:1 1 100%;margin:4px 0 2px!important;transform:none}
+#recordPage :is(.chapter-head,.question-label)>details.arrangement-controls[open] .arr-scope{display:inline}
+@media (max-width:1000px){
+  #recordPage :is(.chapter-head,.question-label)>details.arrangement-controls>summary{min-height:36px!important;padding:4px 10px!important;font-size:14px!important}
+  #recordPage :is(.chapter-head,.question-label)>details.arrangement-controls[open]>label{width:100%!important}
+}
