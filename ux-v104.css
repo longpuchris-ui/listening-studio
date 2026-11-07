@@ -243,3 +243,16 @@
   body #recordPage .intro-segment .clip-card .clip-script,body #recordPage .dialogue-turn .clip-card .clip-script{min-height:44px!important}
  }
 }
+
+/* v108：有「復原」鈕時，舊版 desk-polish 的 :has() 規則會搶走排版，改回 v104 的兩行排版；復原鈕顯示文字 */
+@media(min-width:1001px){
+ body #recordPage .clip-card:has(.clip-bottom>[data-action=undoAudio]){grid-template-areas:"title rec status play tools" "text text text text text"!important}
+ body #recordPage .intro-segment .clip-card:has(.clip-bottom>[data-action=undoAudio]),body #recordPage .dialogue-turn .clip-card:has(.clip-bottom>[data-action=undoAudio]){grid-template-areas:"text rec status play tools"!important}
+ @container (max-width:880px){
+  body #recordPage .intro-segment .clip-card:has(.clip-bottom>[data-action=undoAudio]),body #recordPage .dialogue-turn .clip-card:has(.clip-bottom>[data-action=undoAudio]){grid-template-areas:"status . rec play tools" "text text text text text"!important}
+ }
+ body #recordPage .clip-card .clip-bottom>button[data-action=undoAudio]{width:auto!important;padding:0 10px!important;font-size:13px!important;white-space:nowrap}
+}
+.replay-cue{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.replay-fill{min-height:32px;padding:2px 12px;border:1px solid #e2a35a;border-radius:999px;background:#fff3dc;color:#7a4a1c;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.sequence-replay{margin:2px 0 6px;padding:4px 10px;border-left:3px solid #e2a35a;background:#fff6e3;color:#7a4a1c;font-size:13px;font-weight:600;border-radius:4px}

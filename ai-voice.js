@@ -19,7 +19,7 @@ const unlocked=()=>!!pref().unlocked;
 /* ---------- 段落判斷 ---------- */
 function chapterOf(id){
   if(state.intro.some(c=>c.id===id)||state.start?.id===id)return 'intro';
-  if(state.end?.id===id)return 'end';
+  if(state.end?.id===id||state.replay?.id===id)return 'end';
   if((state.optionLabels||[]).some(c=>c.id===id))return 'optionLabels';
   for(const s of state.sections)if(A.sectionClips(s).some(c=>c.id===id))return s.id;
   return null;
@@ -39,7 +39,7 @@ function voiceLabel(id){return auth?.account?.catalog?.voices?.find(v=>v.id===id
 const isAi=c=>c?.ai&&c.ai.version===c.version&&c.blob;
 function chapterClips(ch){
   if(ch==='intro')return[...state.intro,state.start].filter(Boolean);
-  if(ch==='end')return[state.end].filter(Boolean);
+  if(ch==='end')return[...(state.settings.rounds>1&&state.replay?[state.replay]:[]),state.end].filter(Boolean);
   if(ch==='optionLabels')return state.optionLabels||[];
   const s=state.sections.find(s=>s.id===ch);return s?A.sectionClips(s):[];
 }

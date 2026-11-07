@@ -36,7 +36,7 @@ function chapterList(){
   if(state.settings?.optionLabelsEnabled&&state.optionLabels?.length)list.push({id:'optionLabels',clips:state.optionLabels});
   list.push({id:'intro',clips:[...state.intro,state.start]});
   for(const s of state.sections)list.push({id:s.id,clips:A.sectionClips(s)});
-  list.push({id:'end',clips:[state.end]});
+  list.push({id:'end',clips:[...(state.settings.rounds>1&&state.replay?[state.replay]:[]),state.end]});
   return list;
 }
 function usedIds(){try{return new Set(A.order(state).filter(x=>x.kind==='clip').map(x=>x.id))}catch{return null}}
@@ -115,7 +115,7 @@ function linkExportOverview(){
   make(rows[0],'intro',[...state.intro,state.start],'開場與開始提醒');
   const spans=rows[1]?.querySelectorAll('.flow-sections>span')||[];
   state.sections.forEach((s,i)=>make(spans[i],s.id,A.sectionClips(s),s.title));
-  make(rows[2],'end',[state.end],'結束提醒');
+  make(rows[2],'end',[...(state.settings.rounds>1&&state.replay&&(state.replay.script||state.replay.blob)?[state.replay]:[]),state.end],'結束提醒');
 }
 
 /* ---------- 拍仔確認後：直接去小封 ---------- */
@@ -204,6 +204,11 @@ document.addEventListener('click',e=>{
 },true);
 document.addEventListener('input',e=>{if(e.target.matches?.('#mobileRecordDeck .clip-script'))fitDeckScript()});
 
+/* v108 重播提醒：一鍵填入建議句 */
+document.addEventListener('click',e=>{
+  if(!e.target.closest?.('.replay-fill')||!state.replay||busy())return;
+  e.preventDefault();state.replay.script='現在將重播一遍。You will now hear the listening part again.';save();renderChapter();renderNav();
+});
 /* ---------- 掛勾 ---------- */
 function wrap(name,after){const fn=window[name];if(typeof fn!=='function'||fn.__ux)return;const w=function(...a){const r=fn.apply(this,a);try{after()}catch(err){console.warn('[ux-v104]',name,err)}return r};w.__ux=true;window[name]=w}
 function init(){

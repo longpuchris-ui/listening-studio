@@ -4,6 +4,7 @@ let waveEditor=null,waveRegion=null,waveEpoch=0;
 function roleName(id){const name=state.roles?.[id]?.name;return name&&!/^角色 [AB]$/.test(name)?name:'說話者 '+(id==='A'?'1':'2')}
 function resolveVoice(c){return {...c,voiceStyle:c.voiceStyle||state.roles?.[c.speaker]?.tone||'natural'}}
 function migrateProject(s){
+ if(!s.replay||typeof s.replay!=='object')s.replay={id:uid(),label:'重播提醒',script:'',blob:null,duration:0,trimStart:0,trimEnd:null,version:0,omitFromPlayback:true};
  const templates={A:{name:'角色 A',tone:'natural'},B:{name:'角色 B',tone:'warm'}};
  s.roles=Object.fromEntries(['A','B'].map(k=>{const r=s.roles?.[k]||{},tone=['natural','bright','warm'].includes(r.tone)?r.tone:templates[k].tone;return[k,{...templates[k],name:typeof r.name==='string'?r.name.slice(0,30):templates[k].name,tone,deviceVoice:typeof r.deviceVoice==='string'?r.deviceVoice:''}]}));
  s.settings={introGap:1,dialogueGap:.6,itemRepeat:false,itemRepeatGap:.5,optionLabelsEnabled:false,labelGap:.25,...s.settings};

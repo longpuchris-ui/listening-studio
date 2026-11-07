@@ -7,6 +7,7 @@ function order(state) {
  const clip=(c,label,of)=>!(c.omitFromPlayback&&!c.script&&!c.blob)&&out.push({kind:'clip',id:c.id,label:label||c.label,...(of?{for:of}:{})});
  state.intro.forEach((c,i)=>{clip(c);if(i<state.intro.length-1)gap(state.settings.introGap||0,'開場段落之間')}); clip(state.start); gap(state.settings.sectionGap,'開始前留白');
  for(let round=0;round<state.settings.rounds;round++) {
+  if(round>0&&state.replay&&clip(state.replay,'重播提醒'))gap(state.settings.sectionGap,'重播提醒後');
   for(let si=0;si<state.sections.length;si++) {
    const sec=state.sections[si];
    for(let repeat=0;repeat<state.settings.repeats;repeat++) {
@@ -33,11 +34,11 @@ function order(state) {
  gap(state.settings.sectionGap,'結束提醒前'); clip(state.end); return out;
 }
 function questionClips(q){const m=q.arrangement?.mode;if(q.contentClips)return [...q.contentClips.filter(c=>m!=='single'||!c.speakerName),...(q.arrangement?.recordOptions===false?[]:q.options)];return [...(m==='dialogue'?[]:[q.stem]),...(m==='single'?[]:(q.turns||[])),...(q.arrangement?.recordOptions===false?[]:q.options)]}
-function inventoryClips(s){return [...(s.optionLabels||[]),...s.intro,s.start,...s.sections.flatMap(sec=>[...(sec.heading?[sec.heading]:[]),sec.prompt,...(sec.passages||[]).flatMap(p=>p.clips),...sec.questions.flatMap(q=>[...(q.numberClip?[q.numberClip]:[]),...(q.contentClips||[]),q.stem,...(q.turns||[]),...q.options,...(q.retainedOptions||[])])]),s.end]}
+function inventoryClips(s){return [...(s.optionLabels||[]),...s.intro,s.start,...s.sections.flatMap(sec=>[...(sec.heading?[sec.heading]:[]),sec.prompt,...(sec.passages||[]).flatMap(p=>p.clips),...sec.questions.flatMap(q=>[...(q.numberClip?[q.numberClip]:[]),...(q.contentClips||[]),q.stem,...(q.turns||[]),...q.options,...(q.retainedOptions||[])])]),...(s.replay?[s.replay]:[]),s.end]}
 function resolveOptionLabel(s,q,c,i){return c.answerCodeId!==undefined?(s.optionLabels||[]).find(x=>x.id===c.answerCodeId):s.optionLabels?.[c.answerCodeIndex??i]}
 function usedOptionLabels(s){if(!s.settings.optionLabelsEnabled)return[];const used=new Set(s.sections.flatMap(sec=>sec.questions.flatMap(q=>q.arrangement?.recordOptions===false?[]:q.options.map((c,i)=>resolveOptionLabel(s,q,c,i)?.id))));return (s.optionLabels||[]).filter(c=>used.has(c.id))}
 function sectionClips(sec){const out=[...(sec.heading?[sec.heading]:[]),sec.prompt],used=new Set();for(const q of sec.questions){if(q.passageId&&!used.has(q.passageId)){out.push(...((sec.passages||[]).find(p=>p.id===q.passageId)?.clips||[]));used.add(q.passageId)}out.push(...(q.numberClip&&q.arrangement?.numberEnabled!==false?[q.numberClip]:[]),...questionClips(q))}return out}
-function allClips(s){return [...usedOptionLabels(s),...s.intro,s.start,...s.sections.flatMap(sectionClips),s.end].filter(c=>!c.omitFromPlayback||c.script||c.blob)}
+function allClips(s){return [...usedOptionLabels(s),...s.intro,s.start,...s.sections.flatMap(sectionClips),...(s.replay&&s.settings.rounds>1?[s.replay]:[]),s.end].filter(c=>!c.omitFromPlayback||c.script||c.blob)}
 function effective(c){return c.blob?Math.max(0,(c.trimEnd??c.duration)-(c.trimStart||0)):0}
 function duration(s){const map=new Map(allClips(s).map(c=>[c.id,c]));return order(s).reduce((sum,item)=>sum+(item.kind==='silence'?item.seconds:effective(map.get(item.id))),0)}
 /* Export plan: unrecorded clips (draft) are skipped; gaps that meet across a skipped clip merge to the longer one instead of adding up. */
