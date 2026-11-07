@@ -12,14 +12,15 @@ const ROOMS=[
   {page:'export',action:'enterExport',name:'小封',job:'輸出',num:'3',img:'assets/xiaofeng-export.webp'},
   {page:'library',action:'enterLibrary',name:'資料庫',job:'備份與成品',num:'',img:'assets/audio-library-cabinet-delivery.webp'}
 ];
+const MOD=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent)?'⌥':'Alt+';
 const busy=()=>!!((typeof rec!=='undefined'&&rec)||(typeof building!=='undefined'&&building));
 
 /* ---------- 1. 房間切換列 ---------- */
 function buildDock(){
   const bar=q('.room-return');if(!bar||q('.room-dock'))return;
   const nav=document.createElement('nav');nav.className='room-dock';nav.setAttribute('aria-label','切換房間');
-  nav.innerHTML='<button type="button" class="dock-home" data-action="home" title="回錄音室（Alt+0）" aria-label="回錄音室首頁"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8M10 20v-5.5h4V20"/></svg><span>回錄音室</span></button><span class="dock-rooms">'+
-    ROOMS.map(r=>`<button type="button" class="dock-room dock-${r.page}" data-action="${r.action}" data-room="${r.page}" title="${r.num?r.num+' · ':''}${r.name}｜${r.job}${r.num?'（Alt+'+r.num+'）':''}" aria-label="${r.name}：${r.job}"><span class="dock-face"><img src="${r.img}" alt="" aria-hidden="true"></span>${r.num?`<i aria-hidden="true">${r.num}</i>`:''}<span class="dock-label">${r.name}</span></button>`).join('')+'</span>';
+  nav.innerHTML='<button type="button" class="dock-home" data-action="home" title="回錄音室（'+MOD+'0）" aria-label="回錄音室首頁"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8M10 20v-5.5h4V20"/></svg><span>回錄音室</span></button><span class="dock-rooms">'+
+    ROOMS.map(r=>`<button type="button" class="dock-room dock-${r.page}" data-action="${r.action}" data-room="${r.page}" title="${r.num?r.num+' · ':''}${r.name}｜${r.job}${r.num?'（'+MOD+r.num+'）':''}" aria-label="${r.name}：${r.job}"><span class="dock-face"><img src="${r.img}" alt="" aria-hidden="true"></span>${r.num?`<i aria-hidden="true">${r.num}</i>`:''}<span class="dock-label">${r.name}</span></button>`).join('')+'</span>';
   bar.prepend(nav);
 }
 function syncDock(){
@@ -47,7 +48,9 @@ function missingClips(){
 function goToClip(chapter,clipId){
   if(busy())return;
   if(typeof atWorktable!=='undefined'&&atWorktable||page!=='record')enterRoom('record');
-  if(active!==chapter){stopPreview();if(chapter==='optionLabels')ensureOptionLabels();active=chapter;editClip=null;renderNav();renderChapter();renderBusy()}
+  const phone=innerWidth<=1000;
+  if(phone&&clipId){try{mobileClipId=clipId}catch{}}
+  if(active!==chapter||phone){stopPreview();if(chapter==='optionLabels')ensureOptionLabels();active=chapter;editClip=null;renderNav();renderChapter();renderBusy()}
   requestAnimationFrame(()=>{
     const card=clipId&&document.getElementById('clip-'+clipId);
     const target=card||q('#clips');if(!target)return;
@@ -90,7 +93,7 @@ function renderNextButton(){
   labelIconButtons();queueFit();
   const tools=q('.record-tools');if(!tools)return;
   let b=q('#uxNextMissing');
-  if(!b){b=document.createElement('button');b.id='uxNextMissing';b.type='button';b.className='ux-next-missing';b.title='跳到下一段還沒錄的地方（Alt+N）';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();nextMissing()});const anchor=tools.querySelector('[data-action=micSettings]');tools.insertBefore(b,anchor||null)}
+  if(!b){b=document.createElement('button');b.id='uxNextMissing';b.type='button';b.className='ux-next-missing';b.title='跳到下一段還沒錄的地方（'+MOD+'N）';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();nextMissing()});const anchor=tools.querySelector('[data-action=micSettings]');tools.insertBefore(b,anchor||null)}
   const n=missingClips().length;
   b.innerHTML=n?'<svg aria-hidden="true"><use href="#i-next"/></svg><span>下一段未錄</span><b>'+n+'</b>':'<svg aria-hidden="true"><use href="#i-check"/></svg><span>全部錄好</span>';
   b.classList.toggle('is-done',!n);
@@ -136,6 +139,15 @@ function onKey(e){
   if(k==='KeyN'&&!atWorktable&&page==='record'){e.preventDefault();nextMissing()}
 }
 
+/* ---------- 使用說明補一節 ---------- */
+function addGuide(){
+  const box=q('#studioGuide .guide-scroll');if(!box||q('#uxGuideNav'))return;
+  const d=document.createElement('details');d.id='uxGuideNav';
+  d.innerHTML='<summary>快速換房間與快捷鍵</summary><p>進到任何一間房，右上角都有「回錄音室」和麥麥①、拍仔②、小封③（大螢幕另有資料庫）的頭像，直接點就能換房間，不必先回首頁。錄音或串接進行中暫時不能切換。</p><p>麥麥工具列的「下一段未錄」會跳到下一段還沒錄的地方，數字是剩下幾段。小封的完成度清單按「去錄」，會直接帶你到那個大題缺的段落。拍仔確認節奏後，可按「找小封串成聽力檔」直接前往。</p><p>電腦快捷鍵（Mac 用 Option ⌥，Windows 用 Alt）：⌥1 麥麥、⌥2 拍仔、⌥3 小封、⌥4 資料庫、⌥0 回錄音室、⌥N 下一段未錄。游標在文字框裡時不會觸發。</p>';
+  const items=box.querySelectorAll(':scope>details');const after=items[5]||items[items.length-1];
+  if(after)after.after(d);else box.append(d);
+}
+
 /* ---------- 掛勾 ---------- */
 function wrap(name,after){const fn=window[name];if(typeof fn!=='function'||fn.__ux)return;const w=function(...a){const r=fn.apply(this,a);try{after()}catch(err){console.warn('[ux-v104]',name,err)}return r};w.__ux=true;window[name]=w}
 function init(){
@@ -152,7 +164,7 @@ function init(){
   wrap('renderBusy',()=>document.body.classList.toggle('ux-busy',busy()));
   document.addEventListener('keydown',onKey);
   addEventListener('resize',queueFit,{passive:true});
-  linkExportOverview();syncRhythmNext();
+  linkExportOverview();syncRhythmNext();addGuide();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
