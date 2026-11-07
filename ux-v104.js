@@ -148,6 +148,62 @@ function addGuide(){
   if(after)after.after(d);else box.append(d);
 }
 
+
+/* ---------- v105 手機麥麥：段落點點、下一段預告、稿子自動高度 ---------- */
+function clipName(c){
+  if(!c)return '';
+  if(c.speakerName)return c.speakerName;
+  if(c.speaker&&typeof roleName==='function')return roleName(c.speaker);
+  if(active==='intro')return c.label||(c.lang==='zh'?'中文':'EN · English');
+  return c.label||'段落';
+}
+function missingAfter(id){
+  const all=[];for(const ch of chapterList())for(const c of ch.clips)if(c)all.push({chapter:ch.id,clip:c});
+  const used=usedIds(),i=Math.max(0,all.findIndex(m=>m.clip.id===id));
+  const ok=m=>m.clip.id!==id&&!m.clip.blob&&(!used||used.has(m.clip.id));
+  return all.slice(i+1).find(ok)||all.slice(0,i).find(ok)||null;
+}
+function deckGo(id){
+  if(busy()||!id)return;
+  try{stopPreview()}catch{}
+  mobileClipId=id;editClip=null;renderChapter();renderBusy();
+}
+function fitDeckScript(){
+  const t=q('#mobileRecordDeck .clip-script');if(!t)return;
+  t.style.height='auto';
+  t.style.height=Math.max(96,t.scrollHeight+4)+'px';
+}
+function enhanceDeck(){
+  const deck=q('#mobileRecordDeck');
+  if(!deck||deck.hidden||innerWidth>600||typeof currentClips!=='function')return;
+  const info=deck.querySelector('.clip-card .clip-info');if(!info)return;
+  info.querySelector('.ux-deck-extra')?.remove();
+  const list=currentClips();const i=list.findIndex(c=>c.id===mobileClipId);if(i<0)return;
+  const c=list[i],next=list[i+1];
+  const box=document.createElement('div');box.className='ux-deck-extra';
+  const dots=list.map((x,k)=>`<button type="button" class="ux-dot${x.blob?' is-done':''}${k===i?' is-current':''}" data-ux-clip="${x.id}" aria-label="第 ${k+1} 段 ${esc(clipName(x))}${x.blob?'（已錄）':''}"${k===i?' aria-current="step"':''}></button>`).join('');
+  const done=list.filter(x=>x.blob).length;
+  let tail;
+  if(next){
+    const text=(next.script||'').replace(/\s+/g,' ').trim();
+    tail=`<button type="button" class="ux-next-up" data-ux-clip="${next.id}"><small>接著 · ${esc(clipName(next))}${next.blob?' ✓':''}</small><span>${esc(text.slice(0,60))||'（還沒有稿子）'}${text.length>60?'…':''}</span><b aria-hidden="true">→</b></button>`;
+  }else{
+    const after=missingAfter(c.id),left=missingClips().filter(m=>m.clip.id!==c.id).length;
+    tail=after?`<button type="button" class="ux-next-up is-end" data-ux-missing="${after.clip.id}" data-ux-chapter="${after.chapter}"><small>這個大題最後一段${c.blob?'':' · 錄完這段後'}</small><span>去下一段未錄（其他還有 ${left} 段）</span><b aria-hidden="true">→</b></button>`
+        :!c.blob?`<div class="ux-next-up is-end is-last"><small>最後一段</small><span>錄完這段，整份就全部錄好了</span></div>`
+             :`<button type="button" class="ux-next-up is-end is-all" data-action="enterArrange"><small>全部錄好了</small><span>找拍仔確認播放節奏</span><b aria-hidden="true">→</b></button>`;
+  }
+  box.innerHTML=`<div class="ux-dots" role="group" aria-label="本大題段落：已錄 ${done} / ${list.length}">${dots}<span class="ux-dots-count">${done}/${list.length} 已錄</span></div>${tail}`;
+  info.append(box);
+  fitDeckScript();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.ux-deck-extra [data-ux-clip],.ux-deck-extra [data-ux-missing]');if(!b)return;
+  e.preventDefault();e.stopPropagation();
+  if(b.hasAttribute('data-ux-missing'))goToClip(b.dataset.uxChapter,b.dataset.uxMissing);else deckGo(b.dataset.uxClip);
+},true);
+document.addEventListener('input',e=>{if(e.target.matches?.('#mobileRecordDeck .clip-script'))fitDeckScript()});
+
 /* ---------- 掛勾 ---------- */
 function wrap(name,after){const fn=window[name];if(typeof fn!=='function'||fn.__ux)return;const w=function(...a){const r=fn.apply(this,a);try{after()}catch(err){console.warn('[ux-v104]',name,err)}return r};w.__ux=true;window[name]=w}
 function init(){
@@ -160,10 +216,12 @@ function init(){
   wrap('renderExport',linkExportOverview);
   wrap('renderWorktable',syncRhythmNext);
   wrap('renderSettings',syncRhythmNext);
-  wrap('meta',renderNextButton);
+  wrap('meta',()=>{renderNextButton();enhanceDeck()});
+  wrap('renderMobileDeck',enhanceDeck);
   wrap('renderBusy',()=>document.body.classList.toggle('ux-busy',busy()));
   document.addEventListener('keydown',onKey);
   addEventListener('resize',queueFit,{passive:true});
+  enhanceDeck();
   linkExportOverview();syncRhythmNext();addGuide();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
