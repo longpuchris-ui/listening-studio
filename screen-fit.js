@@ -1,3 +1,5 @@
+/* Refuse to run inside another site's frame (clickjacking); GitHub Pages cannot send frame-ancestors. */
+if(window.top!==window.self){document.documentElement.style.display='none';try{window.top.location=window.location.href}catch(e){}}
 /* Large screens: the desktop studio is laid out at a fixed size (about 1240 px
    wide). On monitors bigger than that, scale the whole page uniformly so the
    scene fills the screen instead of floating small in the middle. Phones and

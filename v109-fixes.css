@@ -1,0 +1,26 @@
+/* v109 layout fixes (audit 2026-11-08). Loaded last; remove this file to roll back. */
+/* 麥麥：大題多時分頁保持可讀寬度，改為水平捲動，不再壓成「第..」 */
+@media(min-width:1001px){
+ .in-workroom #chapterNav .chapter-button{flex:1 1 auto!important;min-width:132px!important;max-width:190px!important}
+}
+/* 平板直向首頁：資料庫櫃子與音樂喇叭不再壓住拍仔／小封的入口卡 */
+@media(min-width:601px) and (max-width:880px){
+ .worktable .cabinet-entry,.worktable .scene-sound-prop{margin-top:-104px}
+}
+/* 平板與手機工作室：提示訊息浮在底部，不把頁面往下推再彈回 */
+@media(max-width:1000px){
+ body.in-workroom #toast.show{position:fixed!important;left:12px!important;right:12px!important;top:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;transform:none!important;margin:0!important;z-index:1000;max-width:none!important;box-shadow:0 6px 18px #2a234040!important;pointer-events:none}
+ body.in-workroom dialog #toast.show{position:static!important;box-shadow:none!important;margin:4px 10px!important}
+}
+/* 手機：小封的大題完成卡改成單欄，長標題不再一字一行 */
+@media(max-width:600px){
+ .flow-sections>span{flex-basis:100%}
+}
+/* 手機：提示改浮在上方，不蓋住底部的錄音／試聽大按鈕 */
+@media(max-width:600px){
+ body.in-workroom #toast.show{bottom:auto!important;top:calc(env(safe-area-inset-top) + 60px)!important}
+}
+/* 手機錄音頁：底部保留安全區，+AI 等按鈕不被 iPhone 底部橫條切到 */
+@media(max-width:1000px){
+ #mobileRecordDeck{padding-bottom:env(safe-area-inset-bottom)}
+}

@@ -20,7 +20,7 @@ function buildDock(){
   const bar=q('.room-return');if(!bar||q('.room-dock'))return;
   const nav=document.createElement('nav');nav.className='room-dock';nav.setAttribute('aria-label','切換房間');
   nav.innerHTML='<button type="button" class="dock-home" data-action="home" title="回錄音室（'+MOD+'0）" aria-label="回錄音室首頁"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8M10 20v-5.5h4V20"/></svg><span>回錄音室</span></button><span class="dock-rooms">'+
-    ROOMS.map(r=>`<button type="button" class="dock-room dock-${r.page}" data-action="${r.action}" data-room="${r.page}" title="${r.num?r.num+' · ':''}${r.name}｜${r.job}${r.num?'（'+MOD+r.num+'）':''}" aria-label="${r.name}：${r.job}"><span class="dock-face"><img src="${r.img}" alt="" aria-hidden="true"></span>${r.num?`<i aria-hidden="true">${r.num}</i>`:''}<span class="dock-label">${r.name}</span></button>`).join('')+'</span>';
+    ROOMS.map(r=>`<button type="button" class="dock-room dock-${r.page}" data-action="${r.action}" data-room="${r.page}" title="${r.num?r.num+' · ':''}${r.name}｜${r.job}${r.num?'（'+MOD+r.num+'）':''}" aria-label="${r.name}：${r.job}"><span class="dock-face"><img src="${r.img}" alt="" aria-hidden="true" loading="lazy" decoding="async"></span>${r.num?`<i aria-hidden="true">${r.num}</i>`:''}<span class="dock-label">${r.name}</span></button>`).join('')+'</span>';
   bar.prepend(nav);
 }
 function syncDock(){
@@ -124,7 +124,7 @@ function syncRhythmNext(){
   let b=q('#uxGoExport');
   const arranged=!!state.workflow?.arranged;
   if(!arranged){b?.remove();return}
-  if(!b){b=document.createElement('button');b.id='uxGoExport';b.type='button';b.className='ux-go-export';b.dataset.action='enterExport';b.innerHTML='<img src="assets/xiaofeng-export.webp" alt="" aria-hidden="true">✓ 節奏已確認・找小封串成聽力檔 →';p.after(b)}
+  if(!b){b=document.createElement('button');b.id='uxGoExport';b.type='button';b.className='ux-go-export';b.dataset.action='enterExport';b.innerHTML='<img src="assets/xiaofeng-export.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">✓ 節奏已確認・找小封串成聽力檔 →';p.after(b)}
 }
 document.addEventListener('click',e=>{if(e.target.closest('[data-action=focusRecording]'))setTimeout(queueFit,0);if(e.target.closest('[data-action=confirmRhythm]'))setTimeout(()=>{syncRhythmNext();toast('播放節奏已確認。點「找小封」或右上角的小封，就能串成完整聽力檔。')},0)});
 
