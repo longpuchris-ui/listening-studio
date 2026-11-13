@@ -12,3 +12,14 @@
 
 .cloud-guide-steps{font-size:15px;padding-left:1.5em;line-height:1.7;margin:12px 0}.cloud-guide-steps li+li{margin-top:12px}.cloud-guide-steps strong{font-weight:600;font-synthesis:none}
 @media(max-width:600px){.cloud-guide-steps{font-size:16px}}
+
+/* v117 說明文件：雲端小卡 */
+.sg-rule{margin:10px 0;padding:10px 14px;border-radius:12px;background:#e1f3ea;color:#1f6b4f;font-weight:700}
+.sg-h{margin:16px 0 4px;font-size:16px;color:#4b3a6b}
+.sg-status{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:8px 12px;margin:8px 0;font-size:15px;line-height:1.6}
+.sg-status dt{display:flex;flex-wrap:wrap;gap:4px;align-items:flex-start}
+.sg-status dd{margin:0;min-width:0}
+.sg-chip{display:inline-block;padding:1px 10px;border-radius:999px;font-weight:700;font-size:14px;white-space:nowrap}
+.sg-ok{background:#d9f0df;color:#24683b}.sg-busy{background:#efe8fa;color:#5b3f93}.sg-warn{background:#fbe5c6;color:#7a4600}.sg-new{background:#dceaf7;color:#1f5d8f}.sg-bad{background:#f8e1e1;color:#8f2b2b}
+.sg-list{margin:6px 0;padding-left:1.3em;line-height:1.7}
+@media (max-width:600px){.sg-status{grid-template-columns:1fr;gap:2px}.sg-status dd{margin-bottom:8px}}
