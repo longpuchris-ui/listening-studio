@@ -144,8 +144,7 @@ function addGuide(){
   const box=q('#studioGuide .guide-scroll');if(!box||q('#uxGuideNav'))return;
   const d=document.createElement('details');d.id='uxGuideNav';
   d.innerHTML='<summary>快速換房間與快捷鍵</summary><p>進到任何一間房，右上角都有「回錄音室」和麥麥①、拍仔②、小封③（大螢幕另有資料庫）的頭像，直接點就能換房間，不必先回首頁。錄音或串接進行中暫時不能切換。</p><p>麥麥工具列的「下一段未錄」會跳到下一段還沒錄的地方，數字是剩下幾段。小封的完成度清單按「去錄」，會直接帶你到那個大題缺的段落。拍仔確認節奏後，可按「找小封串成聽力檔」直接前往。</p><p>電腦快捷鍵（Mac 用 Option ⌥，Windows 用 Alt）：⌥1 麥麥、⌥2 拍仔、⌥3 小封、⌥4 資料庫、⌥0 回錄音室、⌥N 下一段未錄。游標在文字框裡時不會觸發。</p>';
-  const items=box.querySelectorAll(':scope>details');const after=items[5]||items[items.length-1];
-  if(after)after.after(d);else box.append(d);
+  box.append(d);
 }
 
 

@@ -1,4 +1,5 @@
-/* v114 專案列：開新專案、我的專案、結案，以及首頁雲端狀態牌（明確的上傳／下載）。
+/* v118：開新專案在資料庫第一層抽屜、結案在小封（串好音檔後）；雲端專案視窗只放雲端動作＋「我的專案」連結。
+ * v114 專案列：開新專案、我的專案、結案，以及首頁雲端狀態牌（明確的上傳／下載）。
  * 不改資料格式：結案只在專案上記 finishedAt；切換專案沿用 replaceLocalProject（目前內容先存成本機草稿）。 */
 'use strict';
 (()=>{
@@ -32,7 +33,7 @@ async function cloudAct(kind,btn){
   cloudBusy=true;const label=btn?.textContent;if(btn){btn.disabled=true;btn.textContent=kind==='up'?'上傳中…':'檢查雲端中…'}
   try{
     const r=kind==='up'?await S().saveNow():await S().checkCloud();
-    const msg={saved:'✓ 已存到雲端，可以換裝置接著做。',enabled:'✓ 已開始存到雲端；完成會顯示「已存到雲端」。',same:kind==='up'?'✓ 雲端已經是最新的，不用再上傳。':'✓ 雲端沒有更新的版本，這台就是最新的。',running:'正在上傳中，完成會顯示「已存到雲端」。',pending:'還有內容在上傳，請稍候。',missing:'雲端找不到這份專案；可以按「存到雲端」重新上傳。',opened:'✓ 已下載雲端最新版本。',cancelled:''}[r];
+    const msg={saved:'✓ 已存到雲端，可以換裝置接著做。',enabled:'✓ 已開始存到雲端；完成會顯示「已存到雲端」。',same:kind==='up'?'✓ 雲端已經是最新的，不用再上傳。':'✓ 雲端沒有更新的版本，這台就是最新的。',running:'正在上傳中，完成會顯示「已存到雲端」。',pending:'還有內容在上傳，請稍候。',missing:'雲端找不到這份專案；可以按「存到雲端」重新上傳。',opened:'✓ 已下載雲端最新版本。',signin:kind==='up'?'請在 Google 視窗登入；登入後會自動接著存到雲端。':'請在 Google 視窗登入；登入後下方會列出雲端上的專案。',cancelled:''}[r];
     if(msg)toast(msg);
   }catch(e){toast('沒有完成：'+(e.message||e)+'（這台的內容都還在）')}
   finally{cloudBusy=false;if(btn?.isConnected){btn.disabled=false;btn.textContent=label}renderCloudCard()}
@@ -46,7 +47,7 @@ function ensureDialog(){
 function openNewProject(lead=''){
   if(busyNow()){toast('請先停止錄音或完成處理');return}
   const d=ensureDialog(),pending=S()?.info?.()?.sum?.kind==='pending'&&S()?.info?.()?.linked;
-  d.innerHTML=`<form method="dialog"><div class="dialog-top"><h2>開新專案</h2><button class="icon-btn" aria-label="關閉">×</button></div>${lead?`<p class="ph-lead">${lead}</p>`:''}<p>目前的「${esc(state.title||'未命名')}」會自動收進<strong>我的專案</strong>，之後隨時可以打開繼續。</p>${pending?'<p class="ph-warn">⚠ 這份還有修改沒存到雲端。建議先按首頁的「存到雲端」，等顯示「已存到雲端」再開新的。</p>':''}<div class="ph-choices"><button type="button" class="ph-choice" data-hub="blank"><strong>空白開始</strong><small>自己新增大題、題目，再錄音</small></button><button type="button" class="ph-choice" data-hub="import"><strong>匯入錄音稿</strong><small>貼上文字或選 Word 檔，自動拆好題目</small></button></div><button class="secondary">先不要</button></form>`;
+  d.innerHTML=`<form method="dialog"><div class="dialog-top"><h2>開新專案</h2><button class="icon-btn" aria-label="關閉">×</button></div>${lead?`<p class="ph-lead">${lead}</p>`:''}<p>目前的「${esc(state.title||'未命名')}」會自動收進<strong>我的專案</strong>，之後隨時可以打開繼續。</p>${pending?'<p class="ph-warn">⚠ 這份還有修改沒存到雲端。建議先到雲端專案按「存到雲端」，等顯示「已存到雲端」再開新的。</p>':''}<div class="ph-choices"><button type="button" class="ph-choice" data-hub="blank"><strong>空白開始</strong><small>自己新增大題、題目，再錄音</small></button><button type="button" class="ph-choice" data-hub="import"><strong>匯入錄音稿／直接寫</strong><small>貼上文字或選 Word、TXT 檔，自動拆好題目</small></button></div><button class="secondary">先不要</button></form>`;
   d.showModal();
 }
 async function startBlank(btn){
@@ -67,6 +68,12 @@ function finishProject(){
   if(S()?.info?.()?.linked)S().saveNow().catch(()=>{});
   openNewProject('✓ 「'+esc(state.title||'未命名')+'」已完成。要開下一份嗎？');
 }
+function renderFinishRow(){
+  const host=document.getElementById('exportResult');if(!host)return;
+  let row=document.getElementById('finishRow');
+  if(!row){row=document.createElement('div');row.id='finishRow';row.className='finish-row';host.append(row)}
+  row.innerHTML=state.finishedAt?`<span class="ph-done">✓ 這份已標成完成（${when(state.finishedAt)}）</span><button type="button" class="ph-link" data-hub="finish">改回製作中</button>`:`<span>這份考卷做完了嗎？</span><button type="button" class="secondary" data-hub="finish">✓ 這份完成了</button>`;
+}
 function openProjects(){if(busyNow()){toast('請先停止錄音或完成處理');return}openDraftShelf('draft')}
 
 /* ---------- 首頁 ---------- */
@@ -75,7 +82,8 @@ function renderHub(){
   let card=document.getElementById('cloudCard');
   if(!card){card=document.createElement('section');card.id='cloudCard';card.className='cloud-card';card.setAttribute('aria-label','專案與雲端存檔');card.innerHTML='<div class="cc-cloud" aria-live="polite"></div><div id="projectHubBar" class="project-hub-bar"></div>';slot.append(card)}
   const bar=document.getElementById('projectHubBar');
-  bar.innerHTML=`${state.finishedAt?`<span class="ph-done" title="${when(state.finishedAt)} 完成">✓ 已完成</span>`:''}<button type="button" data-hub="new">＋ 開新專案</button><button type="button" data-hub="list">我的專案</button><button type="button" data-hub="finish">${state.finishedAt?'改回製作中':'✓ 這份完成了'}</button>`;
+  bar.innerHTML=`<span class="ph-current">目前：${esc(state.title||'未命名')}${state.finishedAt?` <span class="ph-done" title="${when(state.finishedAt)} 完成">✓ 已完成</span>`:''}</span><button type="button" class="ph-link" data-hub="list">我的專案 →</button>`;
+  renderFinishRow();
   renderCloudCard();
 }
 document.addEventListener('click',e=>{
@@ -91,9 +99,10 @@ document.addEventListener('click',e=>{
   if(k==='cloudProjects'){$('#draftShelfDialog')?.close();S()?.openPanel?.();return}
 });
 window.addEventListener('studio-sync-status',renderCloudCard);
+window.addEventListener('studio-sync-signed-in',e=>{if(e.detail==='up')cloudAct('up',document.querySelector('.cloud-card [data-hub=up]'))});
 window.addEventListener('online',renderCloudCard);window.addEventListener('offline',renderCloudCard);
 window.ProjectHub={render:renderHub};
 (async()=>{while(!window.StudioLoaded||!document.getElementById('hubSlot'))await new Promise(r=>setTimeout(r,150));renderHub()})();
 })();
-/* 首頁重畫時一併更新專案列（與 ux-v104 的 wrap 同法）。 */
-(()=>{const orig=window.renderWorktable;if(typeof orig!=='function')return;window.renderWorktable=function(...a){const r=orig.apply(this,a);try{window.ProjectHub.render()}catch{}return r}})();
+/* 首頁與小封重畫時一併更新專案列與結案列（與 ux-v104 的 wrap 同法）。 */
+for(const name of ['renderWorktable','renderExport'])(()=>{const orig=window[name];if(typeof orig!=='function')return;window[name]=function(...a){const r=orig.apply(this,a);try{window.ProjectHub.render()}catch{}return r}})();

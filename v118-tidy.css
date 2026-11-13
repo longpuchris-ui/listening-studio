@@ -1,0 +1,44 @@
+/* v118 整體整理：使用說明分組、雲端專案視窗只放雲端、資料庫「開新專案」、小封結案列、AI 配音按鈕顯示文字 */
+#studioGuide .sg-group{margin:18px 0 4px;padding:0 2px;font-size:13px;letter-spacing:.08em;color:#8a6f9e;font-weight:800}
+#studioGuide .sg-group:first-child{margin-top:4px}
+
+/* 雲端專案視窗 */
+.sync-dialog .sync-projects-head{margin:14px 0 4px;font-size:15px;color:#4b3a6b}
+.sync-dialog .sync-projects-head:has(+ #syncProjects:empty){display:none}
+.sync-dialog .sync-more{margin:12px 0 4px;border-top:1px dashed #d8c7a3;padding-top:8px}
+.sync-dialog .sync-more>summary{cursor:pointer;min-height:40px;display:flex;align-items:center;font-size:14px;font-weight:700;color:#6d5f7a}
+.sync-dialog .sync-more p,.sync-dialog .sync-more{font-size:14px;line-height:1.55}
+.sync-dialog .sync-more h3{font-size:14px;margin:12px 0 4px;color:#6d5f7a}
+.sync-dialog .sync-pending-head:has(+ #syncPending:empty){display:none}
+.sync-dialog .sync-browser-advice{color:#6d5f7a}
+.sync-dialog .sync-privacy-note{margin:10px 0 0;font-size:12.5px;line-height:1.6;color:#6d5f7a}
+.sync-dialog .sync-privacy-note a{margin-left:6px;display:inline-flex;align-items:center;min-height:32px}
+.sync-dialog #syncStatus:empty,.sync-dialog #syncSafe:empty,.sync-dialog #syncDetail:empty,.sync-dialog #syncCurrent:empty{display:none}
+.project-hub-bar{justify-content:space-between}
+.project-hub-bar .ph-current{font-size:13.5px;color:#5d4e40;min-width:0;overflow-wrap:anywhere}
+.project-hub-bar button.ph-link,.finish-row .ph-link{flex:0 0 auto;border:0;background:none;color:#5b3c8a;text-decoration:underline;text-underline-offset:3px;font:700 14px/1.2 inherit;min-height:40px;padding:4px 6px;cursor:pointer}
+
+/* 小封：串好音檔後的結案列 */
+.finish-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:10px 12px;border-radius:14px;background:#f4fbf5;border:1px dashed #8cc79c;font-size:14px;color:#3f3226}
+.finish-row button.secondary{min-height:40px;padding:4px 14px}
+
+/* 資料庫：開新專案抽屜 */
+.library-project-tools .library-new small{display:block;font-size:12px;font-weight:600;opacity:.75;margin-top:2px}
+@media(max-width:600px){.library-project-tools .library-new{grid-column:1/-1}}
+.in-workroom .library-project-tools .library-new{flex-direction:column}
+
+/* 麥麥：電腦版 AI 配音按鈕一律顯示文字 */
+@media(min-width:1001px){.record-tools.ux-tight .ai-toolbar span{display:inline}}
+
+/* 首頁雲端監視器：「雲端專案」與狀態小字置中對齊在監視器下方 */
+body:not(.in-workroom) .top-actions .sync-entry .cloud-connection-copy{left:50%!important;right:auto!important;transform:translateX(-50%);width:max-content!important;max-width:150px;text-align:center!important}
+body:not(.in-workroom) .top-actions .sync-entry:after{left:50%!important;right:auto!important;transform:translateX(-50%);width:auto!important;text-align:center}
+@media(max-width:600px){body:not(.in-workroom) .top-actions .sync-entry .cloud-connection-copy{max-width:110px}}
+
+/* 細節修正 */
+.sync-dialog .sync-more>summary{list-style:none;gap:6px}
+.sync-dialog .sync-more>summary::-webkit-details-marker{display:none}
+.sync-dialog .sync-more>summary:before{content:'▸';transition:transform .15s}
+.sync-dialog .sync-more[open]>summary:before{transform:rotate(90deg)}
+.project-hub-bar button.ph-link,.finish-row .ph-link{box-shadow:none!important;border-radius:6px}
+@media(min-width:601px){.library-project-tools .library-new small{display:none}}
