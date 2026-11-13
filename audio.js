@@ -10,22 +10,23 @@ function order(state) {
   if(round>0&&state.replay&&clip(state.replay,'重播提醒'))gap(state.settings.sectionGap,'重播提醒後');
   for(let si=0;si<state.sections.length;si++) {
    const sec=state.sections[si];
-   for(let repeat=0;repeat<state.settings.repeats;repeat++) {
+   const groupReplay=hasGroupReplay(sec),sectionRepeats=groupReplay?1:state.settings.repeats;
+    for(let repeat=0;repeat<sectionRepeats;repeat++) {
     if(sec.heading)clip(sec.heading);clip(sec.prompt,sec.title+' · 引導語');const playedPassages=new Set();
-    sec.questions.forEach((q,qi)=>{
+    questionGroups(sec).forEach((g,gi,groups)=>{const passes=groupReplay&&isDialogueGroup(g)?2:1,noRepeat=passes>1;for(let pass=0;pass<passes;pass++){if(pass>0){gap(sec.groupReplayGap??3,'題組重播前');playedPassages.delete(g[0].passageId)}g.forEach((q,k)=>{
      if(q.passageId&&!playedPassages.has(q.passageId)){const passage=(sec.passages||[]).find(p=>p.id===q.passageId);(passage?.clips||[]).forEach((c,i)=>{if(i>0)gap(state.settings.dialogueGap??.6,'共用對話換人');clip(c)});playedPassages.add(q.passageId)}if(q.numberClip&&q.arrangement?.numberEnabled!==false)clip(q.numberClip);
-     const content=questionClips(q),wholeRepeat=q.arrangement?.mode==='single'&&!content.some(c=>q.options.includes(c)||c.speaker||c.speakerName||c.printedItems)&&q.arrangement?.contentRepeat==='2';
+     const content=questionClips(q),wholeRepeat=!noRepeat&&q.arrangement?.mode==='single'&&!content.some(c=>q.options.includes(c)||c.speaker||c.speakerName||c.printedItems)&&q.arrangement?.contentRepeat==='2';
      content.forEach((c,i)=>{
       const option=q.options.includes(c),single=(q.arrangement?.mode==='single'||(!q.arrangement&&!q.turns?.length));
       if(option){gap(state.settings.optionGap,'選項前留白');if(state.settings.optionLabelsEnabled){const label=resolveOptionLabel(state,q,c,q.options.indexOf(c));if(label)clip(label,undefined,c.id);gap(state.settings.labelGap??.25,'代號後留白')}}
       else if(c.speaker&&i>0&&(q.arrangement?.mode==='dialogue'||i>1))gap(state.settings.dialogueGap??.6,'對話換人');
       clip(c,sec.title+' · '+c.label);
-      if(!wholeRepeat&&(option?state.settings.itemRepeat:(['1','2'].includes(q.arrangement?.contentRepeat)?false:state.settings.itemRepeat))&&(option||(single&&(c===q.stem||q.contentClips?.includes(c))&&!q.options.some(x=>questionClips(q).includes(x))))){gap(state.settings.itemRepeatGap??.5,'同一內容連唸間隔');clip(c,sec.title+' · '+c.label+'（再唸一次）')}
+      if(!noRepeat&&!wholeRepeat&&(option?state.settings.itemRepeat:(['1','2'].includes(q.arrangement?.contentRepeat)?false:state.settings.itemRepeat))&&(option||(single&&(c===q.stem||q.contentClips?.includes(c))&&!q.options.some(x=>questionClips(q).includes(x))))){gap(state.settings.itemRepeatGap??.5,'同一內容連唸間隔');clip(c,sec.title+' · '+c.label+'（再唸一次）')}
      });
      if(wholeRepeat){gap(state.settings.itemRepeatGap??.5,'整段內容連唸間隔');content.forEach(c=>clip(c,sec.title+' · '+c.label+'（再唸一次）'))}
-     if(qi<sec.questions.length-1)gap(state.settings.questionGap,'題目之間');
-    });
-    if(repeat<state.settings.repeats-1)gap(state.settings.sectionGap,'同一大題重播前');
+     if(k<g.length-1)gap(state.settings.questionGap,'題目之間');
+    })}if(gi<groups.length-1)gap(state.settings.questionGap,'題目之間');});
+    if(repeat<sectionRepeats-1)gap(state.settings.sectionGap,'同一大題重播前');
    }
    if(si<state.sections.length-1)gap(state.settings.sectionGap,'大題之間');
   }
@@ -33,6 +34,10 @@ function order(state) {
  }
  gap(state.settings.sectionGap,'結束提醒前'); clip(state.end); return out;
 }
+/* 題組: consecutive questions sharing one passage; a question without a passage is its own group. */
+function questionGroups(sec){const out=[];for(const q of sec.questions){const last=out.at(-1);if(q.passageId&&last&&last[0].passageId===q.passageId)last.push(q);else out.push([q])}return out}
+function isDialogueGroup(g){return !!g[0].passageId||g.some(q=>q.arrangement?.mode==='dialogue'||(!q.arrangement&&q.turns?.length)||q.contentClips?.some(c=>c.speaker||c.speakerName))}
+function hasGroupReplay(sec){return sec.groupReplay===true&&questionGroups(sec).some(isDialogueGroup)}
 function questionClips(q){const m=q.arrangement?.mode;if(q.contentClips)return [...q.contentClips.filter(c=>m!=='single'||!c.speakerName),...(q.arrangement?.recordOptions===false?[]:q.options)];return [...(m==='dialogue'?[]:[q.stem]),...(m==='single'?[]:(q.turns||[])),...(q.arrangement?.recordOptions===false?[]:q.options)]}
 function inventoryClips(s){return [...(s.optionLabels||[]),...s.intro,s.start,...s.sections.flatMap(sec=>[...(sec.heading?[sec.heading]:[]),sec.prompt,...(sec.passages||[]).flatMap(p=>p.clips),...sec.questions.flatMap(q=>[...(q.numberClip?[q.numberClip]:[]),...(q.contentClips||[]),q.stem,...(q.turns||[]),...q.options,...(q.retainedOptions||[])])]),...(s.replay?[s.replay]:[]),s.end]}
 function resolveOptionLabel(s,q,c,i){return c.answerCodeId!==undefined?(s.optionLabels||[]).find(x=>x.id===c.answerCodeId):s.optionLabels?.[c.answerCodeIndex??i]}
@@ -71,5 +76,5 @@ async function preview(c,settings){const rate=44100;const pcm=await prepared(c,s
 function captureOptions(settings){return {noiseSuppression:!!settings.noiseCapture,echoCancellation:settings.echoCapture===true,autoGainControl:false}}
 function makeRecorder(stream,settings,Recorder=root.MediaRecorder){const types=['audio/webm;codecs=opus','audio/mp4','audio/webm'].filter(t=>Recorder.isTypeSupported(t));const bitrate=[128000,192000].includes(settings.captureBitrate)?settings.captureBitrate:null;let last;for(const mime of [...types,null]){const base=mime?{mimeType:mime}:{};for(const options of bitrate?[{...base,audioBitsPerSecond:bitrate},base]:[base]){try{return new Recorder(stream,options)}catch(e){last=e;if(!['NotSupportedError','TypeError'].includes(e.name))throw e}}}throw last||Error('沒有可用的錄音格式')}
 function captureDiagnostics(stream,recorder){let settings={};try{settings=stream.getAudioTracks()[0]?.getSettings?.()||{}}catch{}const result={};for(const key of ['sampleRate','channelCount','noiseSuppression','echoCancellation','autoGainControl']){const v=settings[key];if(typeof v==='boolean'||typeof v==='number'&&Number.isFinite(v))result[key]=v}if(typeof recorder?.mimeType==='string')result.mimeType=recorder.mimeType;if(Number.isFinite(recorder?.audioBitsPerSecond))result.audioBitsPerSecond=recorder.audioBitsPerSecond;return result}
-root.AudioBook={playable,speechRms,captureOptions,makeRecorder,captureDiagnostics,resolveOptionLabel,sectionClips,usedOptionLabels,inventoryClips,order,allClips,questionClips,timbre,effective,duration,processPCM,pcm16,header,decode,build,preview,context,clearCache:()=>{cache.clear();cacheBytes=0}};
+root.AudioBook={questionGroups,isDialogueGroup,hasGroupReplay,playable,speechRms,captureOptions,makeRecorder,captureDiagnostics,resolveOptionLabel,sectionClips,usedOptionLabels,inventoryClips,order,allClips,questionClips,timbre,effective,duration,processPCM,pcm16,header,decode,build,preview,context,clearCache:()=>{cache.clear();cacheBytes=0}};
 })(typeof window!=='undefined'?window:globalThis);

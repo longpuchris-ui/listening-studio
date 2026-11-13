@@ -24,3 +24,10 @@
 @media(max-width:1000px){
  #mobileRecordDeck{padding-bottom:env(safe-area-inset-bottom)}
 }
+
+/* v111 題組重播：勾選框與文字同一行 */
+.group-replay-controls label{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:10px;width:auto!important;max-width:none!important;grid-template-columns:none!important;justify-content:flex-start!important}
+.group-replay-controls label>span{flex:1 1 auto;min-width:0;text-align:left}
+.group-replay-controls label input[type=checkbox]{flex:none;margin:0}
+#recordPage details.group-replay-controls>label{display:flex!important;width:100%!important}
+#recordPage details.group-replay-controls>label:has(input[type=number]){width:auto!important;display:inline-flex!important}
