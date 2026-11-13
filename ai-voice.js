@@ -75,7 +75,7 @@ function plan(){
 function rowLabel(r){const l=r.c.speaker?roleName(r.c.speaker)+'・'+(r.c.label||'').replace(/^說話者\s*\d\s*[·・]\s*/,''):(r.c.label||'段落');return(scope==='all'?chapterName(r.ch)+'・':'')+l}
 
 /* ---------- 錯誤訊息 ---------- */
-const MSG={UNAUTHENTICATED:'登入已失效，請重新登入。',FORBIDDEN:'這個 Google 帳號還沒開通 AI 配音，請找管理的老師把你的 Email 加進名單。',STALE:'後端設定剛更新，請重新登入一次。',QUOTA:'今天的 AI 配音額度用完了（每日上限），明天再試，或請管理的老師調高上限。',BUSY:'上一段還在處理中，請等一下再試（失敗後約 90 秒才能再送）。',DUPLICATE:'這個請求已送過，不會重送。',INVALID_INPUT:'這段稿子格式無法送出（可能太長或聲音不在清單內）。',PROVIDER_AUTH:'ElevenLabs 拒絕目前的金鑰或聲音設定。',PROVIDER_LIMIT:'ElevenLabs 回報頻率或額度限制，請稍後再試。',UPSTREAM:'語音服務沒有回傳有效音檔（可能已扣額度）。',PROVIDER_PAYMENT_REQUIRED:'ElevenLabs 要求付款（402）。',PROVIDER_PAID_PLAN_REQUIRED:'ElevenLabs 表示這個聲音或功能需要付費方案。',PROVIDER_INSUFFICIENT_CREDITS:'ElevenLabs 額度不足，本月 credits 可能用完了。',PROVIDER_VOICE_ACCESS_DENIED:'ElevenLabs 拒絕使用這個聲音。',PROVIDER_MODEL_ACCESS_DENIED:'ElevenLabs 拒絕使用 Eleven v3 模型。',PROVIDER_INSUFFICIENT_PERMISSIONS:'API 金鑰缺少 Text to Speech 權限。',UNAVAILABLE:'AI 配音服務暫時無法使用。',INVALID_RESPONSE:'回傳的資料格式不對，沒有存入。',NETWORK:'網路連線失敗，請確認網路後再試。',CANCELLED:'已停止。',GIS:'Google 登入元件載入失敗，請重新整理後再試。'};
+const MSG={UNAUTHENTICATED:'登入已失效，請重新登入。',FORBIDDEN:'這個 Google 帳號還沒開通 AI 配音。請把你的 ElevenLabs 金鑰和這個 Email 私訊給管理的老師。',STALE:'後端設定剛更新，請重新登入一次。',QUOTA:'今天的 AI 配音已達每日上限，明天再試。',BUSY:'上一段還在處理中，請等一下再試（失敗後約 90 秒才能再送）。',DUPLICATE:'這個請求已送過，不會重送。',INVALID_INPUT:'這段稿子格式無法送出（可能太長或聲音不在清單內）。',PROVIDER_AUTH:'ElevenLabs 拒絕你的金鑰，請找管理的老師確認金鑰是否正確。',PROVIDER_LIMIT:'ElevenLabs 回報頻率或額度限制，請稍後再試。',UPSTREAM:'語音服務沒有回傳有效音檔（可能已扣額度）。',PROVIDER_PAYMENT_REQUIRED:'ElevenLabs 要求付款（402）。',PROVIDER_PAID_PLAN_REQUIRED:'ElevenLabs 表示這個聲音或功能需要付費方案。',PROVIDER_INSUFFICIENT_CREDITS:'你的 ElevenLabs 帳號本月 credits 用完了，下個月會自動補回。',PROVIDER_VOICE_ACCESS_DENIED:'ElevenLabs 拒絕使用這個聲音。',PROVIDER_MODEL_ACCESS_DENIED:'ElevenLabs 拒絕使用 Eleven v3 模型。',PROVIDER_INSUFFICIENT_PERMISSIONS:'API 金鑰缺少 Text to Speech 權限。',UNAVAILABLE:'AI 配音服務暫時無法使用。',INVALID_RESPONSE:'回傳的資料格式不對，沒有存入。',NETWORK:'網路連線失敗，請確認網路後再試。',CANCELLED:'已停止。',GIS:'Google 登入元件載入失敗，請重新整理後再試。'};
 const msg=code=>MSG[code]||'AI 配音沒有完成（'+code+'）。';
 
 /* ---------- 登入 ---------- */
@@ -172,8 +172,8 @@ function buildPanel(){
   if($('#aiVoiceDialog'))return;
   const d=document.createElement('dialog');d.id='aiVoiceDialog';
   d.innerHTML=`<form method="dialog"><div class="dialog-top"><h2>AI 配音</h2><button class="icon-btn" aria-label="關閉 AI 配音">×</button></div>
-  <p class="ai-note">用 ElevenLabs 幫<strong>英文段落</strong>配音，一句一段，存進來和「匯入」一樣可以剪輯、復原。中文段落請自己錄。<b>1 個字元約 1 credit</b>，額度由管理的老師提供。</p>
-  <section class="ai-step" id="aiLogin"><h3>① 登入</h3><p id="aiWho">需要已開通的 Google 帳號。</p><button type="button" class="secondary" data-ai="signin">用 Google 登入</button><div id="aiGoogle"></div></section>
+  <p class="ai-note">用 ElevenLabs 幫<strong>英文段落</strong>配音，一句一段，存進來和「匯入」一樣可以剪輯、復原。中文段落請自己錄。<b>1 個字元約 1 credit</b>，扣的是<strong>你自己 ElevenLabs 帳號</strong>的額度（免費方案每月 10,000 credits）。</p>
+  <section class="ai-step" id="aiLogin"><h3>① 登入</h3><p id="aiWho">需要已開通的 Google 帳號：先把你的 ElevenLabs 金鑰和 Email 私訊給管理的老師。</p><button type="button" class="secondary" data-ai="signin">用 Google 登入</button><div id="aiGoogle"></div></section>
   <section class="ai-step" id="aiVoices" hidden><h3>② 聲音</h3><div class="ai-voice-grid"></div><p class="ai-small">每份試卷共用：題目旁白用「旁白」，對話依角色自動套用。想先聽聲音，可以用試音頁比較。</p></section>
   <section class="ai-step" id="aiRun" hidden><h3>③ 生成</h3><div id="aiTargets"></div><progress id="aiBar" max="1" value="0" hidden></progress></section>
   <p id="aiStatus" role="status" aria-live="polite"></p>
@@ -196,7 +196,7 @@ function buildPanel(){
 function paint(){
   const d=$('#aiVoiceDialog');if(!d)return;
   const ok=!!auth?.account;
-  d.querySelector('#aiWho').textContent=ok?'已登入：'+auth.email:'需要已開通的 Google 帳號。';
+  d.querySelector('#aiWho').textContent=ok?'已登入：'+auth.email:'需要已開通的 Google 帳號：先把你的 ElevenLabs 金鑰和 Email 私訊給管理的老師。';
   d.querySelector('[data-ai=signin]').hidden=ok;
   d.querySelector('#aiVoices').hidden=!ok;d.querySelector('#aiRun').hidden=!ok;
   d.querySelector('[data-ai=stop]').hidden=!job||job.one;
