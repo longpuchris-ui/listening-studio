@@ -13,7 +13,7 @@ function order(state) {
    const groupReplay=hasGroupReplay(sec),sectionRepeats=groupReplay?1:state.settings.repeats;
     for(let repeat=0;repeat<sectionRepeats;repeat++) {
     if(sec.heading)clip(sec.heading);clip(sec.prompt,sec.title+' · 引導語');const playedPassages=new Set();
-    questionGroups(sec).forEach((g,gi,groups)=>{const passes=groupReplay&&isDialogueGroup(g)?2:1,noRepeat=passes>1;for(let pass=0;pass<passes;pass++){if(pass>0){gap(sec.groupReplayGap??3,'題組重播前');playedPassages.delete(g[0].passageId)}g.forEach((q,k)=>{
+    questionGroups(sec).forEach((g,gi,groups)=>{const passes=groupReplay&&isDialogueGroup(g)?2:1,noRepeat=passes>1;for(let pass=0;pass<passes;pass++){if(pass>0){gap(state.settings.groupReplayGap??sec.groupReplayGap??3,'題組重播前');playedPassages.delete(g[0].passageId)}g.forEach((q,k)=>{
      if(q.passageId&&!playedPassages.has(q.passageId)){const passage=(sec.passages||[]).find(p=>p.id===q.passageId);(passage?.clips||[]).forEach((c,i)=>{if(i>0)gap(state.settings.dialogueGap??.6,'共用對話換人');clip(c)});playedPassages.add(q.passageId)}if(q.numberClip&&q.arrangement?.numberEnabled!==false)clip(q.numberClip);
      const content=questionClips(q),wholeRepeat=!noRepeat&&q.arrangement?.mode==='single'&&!content.some(c=>q.options.includes(c)||c.speaker||c.speakerName||c.printedItems)&&q.arrangement?.contentRepeat==='2';
      content.forEach((c,i)=>{
