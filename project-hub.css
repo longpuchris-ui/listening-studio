@@ -1,0 +1,33 @@
+/* v114 專案列與雲端狀態牌 */
+.project-hub-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed #d8c7a3}
+.project-hub-bar button{flex:1 1 auto;min-height:38px;padding:4px 10px;border-radius:999px;border:1px solid #c9b6e4;background:#fff;color:#4b3a6b;font:600 14px/1.2 inherit;cursor:pointer}
+.project-hub-bar button:hover{background:#f3eefb}
+.project-hub-bar button:focus-visible,.cloud-card button:focus-visible,.ph-choice:focus-visible{outline:3px solid #2b8a8a;outline-offset:2px}
+.ph-done{padding:4px 10px;border-radius:999px;background:#e3f4e8;color:#24683b;font:700 13px/1.2 inherit}
+.cloud-card{box-sizing:border-box;width:min(330px,calc(100% - 32px));padding:10px 12px;border-radius:16px;background:rgba(255,253,246,.96);border:2px solid #e2cf9f;box-shadow:0 6px 18px rgba(60,40,20,.18);color:#3f3226;z-index:5}
+.cloud-card[data-kind=ok]{border-color:#8cc79c}
+.cloud-card[data-kind=warn]{border-color:#e7a95a}
+.cloud-card[data-kind=newer]{border-color:#6aa7d8}
+.cloud-card[data-kind=busy]{border-color:#c9b6e4}
+.cc-head{display:flex;gap:10px;align-items:flex-start}
+.cc-head strong{display:block;font-size:15px;line-height:1.35}
+.cc-head small{display:block;font-size:12.5px;line-height:1.45;color:#5d4e40;margin-top:2px}
+.cc-icon{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:#f1e6c9}
+.cloud-card[data-kind=ok] .cc-icon{background:#d9f0df;color:#24683b}
+.cloud-card[data-kind=warn] .cc-icon{background:#fbe5c6;color:#8a4b00}
+.cloud-card[data-kind=newer] .cc-icon{background:#dceaf7;color:#1f5d8f}
+.cc-actions{display:flex;gap:6px;margin-top:8px}
+.cc-actions button{flex:1;min-height:40px;padding:4px 8px;border-radius:12px;border:1px solid #cdbb97;background:#fff;color:#3f3226;font:600 14px/1.2 inherit;cursor:pointer}
+.cc-actions button.cc-strong{background:#6d4fa3;border-color:#6d4fa3;color:#fff}
+.cc-actions button:disabled{opacity:.6;cursor:progress}
+@media (min-width:1001px){#worktable .cloud-card{position:absolute;top:200px;right:24px;width:300px;z-index:20}}
+@media (max-width:1000px){#worktable .cloud-card{position:relative;z-index:6;margin:8px auto 0;width:calc(100% - 32px);max-width:520px}.worktable .studio-guide-prop{margin-top:var(--hub-card-h,0px)}}
+.project-hub-dialog{max-width:520px;width:calc(100% - 32px);border-radius:18px;border:2px solid #d7c39a;background:#fffaf0;color:#3f3226}
+.project-hub-dialog p{line-height:1.6}
+.ph-lead{font-weight:700;color:#24683b}
+.ph-warn{padding:8px 10px;border-radius:10px;background:#fbe5c6}
+.ph-choices{display:grid;gap:10px;margin:12px 0}
+.ph-choice{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border-radius:14px;border:2px solid #c9b6e4;background:#fff;text-align:left;cursor:pointer;color:#3f3226}
+.ph-choice strong{font-size:17px}.ph-choice small{font-size:13.5px;color:#5d4e40}
+.ph-choice:hover{background:#f6f1fc}
+.shelf-cloud-link{margin-left:auto;margin-right:8px;min-height:40px;padding:4px 14px;border-radius:999px;border:1px solid #9fc0e0;background:#eef5fc;color:#1f4f7a;font-weight:700;cursor:pointer}
