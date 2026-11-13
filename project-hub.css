@@ -4,7 +4,7 @@
 .project-hub-bar button:hover{background:#f3eefb}
 .project-hub-bar button:focus-visible,.cloud-card button:focus-visible,.ph-choice:focus-visible{outline:3px solid #2b8a8a;outline-offset:2px}
 .ph-done{padding:4px 10px;border-radius:999px;background:#e3f4e8;color:#24683b;font:700 13px/1.2 inherit}
-.cloud-card{box-sizing:border-box;width:min(330px,calc(100% - 32px));padding:10px 12px;border-radius:16px;background:rgba(255,253,246,.96);border:2px solid #e2cf9f;box-shadow:0 6px 18px rgba(60,40,20,.18);color:#3f3226;z-index:5}
+.cloud-card{box-sizing:border-box;width:100%;margin:4px 0 12px;padding:12px 14px;border-radius:16px;background:#fffdf6;border:2px solid #e2cf9f;color:#3f3226}
 .cloud-card[data-kind=ok]{border-color:#8cc79c}
 .cloud-card[data-kind=warn]{border-color:#e7a95a}
 .cloud-card[data-kind=newer]{border-color:#6aa7d8}
@@ -20,8 +20,6 @@
 .cc-actions button{flex:1;min-height:40px;padding:4px 8px;border-radius:12px;border:1px solid #cdbb97;background:#fff;color:#3f3226;font:600 14px/1.2 inherit;cursor:pointer}
 .cc-actions button.cc-strong{background:#6d4fa3;border-color:#6d4fa3;color:#fff}
 .cc-actions button:disabled{opacity:.6;cursor:progress}
-@media (min-width:1001px){#worktable .cloud-card{position:absolute;top:200px;right:24px;width:300px;z-index:20}}
-@media (max-width:1000px){#worktable .cloud-card{position:relative;z-index:6;margin:8px auto 0;width:calc(100% - 32px);max-width:520px}.worktable .studio-guide-prop{margin-top:var(--hub-card-h,0px)}}
 .project-hub-dialog{max-width:520px;width:calc(100% - 32px);border-radius:18px;border:2px solid #d7c39a;background:#fffaf0;color:#3f3226}
 .project-hub-dialog p{line-height:1.6}
 .ph-lead{font-weight:700;color:#24683b}
@@ -31,3 +29,4 @@
 .ph-choice strong{font-size:17px}.ph-choice small{font-size:13.5px;color:#5d4e40}
 .ph-choice:hover{background:#f6f1fc}
 .shelf-cloud-link{margin-left:auto;margin-right:8px;min-height:40px;padding:4px 14px;border-radius:999px;border:1px solid #9fc0e0;background:#eef5fc;color:#1f4f7a;font-weight:700;cursor:pointer}
+.sync-detail-head{margin:14px 0 2px;font-size:14px;color:#6d5f7a}

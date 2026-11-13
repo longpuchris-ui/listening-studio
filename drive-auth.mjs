@@ -59,4 +59,4 @@ if(config.clientId&&/^[\w-]+\.apps\.googleusercontent\.com$/.test(config.clientI
   }catch(e){if(epoch!==authEpoch)return;credential=null;bridge.account=null;window.dispatchEvent(new Event('studio-drive-account'));bridge.error=e.name==='AbortError'?'確認Google帳號逾時或已中止，請檢查網路後重新點選授權；本機內容保留。':e.message;window.dispatchEvent(new Event('studio-drive-ready'))}finally{clearTimeout(profileTimer);if(epoch===authEpoch){pending=false;profileController=null;progress('idle','')}}}
  });client=makeClient(authEpoch);bridge.ready=true;window.dispatchEvent(new Event('studio-drive-ready'))};document.head.append(script);
 }else bridge.error=error||'尚未設定Google OAuth Client ID，私人Drive同步尚未啟用。';
-await import('./drive-ui.js?v=114');
+await import('./drive-ui.js?v=115');

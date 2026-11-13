@@ -71,18 +71,18 @@ function openProjects(){if(busyNow()){toast('請先停止錄音或完成處理')
 
 /* ---------- 首頁 ---------- */
 function renderHub(){
-  const board=document.querySelector('#worktable .studio-nameboard');if(!board)return;
+  const slot=document.getElementById('hubSlot');if(!slot)return;
   let card=document.getElementById('cloudCard');
-  if(!card){card=document.createElement('section');card.id='cloudCard';card.className='cloud-card';card.setAttribute('aria-label','專案與雲端存檔');card.innerHTML='<div class="cc-cloud" aria-live="polite"></div><div id="projectHubBar" class="project-hub-bar"></div>';board.after(card)}
+  if(!card){card=document.createElement('section');card.id='cloudCard';card.className='cloud-card';card.setAttribute('aria-label','專案與雲端存檔');card.innerHTML='<div class="cc-cloud" aria-live="polite"></div><div id="projectHubBar" class="project-hub-bar"></div>';slot.append(card)}
   const bar=document.getElementById('projectHubBar');
   bar.innerHTML=`${state.finishedAt?`<span class="ph-done" title="${when(state.finishedAt)} 完成">✓ 已完成</span>`:''}<button type="button" data-hub="new">＋ 開新專案</button><button type="button" data-hub="list">我的專案</button><button type="button" data-hub="finish">${state.finishedAt?'改回製作中':'✓ 這份完成了'}</button>`;
   renderCloudCard();
-  if(!card.dataset.observed&&window.ResizeObserver){card.dataset.observed='1';new ResizeObserver(()=>{const ws=document.getElementById('worktable');if(ws)ws.style.setProperty('--hub-card-h',(matchMedia('(max-width:1000px)').matches?card.offsetHeight+8:0)+'px')}).observe(card)}
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-hub]');if(!b)return;
   const k=b.dataset.hub;
   if(k==='up'||k==='down')return cloudAct(k,b);
+  if(['new','list','finish'].includes(k))document.querySelector('.sync-dialog')?.close();
   if(k==='new')return openNewProject();
   if(k==='list')return openProjects();
   if(k==='finish')return finishProject();
@@ -93,7 +93,7 @@ document.addEventListener('click',e=>{
 window.addEventListener('studio-sync-status',renderCloudCard);
 window.addEventListener('online',renderCloudCard);window.addEventListener('offline',renderCloudCard);
 window.ProjectHub={render:renderHub};
-(async()=>{while(!window.StudioLoaded)await new Promise(r=>setTimeout(r,100));renderHub()})();
+(async()=>{while(!window.StudioLoaded||!document.getElementById('hubSlot'))await new Promise(r=>setTimeout(r,150));renderHub()})();
 })();
 /* 首頁重畫時一併更新專案列（與 ux-v104 的 wrap 同法）。 */
 (()=>{const orig=window.renderWorktable;if(typeof orig!=='function')return;window.renderWorktable=function(...a){const r=orig.apply(this,a);try{window.ProjectHub.render()}catch{}return r}})();
