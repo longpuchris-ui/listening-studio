@@ -76,6 +76,17 @@ function renderFinishRow(){
 }
 function openProjects(){if(busyNow()){toast('請先停止錄音或完成處理');return}openDraftShelf('draft')}
 
+/* ---------- 首頁下方：存檔＋雲端狀態合成一行（v118） ---------- */
+function renderHomeCloud(){
+  const ticket=document.getElementById('finishTicket');if(!ticket)return;
+  let b=document.getElementById('homeCloudState');
+  if(!b){b=document.createElement('button');b.type='button';b.id='homeCloudState';b.className='home-cloud-state';b.addEventListener('click',()=>{if(busyNow()){toast('請先停止錄音或完成處理');return}S()?.openPanel?.()})}
+  const save=document.getElementById('saveState');
+  if(save&&ticket.contains(save)){if(save.nextSibling!==b)save.after(b)}else if(!ticket.contains(b))ticket.querySelector('div')?.prepend(b);
+  const entry=document.querySelector('.sync-entry'),txt=(entry?.querySelector('.cloud-connection-copy')?.textContent||'').trim(),i=S()?.info?.();
+  if(!i?.configured||!txt){b.hidden=true;return}
+  b.hidden=false;b.textContent='雲端：'+txt;b.dataset.kind=entry?.dataset.sync||(i.connected?'':'off');b.title='打開雲端專案';
+}
 /* ---------- 首頁 ---------- */
 function renderHub(){
   const slot=document.getElementById('hubSlot');if(!slot)return;
@@ -84,7 +95,7 @@ function renderHub(){
   const bar=document.getElementById('projectHubBar');
   bar.innerHTML=`<span class="ph-current">目前：${esc(state.title||'未命名')}${state.finishedAt?` <span class="ph-done" title="${when(state.finishedAt)} 完成">✓ 已完成</span>`:''}</span><button type="button" class="ph-link" data-hub="list">我的專案 →</button>`;
   renderFinishRow();
-  renderCloudCard();
+  renderCloudCard();renderHomeCloud();
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-hub]');if(!b)return;
@@ -98,7 +109,7 @@ document.addEventListener('click',e=>{
   if(k==='import'){ensureDialog().close();document.querySelector('[data-action=importScript]')?.click();return}
   if(k==='cloudProjects'){$('#draftShelfDialog')?.close();S()?.openPanel?.();return}
 });
-window.addEventListener('studio-sync-status',renderCloudCard);
+window.addEventListener('studio-sync-status',()=>{renderCloudCard();renderHomeCloud()});
 window.addEventListener('studio-sync-signed-in',e=>{if(e.detail==='up')cloudAct('up',document.querySelector('.cloud-card [data-hub=up]'))});
 window.addEventListener('online',renderCloudCard);window.addEventListener('offline',renderCloudCard);
 window.ProjectHub={render:renderHub};

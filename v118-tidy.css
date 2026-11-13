@@ -42,3 +42,20 @@ body:not(.in-workroom) .top-actions .sync-entry:after{left:50%!important;right:a
 .sync-dialog .sync-more[open]>summary:before{transform:rotate(90deg)}
 .project-hub-bar button.ph-link,.finish-row .ph-link{box-shadow:none!important;border-radius:6px}
 @media(min-width:601px){.library-project-tools .library-new small{display:none}}
+
+/* v118b 首頁下方一行：已自動保存於這台裝置 · 雲端：已同步 10:32（點了打開雲端專案）；監視器下只留「雲端專案」 */
+body:not(.in-workroom) .top-actions .sync-entry .cloud-connection-copy{display:none!important}
+.home-cloud-state{display:inline;margin:0 0 0 6px;padding:2px 4px;min-height:0;border:0;background:none;box-shadow:none;font:inherit;font-size:inherit;color:#5b3c8a;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.home-cloud-state:before{content:'· ';color:#8a7d6e}
+.home-cloud-state[data-kind=ok]{color:#24683b}
+.home-cloud-state[data-kind=newer],.home-cloud-state[data-kind=conflict]{color:#a2461b;font-weight:700}
+.home-cloud-state:focus-visible{outline:3px solid #2b8a8a;outline-offset:2px}
+.in-workroom .home-cloud-state{display:none}
+
+/* 拍仔：題組整組重播卡片 */
+.setting-card .gr-pick{display:inline;margin-left:4px;padding:0 2px;min-height:0;border:0;background:none;box-shadow:none;font:inherit;font-weight:800;color:#5b3c8a;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.setting-card .legacy-repeats{color:#a2461b;font-weight:700}
+.setting-card .legacy-repeats .gr-pick{color:#a2461b}
+body:not(.in-workroom) #finishTicket #saveState{display:inline!important}
+.setting-card .gr-pick{display:inline!important;width:auto!important;height:auto!important;line-height:inherit!important;padding:0!important;margin-top:0!important;vertical-align:baseline;transform:none!important}
+#timingSettings .setting-card p .gr-pick{display:inline!important;min-height:0!important;min-width:0!important;height:auto!important;line-height:inherit!important;padding:0 2px!important;margin:0 0 0 4px!important;font-size:inherit!important;vertical-align:baseline!important}
