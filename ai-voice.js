@@ -1,12 +1,12 @@
 /* 聽力錄音室 v106 · AI 配音（ElevenLabs，經 Cloudflare Worker）
- * - v111：英文、中文段落都可生成；含中文的段落改用「中文」聲音（預設 ZH_VOICE）。
+ * - 只做英文段落；含中文字或標成中文的段落請老師自己錄。
  * - 一句一段生成，存進來的方式和「匯入」相同（可剪輯、可復原）。
  * - 登入資訊只留在記憶體；本機只記住是否開通過與聲音選擇。
  */
 (()=>{
 'use strict';
 const CFG={endpoint:'https://listening-studio-voice-chris.longpuchris.workers.dev',clientId:'964857001905-feio66b11q9vmm1uje930cejhf1pcfk9.apps.googleusercontent.com',origin:'https://longpuchris-ui.github.io'};
-const PREF='listening-ai-voice-v1',ZH_VOICE='1AKkSX7KMPHIWuz76m0n';
+const PREF='listening-ai-voice-v1';
 const CJK=/[㐀-鿿豈-﫿　-〿！-｠]/;
 const $=s=>document.querySelector(s);
 let auth=null,gsiPromise=null,job=null,expiryTimer=0;
@@ -29,19 +29,12 @@ function eligible(c){
   if(!c)return{ok:false,why:'找不到段落'};
   const t=scriptOf(c);
   if(!t)return{ok:false,why:'還沒有稿子'};
+  if(c.lang==='zh'||CJK.test(t))return{ok:false,why:'含中文，請自己錄'};
   if([...t].length>1000)return{ok:false,why:'稿子太長（上限 1000 字元）'};
   return{ok:true,text:t,chars:[...t].length};
 }
-function isZh(c){return c?.lang==='zh'||CJK.test(scriptOf(c)||'')}
-function baseRole(c){return c?.speaker==='A'||c?.speaker==='B'?c.speaker:'narrator'}
-function roleOf(c){return isZh(c)?'zh':baseRole(c)}
-function zhDefault(v){return (v.find(x=>x.id===ZH_VOICE)||v.find(x=>/中文|國語|華語|chinese|mandarin/i.test(x.label)))?.id}
-function voiceFor(c,role=roleOf(c)){const p=pref(),v=auth?.account?.catalog?.voices||[],want=p.voices?.[role];return v.some(x=>x.id===want)?want:(role==='zh'&&zhDefault(v))||(v[role==='B'?1:0]||v[0])?.id}
-/* 中英混在同一段（例：Now, the test begins. 測驗現在開始。）：逐句分語言，英文用原角色聲音、中文用中文聲音，一次生成成一段音檔。 */
-function voicePlan(c,text){const parts=[];for(const seg of text.split(/(?<=[.!?。！？；;])\s*/).filter(x=>x.trim())){const zh=CJK.test(seg),last=parts.at(-1);if(last&&last.zh===zh)last.text+=(zh?'':' ')+seg;else parts.push({zh,text:seg})}
-  if(parts.length<2)return[{text,voiceId:voiceFor(c)}];
-  return parts.map(x=>({text:x.text.trim(),voiceId:voiceFor(c,x.zh?'zh':baseRole(c))}))}
-function planLabel(plan){return [...new Set(plan.map(x=>voiceLabel(x.voiceId)))].join(' ＋ ')}
+function roleOf(c){return c?.speaker==='A'||c?.speaker==='B'?c.speaker:'narrator'}
+function voiceFor(c){const p=pref(),v=auth?.account?.catalog?.voices||[],want=p.voices?.[roleOf(c)];return v.some(x=>x.id===want)?want:(v[roleOf(c)==='B'?1:0]||v[0])?.id}
 function voiceLabel(id){return auth?.account?.catalog?.voices?.find(v=>v.id===id)?.label||'未選'}
 const isAi=c=>c?.ai&&c.ai.version===c.version&&c.blob;
 function chapterClips(ch){
@@ -127,9 +120,9 @@ async function generateClip(c,signal,preapproved=false){
   const e=eligible(c);if(!e.ok)throw Error('SKIP:'+e.why);
   if(!auth?.account||auth.expiresAt<=Date.now()+5000)throw Error('UNAUTHENTICATED');
   if(rec||building)throw Error('BUSYLOCAL');
-  const plan=voicePlan(c,e.text),voiceId=plan[0].voiceId;if(plan.some(x=>!x.voiceId))throw Error('INVALID_INPUT');
+  const voiceId=voiceFor(c);if(!voiceId)throw Error('INVALID_INPUT');
   const requestId=crypto.randomUUID();
-  const r=await call('/v1/dialogue',{requestId,accountRevision:auth.account.revision,model:'eleven_v3',inputs:plan},signal);
+  const r=await call('/v1/dialogue',{requestId,accountRevision:auth.account.revision,model:'eleven_v3',inputs:[{text:e.text,voiceId}]},signal);
   if(!r.ok){const j=await readJson(r);if(j.code==='STALE'||j.code==='UNAUTHENTICATED'){auth=null;paint()}throw Error(j.code||'INVALID_RESPONSE')}
   if(!/^audio\/mpeg/i.test(r.headers.get('content-type')||''))throw Error('INVALID_RESPONSE');
   const bytes=new Uint8Array(await r.arrayBuffer());
@@ -139,7 +132,7 @@ async function generateClip(c,signal,preapproved=false){
   const ask=window.confirm;if(preapproved)window.confirm=()=>true;
   try{await importAudio(new File([bytes],'ai-voice.mp3',{type:'audio/mpeg'}))}finally{window.confirm=ask}
   if(c.version===before)throw Error('NOT_SAVED');
-  c.ai={voiceId,voice:planLabel(plan),chars:e.chars,text:e.text,version:c.version,at:new Date().toISOString()};
+  c.ai={voiceId,voice:voiceLabel(voiceId),chars:e.chars,text:e.text,version:c.version,at:new Date().toISOString()};
   save();
   return e.chars;
 }
@@ -179,7 +172,7 @@ function buildPanel(){
   if($('#aiVoiceDialog'))return;
   const d=document.createElement('dialog');d.id='aiVoiceDialog';
   d.innerHTML=`<form method="dialog"><div class="dialog-top"><h2>AI 配音</h2><button class="icon-btn" aria-label="關閉 AI 配音">×</button></div>
-  <p class="ai-note">用 ElevenLabs 幫<strong>英文和中文段落</strong>配音，一句一段，存進來和「匯入」一樣可以剪輯、復原。中文句子用「中文」聲音，英文句子用旁白或對話角色的聲音；同一段中英混合也會自動分開唸。<b>1 個字元約 1 credit</b>，扣的是<strong>你自己 ElevenLabs 帳號</strong>的額度（免費方案每月 10,000 credits）。</p>
+  <p class="ai-note">用 ElevenLabs 幫<strong>英文段落</strong>配音，一句一段，存進來和「匯入」一樣可以剪輯、復原。中文段落請自己錄。<b>1 個字元約 1 credit</b>，扣的是<strong>你自己 ElevenLabs 帳號</strong>的額度（免費方案每月 10,000 credits）。</p>
   <section class="ai-step" id="aiLogin"><h3>① 登入</h3><p id="aiWho">需要已開通的 Google 帳號：先把你的 ElevenLabs 金鑰和 Email 私訊給管理的老師。</p><button type="button" class="secondary" data-ai="signin">用 Google 登入</button><div id="aiGoogle"></div></section>
   <section class="ai-step" id="aiVoices" hidden><h3>② 聲音</h3><div class="ai-voice-grid"></div><p class="ai-small">每份試卷共用：題目旁白用「旁白」，對話依角色自動套用。想先聽聲音，可以用試音頁比較。</p></section>
   <section class="ai-step" id="aiRun" hidden><h3>③ 生成</h3><div id="aiTargets"></div><progress id="aiBar" max="1" value="0" hidden></progress></section>
@@ -209,16 +202,16 @@ function paint(){
   d.querySelector('[data-ai=stop]').hidden=!job||job.one;
   d.querySelector('.primary').disabled=!!job;
   if(!ok)return;
-  const v=auth.account.catalog.voices,roles=[['narrator','旁白（題目、開場、答案代號）'],['A',roleName('A')+'（對話）'],['B',roleName('B')+'（對話）'],['zh','中文（中文段落，或中英混合段落裡的中文句）']];
+  const v=auth.account.catalog.voices,roles=[['narrator','旁白（題目、開場、答案代號）'],['A',roleName('A')+'（對話）'],['B',roleName('B')+'（對話）']];
   const grid=d.querySelector('.ai-voice-grid');
-  grid.innerHTML=roles.map(([k,l])=>{const cur=voiceFor(k==='zh'?{lang:'zh'}:{speaker:k==='narrator'?null:k});return`<label><span>${esc(l)}</span><select data-role="${k}" ${job?'disabled':''}>${v.map(x=>`<option value="${esc(x.id)}" ${x.id===cur?'selected':''}>${esc(x.label)}</option>`).join('')}</select></label>`}).join('');
+  grid.innerHTML=roles.map(([k,l])=>{const cur=voiceFor({speaker:k==='narrator'?null:k});return`<label><span>${esc(l)}</span><select data-role="${k}" ${job?'disabled':''}>${v.map(x=>`<option value="${esc(x.id)}" ${x.id===cur?'selected':''}>${esc(x.label)}</option>`).join('')}</select></label>`}).join('');
   const {rows,sum}=plan(),on=cats(),sel=rows.filter(r=>r.on),chars=sel.reduce((n,r)=>n+r.chars,0);
   const cur=innerWidth<=600&&mobileClipId?find(mobileClipId):null,ce=cur&&eligible(cur);
   const t=d.querySelector('#aiTargets'),keep=t.querySelector('.ai-list')?.scrollTop||0;
   t.innerHTML=`<div class="ai-scope" role="radiogroup" aria-label="生成範圍"><label><input type="radio" name="aiScope" value="chapter" ${scope==='chapter'?'checked':''} ${job?'disabled':''}>這個大題（${esc(chapterName(active))}）</label><label><input type="radio" name="aiScope" value="all" ${scope==='all'?'checked':''} ${job?'disabled':''}>整份試卷</label></div>
   <fieldset class="ai-cats" ${job?'disabled':''}><legend>要用 AI 的部分</legend>${CATS.map(([k])=>`<label><input type="checkbox" data-ai-cat="${k}" ${on[k]?'checked':''}>${esc(catName(k))}</label>`).join('')}</fieldset>
-  ${rows.length?`<ul class="ai-list">${rows.map(r=>`<li class="${r.on?'is-on':''}${r.stale?' is-stale':''}"><label><input type="checkbox" data-ai-pick="${r.c.id}" ${r.on?'checked':''} ${job?'disabled':''}><span class="ai-n">${esc(rowLabel(r))}</span><span class="ai-v">${r.stale?'稿子改過，重新生成？':esc(planLabel(voicePlan(r.c,scriptOf(r.c))).split(' · ')[0])}</span><span class="ai-k">${r.chars}</span></label></li>`).join('')}</ul>`:'<p class="ai-empty">這個範圍沒有還沒錄的段落。</p>'}
-  <p class="ai-small">${[sum.recorded&&`已錄好 ${sum.recorded} 段（不會動）`,sum.empty&&`${sum.empty} 段還沒有稿子`].filter(Boolean).join(' · ')||'&nbsp;'}</p>
+  ${rows.length?`<ul class="ai-list">${rows.map(r=>`<li class="${r.on?'is-on':''}${r.stale?' is-stale':''}"><label><input type="checkbox" data-ai-pick="${r.c.id}" ${r.on?'checked':''} ${job?'disabled':''}><span class="ai-n">${esc(rowLabel(r))}</span><span class="ai-v">${r.stale?'稿子改過，重新生成？':esc(voiceLabel(voiceFor(r.c)).split(' · ')[0])}</span><span class="ai-k">${r.chars}</span></label></li>`).join('')}</ul>`:'<p class="ai-empty">這個範圍沒有還沒錄的英文段落。</p>'}
+  <p class="ai-small">${[sum.recorded&&`已錄好 ${sum.recorded} 段（不會動）`,sum.zh&&`中文 ${sum.zh} 段（請自己錄）`,sum.empty&&`${sum.empty} 段還沒有稿子`].filter(Boolean).join(' · ')||'&nbsp;'}</p>
   <button type="button" class="ai-go" data-ai="batch" ${!sel.length||job?'disabled':''}>${sel.length?`生成勾選的 ${sel.length} 段（約 ${chars} credits）`:'勾選要生成的段落'}</button>`+
   (cur?`<button type="button" class="ai-target" data-ai="current" ${!ce.ok||job?'disabled':''}><b>只生成目前這一段${cur.blob?'（會取代原錄音）':''}</b><span>${ce.ok?`約 ${ce.chars} credits`:esc(ce.why)}</span></button>`:'')+
   `<p class="ai-small">電腦版每一段的工具列也有 ✨，可單獨生成或重做。</p>`;
@@ -230,7 +223,7 @@ function openPanel(){buildPanel();paint();const d=$('#aiVoiceDialog');if(!d.open
 const SPARK='<svg viewBox="0 0 24 24" aria-hidden="true" class="ai-spark"><path d="M12 2.5l1.9 5.6 5.6 1.9-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9z"/><path d="M19 15l.9 2.1 2.1.9-2.1.9L19 21l-.9-2.1-2.1-.9 2.1-.9z"/></svg>';
 function decorate(){
   const tools=$('.record-tools');
-  if(tools&&!tools.querySelector('#aiToolbar')){const b=document.createElement('button');b.type='button';b.id='aiToolbar';b.className='quiet ai-toolbar';b.title='AI 配音（英文、中文段落）';b.innerHTML=SPARK+'<span>AI 配音</span>';const mic=tools.querySelector('[data-action=micSettings]');mic?mic.before(b):tools.append(b)}
+  if(tools&&!tools.querySelector('#aiToolbar')){const b=document.createElement('button');b.type='button';b.id='aiToolbar';b.className='quiet ai-toolbar';b.title='AI 配音（英文段落）';b.innerHTML=SPARK+'<span>AI 配音</span>';const mic=tools.querySelector('[data-action=micSettings]');mic?mic.before(b):tools.append(b)}
   const on=unlocked();
   for(const card of document.querySelectorAll('#recordPage .clip-card')){
     const id=card.id.replace(/^clip-/,''),c=find(id);if(!c)continue;
@@ -243,7 +236,7 @@ function decorate(){
     if(!on){btn?.remove();continue}
     if(!btn){btn=document.createElement('button');btn.type='button';btn.className='ai-clip';btn.dataset.aiClip=id;btn.innerHTML=SPARK+'<span>AI</span>';host.prepend(btn)}
     btn.disabled=!e.ok||!!job;
-    btn.title=e.ok?`AI 配音（${e.ok?planLabel(voicePlan(c,e.text)):''}，約 ${e.chars} credits）${c.blob?'・會取代原錄音':''}`:'AI 配音：'+e.why;
+    btn.title=e.ok?`AI 配音（${voiceLabel(voiceFor(c))}，約 ${e.chars} credits）${c.blob?'・會取代原錄音':''}`:'AI 配音：'+e.why;
     btn.setAttribute('aria-label',btn.title);
   }
 }
